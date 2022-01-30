@@ -2,17 +2,17 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">TaonaBox</a>
+      <a class="navbar-brand" href="#"><img src="../assets/Logo3.png" alt="Logo TaonaCosmetics">TaonaCosmetics</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+            <router-link class="nav-link" aria-current="page" to="/">Accueil</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Produits</a>
+            <router-link class="nav-link" to="/articles">Produits</router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Astuces</a>
@@ -27,7 +27,7 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li><a class="dropdown-item" href="#">Mon Profil</a></li>
               <li><a class="dropdown-item" href="#">Mes Commandes</a></li>
-              <li><a class="dropdown-item" href="#">Déconexion</a></li>
+              <li><a class="dropdown-item" href="#">Déconnexion</a></li>
             </ul>
           </li>
         </ul>
@@ -45,7 +45,7 @@ export default {
 </script>
 <style scoped>
 .navbar{
-  background-color:maroon;
+  background-color:rgb(31, 25, 25);
 }
 img { 
   height: 50px;

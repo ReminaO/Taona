@@ -7,10 +7,11 @@
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap');
 body, html{
   margin:0;
   padding: 0;
-  background-color: bisque;
+  font-family: 'Roboto', sans-serif;
 }
 </style>
 

@@ -15,7 +15,5 @@
 </template>
 
 <style scoped>
-.carousel {
-  background-color: bisque
-}
+
 </style>
