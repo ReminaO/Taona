@@ -8,14 +8,14 @@
     </div>
   </div>
 </header>
-<main class="container row d-flex text-center">
-  <div class="row">
-    <div class="col-5">
-      <router-link to="/articles"><p class="product text-center"><img src="../assets/logo.png" alt="Produits" class="w-75"></p></router-link>
+<main class="container-fluid d-flex justify-content-center text-center">
+  <div class="row d-flex justify-content-center w-100">
+    <div class="product col w-100">
+      <router-link to="/articles"><img src="../assets/logo.png" alt="Photo Produits"></router-link>
       <p class="title-product">Produits</p>
     </div>
-    <div class="col-5">
-      <router-link to="/articles"><p class="product text-center "><img src="../assets/logo.png" alt="Produits" class="w-75"></p></router-link>
+    <div class="product col w-100">
+      <router-link to="/astuces"><img src="../assets/logo.png" alt="Photo Astuces"></router-link>
       <p class="title-tips">Astuces</p>
     </div>
   </div>
@@ -34,33 +34,32 @@ export default {
 }
 </script>
 <style scoped>
-/* row{
-  backdrop-filter: blur(10px);
-} */
+ main .container-fluid{
+  width: 100%;
+  margin:0
+} 
 .product{
   position: relative;
   border: #d4a449 1px solid;
   margin: 30px;
-  border-radius: 35%;
+  border-radius: 10px;
+  -webkit-box-shadow: 0.5px 0.5px 10px 1px rgba(0,0,0,0.1);
+  box-shadow: 0.5px 0.5px 10px 1px rgba(0,0,0,0.1);
 }
-.title-product {
-  position: absolute;
-  bottom: 50px;
-  left: 12%;
-  backdrop-filter: blur(10px);
-  font-size: 30px;
-}
-.title-tips {
-  position: absolute;
-  bottom: 50px;
-  left:39%;
-  backdrop-filter: blur(10px);
-  font-size: 30px;
-}
-.title-product:hover {
+.product:hover {
   text-decoration: underline;
+  transform: scale(1.03);
+  transition: transform 0.9s;
+  cursor: pointer;
 }
-.title-tips:hover {
+.title-product, .title-tips {
+  position: absolute;
+  bottom: 55px;
+  left: 45%;
+  backdrop-filter: blur(10px);
+  font-size: 1.6rem;
+}
+.title-product:hover, .title-tips:hover {
   text-decoration: underline;
 }
 

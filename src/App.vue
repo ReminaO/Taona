@@ -8,10 +8,13 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;500&display=swap');
-body, html{
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
+
+body{
   margin:0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
+  font-size: 1.4rem;/* soit 10px*/
 }
 </style>
 

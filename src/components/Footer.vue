@@ -17,7 +17,7 @@
 
             <div class="col-4 offset-1">
                 <form data-form-type="newsletter">
-                <h5>Subscribe to our newsletter</h5>
+                <h5>Souscrivez à notre Newsletter</h5>
                 <p>Monthly digest of whats new and exciting from us.</p>
                 <div class="d-flex w-100 gap-2">
                     <label for="newsletter1" class="visually-hidden">Email address</label>
@@ -55,4 +55,5 @@ export default {
 .nav-link:hover {
     color:black
 }
+
 </style>

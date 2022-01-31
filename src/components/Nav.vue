@@ -2,7 +2,7 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img src="../assets/Logo3.png" alt="Logo TaonaCosmetics">TaonaCosmetics</a>
+      <router-link class="navbar-brand" to="/"><img src="../assets/Logo3.png" alt="Logo TaonaCosmetics">TaonaCosmetics</router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -13,6 +13,9 @@
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/articles">Produits</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/article/:id">Produit</router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Astuces</a>
