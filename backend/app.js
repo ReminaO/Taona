@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 //Définition du chemin contenant les images
-app.use('/avatar', express.static(path.join(__dirname, 'avatar')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //Définition du chemin des routes
 app.use('/api/users', userRoutes);
