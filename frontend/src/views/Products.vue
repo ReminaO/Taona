@@ -1,5 +1,6 @@
 <template>
-<section class="container d-flex ">
+<Produits/>
+<!-- <section class="container d-flex ">
   <div class="container d-flex flex-column">
     <div class="d-flex justify-content-center row">
       <div class="card col-3" style="width: 20rem;">
@@ -52,15 +53,16 @@
       </div>
     </div>
   </div>
-</section> 
+</section>  -->
 </template>
 
 <script>
 // @ is an alias to /src
+import Produits from'@/components/Produitstest'
 export default {
   name: 'Home',
   components: {
-   
+    Produits
   }
 }
 </script>

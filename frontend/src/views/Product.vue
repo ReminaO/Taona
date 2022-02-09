@@ -1,14 +1,13 @@
 <template>
     <section class="container product-container mt-100">
         <div class="product-images">
-            <div class="d-flex full-img-container">
-                <img id="full" src="../../src/assets/logo.png" alt="Produits 1" class="figure-img img-fluid rounded ">
+            <div class="full-img-container">
+                <img id="full" src="../assets/img/logo.png" alt="Produits" class="figure-img img-fluid rounded ">
             </div>
-            <div class="thumbnails-container" >
-                <img src="../../src/assets/logo.png " alt="Produits 1" @click="thumbClick()" class="img-thumbnail small img-fluid rounded">
-                <img src="../../src/assets/Logo2.jpg" alt="Produits 1" @click="thumbClick()" class="img-thumbnail small img-fluid rounded">
-                <img src="../../src/assets/Logo3.png" alt="Produits 1" @click="thumbClick()" class="img-thumbnail small img-fluid rounded">
-                <img src="../../src/assets/logo.png " alt="Produits 1" @click="thumbClick()" class="img-thumbnail small img-fluid rounded">
+            <div class="thumbnails-container">
+                <div v-for="(img, index) in images" :key="index" class="thumbnails-container" >
+                    <img :src="img.lien" :alt="img.nom" @click="thumbClick()" class="img-thumbnail small img-fluid rounded" style="height:100px; width: 100px" /> 
+                </div>
             </div>
         </div>
         <div class="product-infos">
@@ -24,19 +23,28 @@
 </template>
 
 <script>
-export default {
-name: "Product",
-    methods:{
-        thumbClick(){
-            const thumbs = document.querySelectorAll('.small')
-            const fullImg = document.getElementById('full')
-            thumbs.forEach(item =>{
-                let imgSource = item.getAttribute('src')
-                fullImg.setAttribute('src', imgSource)
-            })
-            
-        }
-    }
+    export default {
+        name: "Product",
+        data(){
+            return {
+                images : [
+                    {lien :"../assets/img/logo.png", nom: "Produit 1"}, 
+                    {lien :"../assets/img/Logo2.jpg", nom: "Produit 2"}, 
+                    {lien :"../assets/img/Logo3.png", nom: "Produit 3"}, 
+                    {lien :"../assets/img/logo.png", nom: "Produit 4"} 
+            ]}
+        },
+        methods:{
+            thumbClick(){
+                const thumbs = document.querySelectorAll('.small')
+                const fullImg = document.getElementById('full')
+                thumbs.forEach(item =>{
+                    let imgSource = item.getAttribute('src')
+                    fullImg.setAttribute('src', imgSource)
+                })
+                
+            }
+        },
 }
 </script>
 <style scoped>
@@ -65,10 +73,10 @@ name: "Product",
 }
 .thumbnails-container{
     display:flex;
+    justify-content: center;
 }
 .small{
     flex:1;
-    width: 20%;
     margin: 0.3rem;
 }
 h1.product-title{
@@ -95,7 +103,7 @@ img{
 }
 @media screen and (max-width: 800px){
     .container{
-        height: auto;/*annule la height:100vh*/
+        height: auto;
     }
     .product-container{
         flex-direction: column;

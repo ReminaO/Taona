@@ -11,12 +11,14 @@
 <main class="container-fluid d-flex justify-content-center text-center">
   <div class="row d-flex justify-content-center w-100">
     <div class="product col w-100">
-      <router-link to="/articles"><img src="../assets/logo.png" alt="Photo Produits"></router-link>
-      <p class="title-product">Produits</p>
+      <router-link to="/articles"><img src="../assets/img/logo.png" alt="Photo Produits">
+        <p class="title-product">Produits</p>
+      </router-link>
     </div>
     <div class="product col w-100">
-      <router-link to="/astuces"><img src="../assets/logo.png" alt="Photo Astuces"></router-link>
-      <p class="title-tips">Astuces</p>
+      <router-link to="/astuces"><img src="../assets/img/logo.png" alt="Photo Astuces">
+        <p class="title-tips">Astuces</p>
+      </router-link>
     </div>
   </div>
 </main>  
@@ -58,6 +60,7 @@ export default {
   left: 45%;
   backdrop-filter: blur(10px);
   font-size: 1.6rem;
+  color: #7d1426
 }
 .title-product:hover, .title-tips:hover {
   text-decoration: underline;
