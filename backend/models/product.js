@@ -11,6 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.User.hasMany(models.Comment),
+      models.Product.hasMany(models.Comment, {
+        foreignKey: {
+          name: 'productId',
+          allowNull: false,
+        }
+    }),
+      models.Product.belongsTo(models.User, {
+        onDelete: 'cascade',
+        hooks: true,
+        foreignKey: {
+          allowNull: false
+        }
+      })
     }
   }
   Product.init({

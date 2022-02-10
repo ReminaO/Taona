@@ -11,15 +11,37 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.Comment.belongsTo(models.User, {
+        onDelete: 'cascade',
+        hooks: true,
+        foreignKey: {
+          name: 'userId',
+          allowNull: false }
+      });
+      models.Comment.belongsTo(models.Product, {
+        onDelete: 'cascade',
+        hooks: true,
+        foreignKey: {
+          name: 'productId',
+          allowNull: false}
+          
+      })
     }
   }
   Comment.init({
+    userName: {
+      type: DataTypes.STRING,
+      references : {
+        model : 'User',
+        key : 'firstName'
+      }
+    },
     content: DataTypes.STRING,
-    1: DataTypes.BOOLEAN,
-    2: DataTypes.BOOLEAN,
-    3: DataTypes.BOOLEAN,
-    4: DataTypes.BOOLEAN,
-    5: DataTypes.BOOLEAN
+    one: DataTypes.BOOLEAN,
+    two: DataTypes.BOOLEAN,
+    three: DataTypes.BOOLEAN,
+    four: DataTypes.BOOLEAN,
+    five: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Comment',

@@ -8,6 +8,9 @@ const path = require('path');
 
 //import des routes
 const userRoutes = require('./routes/users');
+const productRoutes = require('./routes/products');
+const commentRoutes = require('./routes/comments');
+const orderRoutes = require('./routes/orders');
 
 const app = express();
 
@@ -26,6 +29,9 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 //Définition du chemin des routes
 app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/orders', orderRoutes);
 
 
 module.exports = app;

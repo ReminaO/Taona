@@ -26,22 +26,25 @@ module.exports = {
         },
         onDelete: 'CASCADE',
       },
+      username: {
+        type: Sequelize.STRING
+      },
       content: {
         type: Sequelize.STRING
       },
-      1: {
+      one: {
         type: Sequelize.BOOLEAN
       },
-      2: {
+      two: {
         type: Sequelize.BOOLEAN
       },
-      3: {
+      three: {
         type: Sequelize.BOOLEAN
       },
-      4: {
+      four: {
         type: Sequelize.BOOLEAN
       },
-      5: {
+      five: {
         type: Sequelize.BOOLEAN
       },
       createdAt: {

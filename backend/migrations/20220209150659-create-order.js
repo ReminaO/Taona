@@ -15,7 +15,6 @@ module.exports = {
           model: 'Users',
           key: 'id',
         },
-        onDelete: 'CASCADE',
       },
       productId: {
         allowNull: false,
@@ -24,7 +23,6 @@ module.exports = {
           model: 'Products',
           key: 'id',
         },
-        onDelete: 'CASCADE',
       },
       product: {
         type: Sequelize.STRING
