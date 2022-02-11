@@ -2,10 +2,12 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/"><img src="../assets/img/Logo3.png" alt="Logo TaonaCosmetics">TaonaCosmetics</router-link>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div>
+        <router-link class="navbar-brand" to="/"><img src="../assets/img/Logo3.png" alt="Logo TaonaCosmetics">TaonaCosmetics</router-link>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
@@ -36,6 +38,7 @@
         </ul>
       </div>
     </div>
+    
   </nav>
 </header>
 </template>
@@ -48,7 +51,7 @@ export default {
 </script>
 <style scoped>
 .navbar{
-  background-color:rgb(31, 25, 25);
+  background-color:#333333;
 }
 img { 
   height: 50px;
@@ -57,4 +60,5 @@ img {
   padding:0;
   margin: 0;
 }
+
 </style>
