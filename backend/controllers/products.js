@@ -32,8 +32,8 @@ exports.createProducts = (req, res) => {
     // 1. Vérification de l'existance de l'utilisateur
     function(done) { // done = paramètre principal
       models.User.findOne({
-              attributes: ['isAdmin'],
-              where: { isAdmin: true }
+              attributes: ['id'],
+              where: { id: req.params.id }
           })
           .then(function(userFound) { // userFound sera le paramètre suivant
               done(null, userFound);
@@ -46,22 +46,26 @@ exports.createProducts = (req, res) => {
     // 2. Une fois trouvé crée le produit avec l'input
     function (userFound, done) {
       if (userFound) {
-        models.Product.create({
-          name : name,
-          description: description,
-          price: price,
-          img : img,
-          thumbImg1 : thumbImg1,
-          thumbImg2 : thumbImg2,
-          thumbImg3 : thumbImg3,
-          thumbImgVideo: thumbImgVideo
-        })
-          .then(function (newProduct) {
-            done(newProduct);
-          });
+        if (userFound.isAdmin == true) {
+          models.Product.create({
+            name: name,
+            description: description,
+            price: price,
+            img: img,
+            thumbImg1: thumbImg1,
+            thumbImg2: thumbImg2,
+            thumbImg3: thumbImg3,
+            thumbImgVideo: thumbImgVideo
+          })
+            .then(function (newProduct) {
+              done(newProduct);
+            });
+        } else {
+          res.status(401).json({ 'error': 'utilisateur non autorisé' });
+        }
       } else {
         res.status(404).json({ 'error': 'Utilisateur introuvable' });
-      }
+        }
     },
     // 3. Confirmation une fois fait
   ],
@@ -80,19 +84,19 @@ exports.modifyProduct = (req, res) => {
   const description = req.body.description;
   const price = req.body.price;
   //Vérification d'un fichier existant ou laisse le lien vide
-  const img = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-  const thumbImg1 = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-  const thumbImg2 = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-  const thumbImg3 = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-  const thumbImgVideo = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
+  const img = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
+  const thumbImg1 = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
+  const thumbImg2 = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
+  const thumbImg3 = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
+  const thumbImgVideo = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
 
   asyncLib.waterfall([
 
     // Vérification que la requête soit envoyé d'un compte existant
     function (done) {
       models.User.findOne({
-        attributes: ['isAdmin'],
-        where: { isAdmin: true }
+        attributes: ['id'],
+        where: { id: req.body.id }
       }).then(function (userFound) {
         done(null, userFound);
       })
@@ -156,7 +160,7 @@ exports.deleteProduct = (req, res) => {
     function(done) { // done = paramètre principal
       models.User.findOne({
               attributes: ['isAdmin'],
-              where: { isAdmin: true }
+              where: { isAdmin: 1 }
           })
           .then(function(userFound) { // userFound sera le paramètre suivant
               done(null, userFound);

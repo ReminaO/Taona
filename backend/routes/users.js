@@ -9,13 +9,13 @@ const auth = require('../middleware/auth');
 const userCtrl = require('../controllers/users');
 
 // Middleware pour l'enregistrement des images
-const multer = require('../middleware/multer-config');
+const avatar = require('../middleware/avatar');
 
 //Routes pour appeler les controllers user
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
 router.get('/:id', auth, userCtrl.getOneProfile);
-router.put('/:id', auth, multer, userCtrl.modifyProfile);
+router.put('/:id', auth, avatar, userCtrl.modifyProfile);
 router.put('/:id', auth, userCtrl.modifyPassword);
 router.delete('/:id', auth, userCtrl.deleteProfile);
 

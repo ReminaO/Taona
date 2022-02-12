@@ -6,7 +6,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 
 // Middleware pour l'enregistrement des images
-const multer = require('../middleware/multer-config');
+const multer = require('../middleware/productImg');
 
 //import du controller
 const productsCtrl = require('../controllers/products');

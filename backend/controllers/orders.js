@@ -1,11 +1,10 @@
 //Import des modules
 const asyncLib = require('async');
+const uuid = require("uuid")
 //import des modèles
 const models = require('../models');
 
 //Paramètres
-const TITLE_LIMIT   = 2;
-const CONTENT_LIMIT = 2;
 const ITEMS_LIMIT = 50;
 
 // Controllers pour créer un message
@@ -17,7 +16,6 @@ exports.createOrder = (req, res, next) => {
   const quantity  = req.body.quantity;
   const productId = response.locals.userId;
   const amount = req.body.amount;
-  const product = req.body.product
   
 
   asyncLib.waterfall([
@@ -25,6 +23,7 @@ exports.createOrder = (req, res, next) => {
     // 1. recherche de l'utilisateur
     function (done) {
       models.User.findOne({
+        attributes: ['id'],
         where: { id: userId }
       })
         .then(function (userFound) {
@@ -39,10 +38,11 @@ exports.createOrder = (req, res, next) => {
     function (userFound, done) {
       if (userFound) {
         models.Order.create({
+          id: uuid.v4(),
           UserId: userFound.id,
-          productId: productId,
+          ProductId: productId,
           amount: amount,
-          product: product,
+          product: models.Product.name,
           quantity: quantity
         })
           .then(function (newOrder) {
@@ -62,7 +62,7 @@ exports.createOrder = (req, res, next) => {
     }
   })
 };
-  // Controllers por effacer un message grâce a l'ID
+  // Controllers por effacer le reçu grâce a l'ID
 exports.deleteOrder = (req, res, next) => {
   
     asyncLib.waterfall([
@@ -122,20 +122,21 @@ exports.deleteOrder = (req, res, next) => {
   };
 
   // Controllers pour afficher toutes les messages
-  exports.getAllOrders = (req, res, next) => {
-    const fields = req.query.fields; // DB table fields to load
-    const limit = parseInt(req.query.limit); // Limits the number..
-    const offset = parseInt(req.query.offset); // ..of orders loaded
-    const order = req.query.order;
+exports.getAllOrders = (req, res, next) => {
+  const fields = req.query.fields; // DB table fields to load
+  const limit = parseInt(req.query.limit); // Limits the number..
+  const offset = parseInt(req.query.offset); // ..of orders loaded
+  const order = req.query.order;
 
-    if (limit > ITEMS_LIMIT) {
-      limit = ITEMS_LIMIT;
-    }
+  if (limit > ITEMS_LIMIT) {
+    limit = ITEMS_LIMIT;
+  }
 
-    asyncLib.waterfall([
+  asyncLib.waterfall([
 
-      // 2. Affiche les order par username
-      function (done) {
+    // 2. Affiche les order par username
+    function (done) {
+      if (userFound.isAdmin == true) {
         models.Order.findAll({
           // Test des input de l'utilisateur
           order: [(order != null) ? order.split(':') : ['createdAt', 'DESC']],
@@ -145,24 +146,60 @@ exports.deleteOrder = (req, res, next) => {
           include: [{ // Relie le message avec les tables User and Comments  
             model: models.User
           },
-            {model: models.Product},
+          { model: models.Product },
           
-        ]
+          ]
         }).then(function (orders) {
           done(orders)
         }).catch(function (err) {
           console.log(err);
           res.status(500).json({ "error": "Champs invalide" });
         });
+      } else {
+        res.status(401).json({ 'error': 'utilisateur non autorisé' });
+      }
+    }
+    // 3. Confirmation, une fois vérifié
+  ],
+    function (orders) {
+      if (orders) {
+        return res.status(201).json(orders);
+      } else {
+        return res.status(500).json({ 'error': 'Les commandes ne peuvent être affichées' });
+      }
+    })
+};
+
+//Récupération d'un reçu
+exports.getOrder = (request, response) => {
+  models.Order.findOne({
+    include: [
+      {
+          model: models.User,
       },
-      // 3. Confirmation, une fois vérifié
+      {
+          model: models.Product,
+      },
     ],
-      function (orders) {
-        if (orders) {
-          return res.status(201).json(orders);
-        } else {
-          return res.status(500).json({ 'error': 'Les commandes ne peuvent être affichées' });
-        }
-      })
-  }
+    where: {
+      id: request.params.id,
+    },
+})
+    .then((post) => {
+      if (post) {
+          let viewer = {
+            userId: response.locals.userId,
+            isadmin: response.locals.isadmin,
+          };
+          response.status(200).json({ post, viewer });
+      } else {
+          response.status(404).json({
+            message: "Ce reçu n'a pas été trouvé...",
+          });
+      }
+    })
+    .catch((error) => {
+      response.status(500).json(error);
+    });
+};
 
