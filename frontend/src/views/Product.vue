@@ -1,19 +1,22 @@
 <template>
-    <section class="container product-container mt-100">
-        <div class="product-images">
+    <section class="container product-container mt-100" >
+        <div class="product-images" >
             <div class="full-img-container">
-                <img id="full" src="../assets/img/logo.png" alt="Produits" class="figure-img img-fluid rounded ">
+                <img id="full" :src="Product.img" :alt="Product.name" class="figure-img img-fluid rounded ">
             </div>
             <div class="thumbnails-container">
-                <div v-for="(img, index) in images" :key="index" class="thumbnails-container" >
-                    <img :src="img.lien" :alt="img.nom" @click="thumbClick()" class="img-thumbnail small img-fluid rounded" style="height:100px; width: 100px" /> 
+                <div class="thumbnails-container" >
+                    <img :src="Product.thumbImg1" :alt="Product.name" @click="thumbClick()" class="img-thumbnail small img-fluid rounded" style="height:100px; width: 100px" /> 
+                    <img :src="Product.thumbImg2" :alt="Product.name" @click="thumbClick()" class="img-thumbnail small img-fluid rounded" style="height:100px; width: 100px" /> 
+                    <img :src="Product.thumbImg3" :alt="Product.name" @click="thumbClick()" class="img-thumbnail small img-fluid rounded" style="height:100px; width: 100px" /> 
+                    <img :src="Product.thumbVideo" :alt="Product.name" @click="thumbClick()" class="img-thumbnail small img-fluid rounded" style="height:100px; width: 100px" /> 
                 </div>
             </div>
         </div>
         <div class="product-infos">
-            <h1 class="product-title">TaonaBox</h1>
-            <p class="product-price">56€</p>
-            <p class="descritpion">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae sit inventore dolores illo facilis exercitationem facere, maiores repellat debitis minus accusamus saepe eaque. Rerum assumenda ab doloribus eius vero soluta!</p>
+            <h1 class="product-title">{{Product.name}}</h1>
+            <p class="product-price">{{Product.price}}</p>
+            <p class="descritpion">{{Product.description}}</p>
             <button class="btn btn-add">
                 <i class="bi bi-cart4"></i>
                 Ajouter au panier
@@ -23,27 +26,33 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
     export default {
         name: "Product",
+        
         data(){
             return {
-                images : [
-                    {lien :"../assets/img/logo.png", nom: "Produit 1"}, 
-                    {lien :"../assets/img/Logo2.jpg", nom: "Produit 2"}, 
-                    {lien :"../assets/img/Logo3.png", nom: "Produit 3"}, 
-                    {lien :"../assets/img/logo.png", nom: "Produit 4"} 
-            ]}
+                }
         },
-        methods:{
-            thumbClick(){
-                const thumbs = document.querySelectorAll('.small')
-                const fullImg = document.getElementById('full')
-                thumbs.forEach(item =>{
-                    let imgSource = item.getAttribute('src')
-                    fullImg.setAttribute('src', imgSource)
-                })
+        computed: {
+            Product() {
+                return this.$store.state.productInfos
+            },
+            created() {
+                this.getOneProduct(this.$route.params.id);
+                },
+            },
+            methods:{
+                ...mapState(["getOneProduct"]),
+                thumbClick(){
+                    const thumbs = document.querySelectorAll('.small')
+                    const fullImg = document.getElementById('full')
+                    thumbs.forEach(item =>{
+                        let imgSource = item.getAttribute('src')
+                        fullImg.setAttribute('src', imgSource)
+                    })
                 
-            }
+            },
         },
 }
 </script>

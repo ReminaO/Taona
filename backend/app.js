@@ -22,8 +22,8 @@ app.options('*', cors())
 app.use(bodyParser.json());
 
 //Définition du chemin contenant les images
-app.use( "images/avatars", express.static(path.join(__dirname, 'images/avatars')));
-app.use("images/products", express.static(path.join(__dirname, 'images/products')));
+app.use("/images/avatars", express.static(path.join(__dirname, 'images/avatars')));
+app.use("/images/products", express.static(path.join(__dirname, 'images/products')));
 
 //Définition du chemin des routes
 app.use('/api/users', userRoutes);

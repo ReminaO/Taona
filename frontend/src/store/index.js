@@ -122,13 +122,11 @@ const store = createStore({
     },
     getUserInfos: ({ commit }) => {
       commit('setStatus', 'loading')
-      return new Promise((resolve, reject) => {
         instance.get(`users/${user.userId}`)
           .then(function (response) {
             commit('userInfos', response.data)
           })
           .catch(function () { })
-      })
     },
     getProducts: ({ commit }) => {
       commit('setStatus', 'loading')
@@ -136,6 +134,15 @@ const store = createStore({
           .then(function (response) {
             commit('products', response.data)
             commit('product', response.data)
+          })
+          .catch(function () {  })
+      
+    },
+    getOneProduct: ({ commit }, id) => {
+      commit('setStatus', 'loading')
+        instance.get(`products/${id}`)
+          .then(function (response) {
+            commit('products', response.data)
           })
           .catch(function () {  })
       
