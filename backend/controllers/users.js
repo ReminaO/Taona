@@ -103,7 +103,7 @@ exports.signup = (req, res, next) => {
 };
 
 // Controllers pour se connecter au site
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
     //Paramètres
     const email = req.body.email;
     const password = req.body.password;
@@ -168,10 +168,10 @@ exports.login = (req, res, next) => {
 
 // Controllers pour afficher le profil grâce a l'ID
 
-exports.getOneProfile = (req, res, next) => {
+exports.getOneProfile = (req, res) => {
     // Récupération des information du profile
     models.User.findOne({
-        attributes: ['id'],
+        attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'postal_code', 'city', 'phone_number', 'avatar', 'isAdmin'],
         where: { id: req.params.id }
     }).then((user) => {
         if (user) {
@@ -186,16 +186,16 @@ exports.getOneProfile = (req, res, next) => {
 
 
 // Controllers pour modifier un profil
-exports.modifyProfile = (req, res, next) => {
+exports.modifyProfile = (req, res) => {
     // Paramètres
-    let avatar = req.body && req.file ? `${req.protocol}://${req.get('host')}/avatar/${req.file.filename}` : null;
+    let avatar = req.body && req.file ? `${req.protocol}://${req.get('host')}/images/avatars/${req.file.filename}` : null;
 
     
         asyncLib.waterfall([
             // Vérifie que la requête est envoyé par un compte existant
             function (done) {
                 models.User.findOne({
-                    attributes: ['id'],
+                    attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'postal_code', 'city', 'phone_number', 'avatar', 'isAdmin'],
                     where: { id: req.params.id}
                 }).then(function (userFound) {
                     done(null, userFound);
@@ -228,8 +228,8 @@ exports.modifyProfile = (req, res, next) => {
                 }
             });
         };
-// Controllers pour modifier un profil
-exports.modifyPassword = (req, res, next) => {
+// Controllers pour modifier le mot de passe
+exports.modifyPassword = (req, res) => {
     // Paramètres
     let password = req.body.password;
 
@@ -237,57 +237,146 @@ exports.modifyPassword = (req, res, next) => {
         return res.status(400).json({ 'error': 'Champs manquant' });
     }
     
-        asyncLib.waterfall([
-            // Vérifie que la requête est envoyé par un compte existant
-            function (done) {
-                models.User.findOne({
-                    attributes: ['id'],
-                    where: { id: req.params.id}
-                }).then(function (userFound) {
-                    done(null, userFound);
+    asyncLib.waterfall([
+        // Vérifie que la requête est envoyé par un compte existant
+        function (done) {
+            models.User.findOne({
+                attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'postal_code', 'city', 'phone_number', 'avatar', 'isAdmin'],
+                where: { id: req.params.id}
+            }).then(function (userFound) {
+                done(null, userFound);
+            })
+                .catch(function () {
+                    return res.status(500).json({ 'error': 'impossible de vérifier l\'utilisateur' });
+                });
+        },
+        //Si l'utilisateur existe, le mot de passe est hashé
+        function(userFound, done) { 
+            if (userFound) {
+                // Mot de passe salé 12 fois (paramètre par défait)
+                bcrypt.hash(password, 12, function(err, bcryptedPassword) { // nouveau paramètre
+                    done(null, userFound, bcryptedPassword);
+                });
+            } else {
+                return res.status(409).json({ error: 'Utilisateur déjà existant' });
+            }
+        },
+        function (userFound, bcryptedPassword, done) {
+            // Vérification que l'utilisateur est le propriétaire du profil
+            if (userFound) {
+                userFound.update({
+                    password: (bcryptedPassword ? bcryptedPassword : userFound.password),
                 })
-                    .catch(function () {
-                        return res.status(500).json({ 'error': 'impossible de vérifier l\'utilisateur' });
-                    });
-            },
-            //Si l'utilisateur existe, le mot de passe est hashé
-            function(userFound, done) { 
-                if (userFound) {
-                    // Mot de passe salé 12 fois (paramètre par défait)
-                    bcrypt.hash(password, 12, function(err, bcryptedPassword) { // nouveau paramètre
-                        done(null, userFound, bcryptedPassword);
-                    });
-                } else {
-                    return res.status(409).json({ error: 'Utilisateur déjà existant' });
-                }
-            },
-            function (userFound, bcryptedPassword, done) {
-                // Vérification que l'utilisateur est le propriétaire du profil
-                if (userFound) {
-                    userFound.update({
-                        password: (bcryptedPassword ? bcryptedPassword : userFound.password),
+                    .then(function () {
+                        done(userFound, bcryptedPassword);
                     })
-                        .then(function () {
-                            done(userFound, bcryptedPassword);
-                        })
-                        .catch(function () {
-                            res.status(500).json({ 'error' : 'Impossible de mettre a jour l\'utilisateur' });
-                        })
-                }
-            },
-            
-        ],
-            function (userFound) {
-                if (userFound) {
-                    return res.status(201).json(userFound);
-                } else {
-                    return res.status(500).json({ 'error': 'cannot update user profile' });
-                }
-            });
-};
+                    .catch(function () {
+                        res.status(500).json({ 'error' : 'Impossible de mettre a jour l\'utilisateur' });
+                    })
+            }
+        },
         
+    ],
+    function (userFound) {
+        if (userFound) {
+            return res.status(201).json(userFound);
+        } else {
+            return res.status(500).json({ 'error': 'cannot update user profile' });
+        }
+    });
+};
+
+// Controllers pour modifier l'adresse
+exports.modifyAddress = (req, res) => {
+    // Paramètres
+    const address = req.body.address;
+    const postal_code = req.body.postal_code;
+    const city = req.body.city;
+
+    asyncLib.waterfall([
+        // Vérifie que la requête est envoyé par un compte existant
+        function (done) {
+            models.User.findOne({
+                attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'postal_code', 'city', 'phone_number', 'avatar', 'isAdmin'],
+                where: { id: req.params.id}
+            }).then(function (userFound) {
+                done(null, userFound);
+            })
+                .catch(function () {
+                    return res.status(500).json({ 'error': 'impossible de vérifier l\'utilisateur' });
+                });
+        },
+        function (userFound, done) {
+            // Vérification que l'utilisateur est le propriétaire du profil
+            if (userFound) {
+                userFound.update({
+                    address: (address ? address : userFound.address),
+                    postal_code: (postal_code ? postal_code : userFound.postal_code),
+                    city: (city ? city : userFound.city),
+                })
+                    .then(function () {
+                        done(userFound);
+                    })
+                    .catch(function () {
+                        res.status(500).json({ 'error' : 'Impossible de mettre a jour l\'utilisateur' });
+                    })
+            }
+        },
+        
+    ],
+        function (userFound) {
+            if (userFound) {
+                return res.status(201).json(userFound);
+            } else {
+                return res.status(500).json({ 'error': 'cannot update user profile' });
+            }
+        });
+    };
+        
+    // Controllers pour modifier l'adresse
+exports.modifyNumber = (req, res) => {
+    // Paramètres
+    const phone_number = req.body.phone_number;
+
+    asyncLib.waterfall([
+        // Vérifie que la requête est envoyé par un compte existant
+        function (done) {
+            models.User.findOne({
+                attributes: ['id', 'phone_number'],
+                where: { id: req.params.id}
+            }).then(function (userFound) {
+                done(null, userFound);
+            })
+                .catch(function () {
+                    return res.status(500).json({ 'error': 'impossible de vérifier l\'utilisateur' });
+                });
+        },
+        function (userFound, done) {
+            // Vérification que l'utilisateur soit le propriétaire du profil
+            if (userFound) {
+                userFound.update({
+                    phone_number: (phone_number ? phone_number : userFound.phone_number),
+                })
+                    .then(function () {
+                        done(userFound);
+                    })
+                    .catch(function () {
+                        res.status(500).json({ 'error' : 'Impossible de mettre a jour l\'utilisateur' });
+                    })
+            }
+        },
+        
+    ],
+        function (userFound) {
+            if (userFound) {
+                return res.status(201).json(userFound);
+            } else {
+                return res.status(500).json({ 'error': 'cannot update user profile' });
+            }
+        });
+    };
 // Controllers por effacer un profil grâce a l'ID
-exports.deleteProfile = (req, res, next) => {
+exports.deleteProfile = (req, res) => {
     asyncLib.waterfall([
 
         // Vérification que la requête soit envoyé par un compte existant
@@ -307,7 +396,7 @@ exports.deleteProfile = (req, res, next) => {
             if (userFound.id == req.params.id || userFound.isAdmin == true) { // ou s'il est admin
 
                 // Suppression du profil
-                models.User.destroy({
+                userFound.destroy({
                         where: { id: req.params.id }
                     })
                     .then(() => res.status(200).json({ message: 'Utilisateur supprimé' })) // envoie un message de confirmation une fois fait

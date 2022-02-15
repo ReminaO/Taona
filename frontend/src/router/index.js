@@ -9,6 +9,7 @@ import Contact from '../views/Contact.vue'
 import About from '../views/About.vue'
 import CGV from '../views/Cgv.vue'
 import Tips from '../views/Tips.vue'
+import Login from '../views/Login.vue'
 
 const routes = [
   {
@@ -65,6 +66,14 @@ const routes = [
     component: Contact,
     meta: {
       title: 'Contactez-nous',
+    },
+  },
+  {
+    path: '/connexion',
+    name: 'Login',
+    component: Login,
+    meta: {
+      title: 'Connexion',
     },
   },
   {

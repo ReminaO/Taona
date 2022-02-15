@@ -9,17 +9,17 @@ exports.createProducts = (req, res) => {
   
 
   // Paramètres
-  const name   = req.body.name;
+  const name = req.body.name;
   const description = req.body.description;
   const price = req.body.price;
   //Vérification d'un fichier existant ou laisse le lien vide
-  const img = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-  const thumbImg1 = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-  const thumbImg2 = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-  const thumbImg3 = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
-  const thumbImgVideo = req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
+  const img = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[0].filename}` : null;
+  const thumbImg1 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[1].filename}` : null;
+  const thumbImg2 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[2].filename}` : null;
+  const thumbImg3 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[3].filename}` : null;
+  const thumbVideo = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[4].filename}` : null;
 
-  
+  console.log(req.files)
   
   
   //Vérification que le titre et le contenu ne soit pas nul
@@ -32,22 +32,25 @@ exports.createProducts = (req, res) => {
     // 1. Vérification de l'existance de l'utilisateur
     function(done) { // done = paramètre principal
       models.User.findOne({
-              attributes: ['id'],
-              where: { id: req.params.id }
-          })
-          .then(function(userFound) { // userFound sera le paramètre suivant
-              done(null, userFound);
-          })
-          .catch(function(err) {
-              return res.status(500).json({ 'error': 'unable to verify user' });
-          });
+        attributes: ['id','isAdmin'],
+        where: { id: req.params.id }
+    })
+    .then(function(userFound) { // userFound sera le paramètre suivant
+        done(null, userFound);
+    })
+    .catch(function(err) {
+        return res.status(500).json({ 'error': 'unable to verify user' });
+    });
   },
       
     // 2. Une fois trouvé crée le produit avec l'input
     function (userFound, done) {
       if (userFound) {
+        // console.log(req.files)
         if (userFound.isAdmin == true) {
-          models.Product.create({
+        models.Product.create({
+            
+            UserId: userFound.id,
             name: name,
             description: description,
             price: price,
@@ -55,15 +58,17 @@ exports.createProducts = (req, res) => {
             thumbImg1: thumbImg1,
             thumbImg2: thumbImg2,
             thumbImg3: thumbImg3,
-            thumbImgVideo: thumbImgVideo
+            thumbVideo: thumbVideo
           })
             .then(function (newProduct) {
               done(newProduct);
             });
-        } else {
+      }
+      else {
           res.status(401).json({ 'error': 'utilisateur non autorisé' });
         }
-      } else {
+    } 
+      else {
         res.status(404).json({ 'error': 'Utilisateur introuvable' });
         }
     },
@@ -80,23 +85,21 @@ exports.createProducts = (req, res) => {
 
 exports.modifyProduct = (req, res) => {
   // Paramètres
-  const name   = req.body.name;
+  const name = req.body.name;
   const description = req.body.description;
   const price = req.body.price;
   //Vérification d'un fichier existant ou laisse le lien vide
-  const img = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
-  const thumbImg1 = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
-  const thumbImg2 = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
-  const thumbImg3 = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
-  const thumbImgVideo = req.file ? `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}` : null;
-
+  const img = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[0].filename}` : null;
+  const thumbImg1 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[1].filename}` : null;
+  const thumbImg2 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[2].filename}` : null;
+  const thumbImg3 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[3].filename}` : null;
+  const thumbVideo = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[4].filename}` : null;
+  const userId = req.params.userId;
   asyncLib.waterfall([
-
-    // Vérification que la requête soit envoyé d'un compte existant
+    // Vérification que la requête est envoye d'un compte existant
     function (done) {
       models.User.findOne({
-        attributes: ['id'],
-        where: { id: req.body.id }
+        where: { id: userId }
       }).then(function (userFound) {
         done(null, userFound);
       })
@@ -105,25 +108,26 @@ exports.modifyProduct = (req, res) => {
         });
     },
 
-    // Affichage du message ciblé
+    // Vérification que l'article soit existant
     function (userFound, done) {
       models.Product.findOne({
+        attributes: ['id', 'userId'],
         where: { id: req.params.id }
       })
         .then(function (productFound) {
           done(null, userFound, productFound);
         })
         .catch(function (err) {
-          return res.status(500).json({ 'error': 'Message non trouvé' });
+          return res.status(404).json({ 'error': 'Article non trouvé' });
         });
     },
 
     function (userFound, productFound) {
 
-      // verifie que l'utilisateur soit l'auteur du product
-      if (userFound.isAdmin == true) { // ou soit admin
+      // verifie que l'utilisateur soit admin
+      if (userFound.isAdmin == true) {
 
-        // Met a jour le product
+        // Met a jour l'article'
         productFound.update({
           name : name,
           description: description,
@@ -132,7 +136,7 @@ exports.modifyProduct = (req, res) => {
           thumbImg1 : thumbImg1,
           thumbImg2 : thumbImg2,
           thumbImg3 : thumbImg3,
-          thumbImgVideo: thumbImgVideo
+          thumbVideo: thumbVideo
         })
           .then(() => res.status(200).json({ message: 'Produit modifié !' }))
           .catch(error => res.status(400).json({ message: "Produit introuvable", error: error }))
@@ -143,8 +147,8 @@ exports.modifyProduct = (req, res) => {
     },
   ],
 
-    function (userFound) {
-      if (userFound) {
+    function (productFound) {
+      if (productFound) {
         return res.status(201).json({ 'message': 'Article modifié' });
       } else {
         return res.status(500).json({ 'error': 'Impossible de mettre a jour l\'article' });
@@ -153,44 +157,41 @@ exports.modifyProduct = (req, res) => {
 }
   // Controllers por effacer un message grâce a l'ID
 exports.deleteProduct = (req, res) => {
-  
+  //Paramètres
+  const userId = req.params.userId;
+
     asyncLib.waterfall([
 
-      // 1. Vérification de l'existance de l'utilisateur
-    function(done) { // done = paramètre principal
-      models.User.findOne({
-              attributes: ['isAdmin'],
-              where: { isAdmin: 1 }
-          })
-          .then(function(userFound) { // userFound sera le paramètre suivant
-              done(null, userFound);
-          })
-          .catch(function(err) {
-              return res.status(500).json({ 'error': 'unable to verify user' });
+      function (done) {
+        models.User.findOne({
+          where: { id: userId }
+        }).then(function (userFound) {
+          done(null, userFound);
+        })
+          .catch(function (err) {
+            return res.status(500).json({ 'error': 'Utilisateur inexistant' });
           });
-  },
-
-      // Affichage du message ciblé
-      function (userFound, done) {
-        models.Product.findOne({
-          where: { id: req.params.id }
+      },
+  
+      // Vérification que l'article soit existant
+      function (userFound, done) { // done = paramètre principal
+          models.Product.findOne({
+            where: { id: req.params.id }, 
+            attributes: ['id', 'userId'],
         })
           .then(function (productFound) {
             done(null, userFound, productFound);
           })
           .catch(function (err) {
-            return res.status(500).json({ 'error': 'Message non trouvé' });
+            return res.status(404).json({ 'error': 'Article non trouvé' });
           });
       },
 
       function (userFound, productFound) {
-
-        // Vérification que l'utilisateur est admin
+        // Vérification que l'utilisateur soit admin
         if (userFound.isAdmin == true) { 
-
           // Suppression du produit
-          models.Product.destroy({
-            where: { id: req.params.id }
+          productFound.destroy({
           })
             .then(() => res.status(200).json({ message: 'Produit supprimé !' }))
             .catch(error => res.status(400).json({ message: "Produit introuvable", error: error }))
@@ -201,8 +202,8 @@ exports.deleteProduct = (req, res) => {
       },
     ],
 
-      function (userFound) {
-        if (userFound) {
+      function (productFound) {
+        if (productFound) {
           return res.status(201).json({ 'message': 'produit effacé' });
         } else {
           return res.status(500).json({ 'error': 'Impossible d\'effacer le produit' });
@@ -211,7 +212,7 @@ exports.deleteProduct = (req, res) => {
     
   };
 
-  // Controllers pour afficher toutes les messages
+  // Controllers pour afficher toutes les articles
   exports.getAllProducts = (req, res) => {
 
     asyncLib.waterfall([
@@ -219,6 +220,36 @@ exports.deleteProduct = (req, res) => {
       // 2. Affiche les article
       function (done) {
         models.Product.findAll({
+          include: [{ // Relie le produit avec la tables Comments  
+            model: models.Comment,
+          }
+        ]
+        }).then(function (products) {
+          done(products)
+        }).catch(function (err) {
+          console.log(err);
+          res.status(500).json({ "error": "Champs invalide" });
+        });
+      },
+      // 3. Confirmation, une fois vérifié
+    ],
+      function (products) {
+        if (products) {
+          return res.status(201).json(products);
+        } else {
+          return res.status(500).json({ 'error': 'Le produit ne peut être affiché' });
+        }
+      })
+}
+  // Controllers pour afficher un article
+  exports.getProduct = (req, res) => {
+
+    asyncLib.waterfall([
+
+      // 2. Affiche les article
+      function (done) {
+        models.Product.findOne({
+          where: { id: req.params.id },
           include: [{ // Relie le produit avec la tables Comments  
             model: models.Comment,
           }
