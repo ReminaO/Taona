@@ -15,8 +15,8 @@ const multer = require('../middleware/product');
 router.post('/:id', auth, multer, productsCtrl.createProducts);
 router.put('/:userId/:id', auth, multer, productsCtrl.modifyProduct);
 router.delete('/:userId/:id', auth, productsCtrl.deleteProduct);
-router.get('/', auth, productsCtrl.getAllProducts);
-router.get('/:id', auth, productsCtrl.getProduct);
+router.get('/', productsCtrl.getAllProducts);
+router.get('/:id', productsCtrl.getProduct);
 
 
 
