@@ -87,7 +87,7 @@ const store = createStore({
         userId: -1,
         token: '',
       }
-      localStorage.removeItem('user')
+      localStorage.clear()
     },
   },
   actions: {
@@ -133,20 +133,10 @@ const store = createStore({
         instance.get(`products`)
           .then(function (response) {
             commit('products', response.data)
-            commit('product', response.data)
           })
-          .catch(function () {  })
+          .catch(function () {})
       
-    },
-    getOneProduct: ({ commit }, id) => {
-      commit('setStatus', 'loading')
-        instance.get(`products/${id}`)
-          .then(function (response) {
-            commit('products', response.data)
-          })
-          .catch(function () {  })
-      
-    },
+    },    
   }
   })
 

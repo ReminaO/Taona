@@ -17,9 +17,6 @@
             <router-link class="nav-link" to="/articles">Produits</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/article/:id">Produit</router-link>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="#">Astuces</a>
           </li>
           <li class="nav-item">
