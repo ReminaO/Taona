@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class='logo'>
-      <img alt="logo-groupomania">
+      <img src="../assets/img/Logo3.png" alt="logo-Taona">
     </div>
     <form @submit="checkForm" class="card">
       <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
@@ -12,9 +12,23 @@
         <input v-model="email" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
-        <input v-model="username" class="form-row__input" type="text" placeholder="Pseudo"/>
-        <textarea v-model="bio" class="form-row__input" type="text" placeholder="Biographie"/>
+        <input v-model="firstName" class="form-row__input" type="text" placeholder="Prénom"/>
       </div>
+      <div class="form-row" v-if="mode == 'create'">
+        <input v-model="lastName" class="form-row__input" type="text" placeholder="Nom"/>
+      </div>
+      <div class="form-row" v-if="mode == 'create'">
+        <input v-model="phone_number" class="form-row__input" type="text" placeholder="Téléphone"/>
+      </div>
+      <div class="form-row" v-if="mode == 'create'">
+        <textarea v-model="address" class="form-row__input" type="text" placeholder="Adresse"/>
+      </div>
+      <div class="form-row" v-if="mode == 'create'">
+        <input v-model="city" class="form-row__input" type="text" placeholder="ville"/>
+      </div>
+      <div class="form-row" v-if="mode == 'create'">
+        <input v-model="postal_code" class="form-row__input" type="text" placeholder="Code postal"/>
+      </div>  
       <div class="form-row">
         <input v-model="password" @change="isPwdValid" class="form-row__input" type="password" placeholder="Mot de passe"/>
       </div>
@@ -51,9 +65,13 @@ export default {
       mode: 'login',
       id: '',
       email: '',
-      username: '',
-      password: '',
-      bio: '',
+      firstName: '',
+      lastName: '',
+      address: '',
+      city: '',
+      postal_code: '',
+      phone_number: '',
+      password:'',
       errors: []
     }
   },
@@ -94,17 +112,21 @@ export default {
         email: this.email,
         password: this.password,
       }).then(function () {
-        self.$router.push('/wall');
+        self.$router.push('/');
       }, function (error) {
         console.log(error);
       })
     },
     signup: function () {
       const self = this;
-      this.$store.dispatch('signup', {
+      this.$store.dispatch('createAccount', {
         email: this.email,
-        username: this.username,
-        bio: this.bio,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        address: this.address,
+        city: this.city,
+        postal_code: this.postal_code,
+        phone_number: this.phone_number,
         password: this.password,
       }).then(function () {
         self.login();
@@ -135,15 +157,16 @@ export default {
 
 <style scoped>
   .card {
-      text-align: center;
-      width: 50%;
-      background: rgb(255, 178, 162);
-      color: white;
-      background-position: 50% 50%;
-      border: 1px solid rgb(253, 88, 55);
-      padding: 10px;
-      border-radius: 8px;
-        }
+    text-align: center;
+    width: 50%;
+    background: #672932;
+    color: #d4a449;
+    background-position: 50% 50%;
+    border: 1px solid #d4a449;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 100px;
+  }
   .form-row {
     display: flex;
     margin: 16px 0px;
@@ -155,7 +178,7 @@ export default {
     padding:8px;
     border: rgb(204, 43, 54) solid 1px;
     border-radius: 8px;
-    background-color: rgba(201, 55, 65,0.5);
+    background-color: #d4a449;
     font-weight: 500;
     font-size: 20px;
     flex:1;
@@ -163,7 +186,7 @@ export default {
     color: white;
   }
   .form-row__input::placeholder {
-    color:rgba(255,255,255,0.8);
+    color:#672932;
     
   }
 .form-row__input {
@@ -182,12 +205,16 @@ export default {
     padding: 0;
   }
   button {
-  background-color:rgb(255, 101, 70);
-  color:rgba(255,255,255,1);
-  border-radius: 8px;
-  padding: 10px 25px;
-  font-size: 23px;
-  border: none;
+    background-color:#d4a449;
+    color:rgba(255,255,255,1);
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-size: 23px;
+    border: none;
+    }
+  button:hover {
+    background-color:#b46773;
+    color:rgba(255,255,255,1);
 }
 .button--disabled {
   background-color:rgba(253, 45, 1, 0.2);

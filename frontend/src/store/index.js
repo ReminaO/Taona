@@ -2,9 +2,6 @@ import { createStore } from 'vuex'
 
 const axios = require('axios')
 
-const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/',
-})
 
 let user = localStorage.getItem('user')
 let product = localStorage.getItem('product')
@@ -16,7 +13,6 @@ if (!user) {
 } else {
   try {
     user = JSON.parse(user)
-    instance.defaults.headers.common['Authorization'] = user.token;
   } catch (ex) {
     user = {
       userId: -1,
@@ -24,6 +20,10 @@ if (!user) {
     }
   }
 }
+const instance = axios.create({
+  baseURL: 'http://localhost:3000/api/',
+  headers: {'Authorization': 'Bearer '+ `${user.token}`}
+})
 
 // Create a new store instance.
 const store = createStore({
@@ -38,6 +38,7 @@ const store = createStore({
       city: '',
       phone_number: '',
       avatar: '',
+      isAdmin:''
     },
     product: product,
     products:[],
@@ -136,7 +137,30 @@ const store = createStore({
           })
           .catch(function () {})
       
-    },    
+    }, 
+    createProduct: ({ commit }, payload) => {
+      commit('setStatus', 'loading')
+      return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append('prodImg', payload.img);
+        formData.append('prodImg', payload.thumbImg1);
+        formData.append('prodImg', payload.thumbImg2);
+        formData.append('prodImg', payload.thumbImg3);
+        formData.append('prodImg', payload.thumbVideo);
+        formData.append('name', payload.name);
+        formData.append('description', payload.description);
+        formData.append('price', payload.price);
+        instance.post(`products/${user.userId}`, formData)
+          .then(function (response) {
+            commit('setStatus', 'created')
+            resolve(response)
+          })
+          .catch(function (error) {
+            commit('setStatus', 'error_create')
+            reject(error)
+          })
+      })
+    },
   }
   })
 

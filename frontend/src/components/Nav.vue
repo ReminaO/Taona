@@ -22,14 +22,17 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Panier</a>
           </li>
-          <li class="nav-item dropdown">
+          <li v-if="$store.state.user.userId == -1" class="nav-item">
+            <router-link class="nav-link" to="/connexion">Connexion</router-link>
+          </li>
+          <li v-else class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Mon compte
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">Mon Profil</a></li>
-              <li><a class="dropdown-item" href="#">Mes Commandes</a></li>
-              <li><a class="dropdown-item" href="#">Déconnexion</a></li>
+              <li><router-link class="dropdown-item" to="/profil">Mon Profil</router-link></li>
+              <li><router-link class="dropdown-item" to="/commandes">Mes Commandes</router-link></li>
+              <li><a class="dropdown-item" @click="logout" href="#">Déconnexion</a></li>
             </ul>
           </li>
         </ul>
@@ -43,8 +46,15 @@
 import { mapState } from 'vuex'
 export default {
   name: 'Nav',
+  methods:{
+  logout: function () {
+      this.$store.commit('logout');
+      this.$router.push('/');
+    }
+  }
 
 }
+
 </script>
 <style scoped>
 .navbar{

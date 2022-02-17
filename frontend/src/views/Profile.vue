@@ -52,6 +52,20 @@
 import { mapState } from 'vuex'
 export default {
   name: 'Profile',
+  data (){
+    return {
+      toggle: true,
+      email: '',
+      firstName: '',
+      lastName: '',
+      address: '',
+      city: '',
+      postal_code: '',
+      phone_number: '',
+      password:'',
+      errors: []
+    }
+  },
   mounted: function () {
     const self = this;
     console.log(self.$store.state.user);

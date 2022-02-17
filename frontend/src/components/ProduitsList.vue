@@ -1,5 +1,8 @@
 <template>
   <section class="container d-flex ">
+    <div class="product-form">
+      <Form v-if="$store.state.user.isAdmin == true"/>
+    </div>
     <div class="container d-flex flex-column">
       <div class="d-flex justify-content-center row">
         <Product v-for="product in products" :key="product.id" class="card col-3" style="width: 20rem;"
@@ -16,11 +19,13 @@
 
 <script>
 import Product from '@/components/Product'
+import Form from'@/components/ProductForm'
 import { mapState } from 'vuex'
 export default {
   name: 'Home',
   components: {
-    Product
+    Product,
+    Form
   },
   data(){
     return {
@@ -51,7 +56,13 @@ export default {
    display: flex;
    justify-content: space-between;
  }
-
-
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.product-form{
+  display: flex;
+  
+}
  
 </style>

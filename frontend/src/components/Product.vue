@@ -8,6 +8,10 @@
                 <p class="card-text">{{name}}</p>
                 <p class="card-text">{{price}}</p>
             </div>
+            <div v-if="$store.state.user.isAdmin == true" class="card-footer">
+            <i class="bi bi-pencil-square"></i>
+            <i class="bi bi-trash3"></i>
+            </div>
             </a>
         </div>
     </div>
@@ -30,15 +34,7 @@ import { mapState } from 'vuex'
         },
         methods:{
             ...mapState(["getOneProduct"]),
-            thumbClick(){
-                const thumbs = document.querySelectorAll('.small')
-                const fullImg = document.getElementById('full')
-                thumbs.forEach(item =>{
-                    let imgSource = item.getAttribute('src')
-                    fullImg.setAttribute('src', imgSource)
-                })
             },
-        },
         props: ["name", "img", "price", "id"],
     }
 </script>
@@ -66,6 +62,10 @@ import { mapState } from 'vuex'
     }
     a:hover{
         color:#333333
+    }
+    .card-footer{
+        display: flex;
+        justify-content: space-between;
     }
 @media screen and (max-width: 800px){
     .container{
