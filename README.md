@@ -22,8 +22,8 @@ run `npm install` to install the dependancies.
 - Sequelize-CLI
 - DotEnv : 
 `
-DB_TOKEN=
-DB_EXPIRES_IN=
+DB_TOKEN= ;
+DB_EXPIRES_IN= ;
 `
 - Stripe
 
