@@ -90,6 +90,13 @@ const store = createStore({
       }
       localStorage.clear()
     },
+    deleteInfos: function (state) {
+      state.user = {
+        userId: -1,
+        token: '',
+      }
+      localStorage.clear();
+    },
   },
   actions: {
     login: ({ commit }, userInfos) => {
@@ -129,6 +136,69 @@ const store = createStore({
           })
           .catch(function () { })
     },
+    modifyAvatar: ({ commit }, payload) => {
+      commit('setStatus', 'loading')
+      return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append('image', payload.avatar);
+        instance.put(`users/${user.userId}/profile`, formData)
+          .then(function (response) {
+            commit('userInfos')
+            resolve(response)
+          })
+          .catch(function (error) {
+            commit('setStatus', 'error_create')
+            reject(error)
+          })
+      })
+    },
+    modifyAddress: ({ commit }, payload) => {
+      commit('setStatus', 'loading')
+      return new Promise((resolve, reject) => {
+        instance.put(`users/${user.userId}/address`, payload)
+          .then(function (response) {
+            resolve(response)
+          })
+          .catch(function (error) {
+            commit('setStatus', 'error_create')
+            reject(error)
+          })
+      })
+    },
+    modifyNumber: ({ commit }, payload) => {
+      commit('setStatus', 'loading')
+      return new Promise((resolve, reject) => {
+        instance.put(`users/${user.userId}/number`, payload)
+          .then(function (response) {
+            resolve(response)
+          })
+          .catch(function (error) {
+            commit('setStatus', 'error_create')
+            reject(error)
+          })
+      })
+    },
+    modifyPassword: ({ commit }, payload) => {
+      commit('setStatus', 'loading')
+      return new Promise((resolve, reject) => {
+        instance.put(`users/${user.userId}/password`, payload)
+          .then(function (response) {
+            resolve(response)
+          })
+          .catch(function (error) {
+            commit('setStatus', 'error_create')
+            reject(error)
+          })
+      })
+    },
+    deleteProfile: ({ commit, payload }) => {
+      instance.delete(`users/${user.userId}`,{ data : payload})
+        .then(() => {
+          commit('deleteInfos')
+      })
+      .catch(function () {
+      });
+    },
     getProducts: ({ commit }) => {
       commit('setStatus', 'loading')
         instance.get(`products`)
@@ -161,6 +231,7 @@ const store = createStore({
           })
       })
     },
+    
   }
   })
 

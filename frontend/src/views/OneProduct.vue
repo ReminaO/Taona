@@ -15,7 +15,7 @@
         </div>
         <div class="product-infos">
             <h1 class="product-title">{{product.name}}</h1>
-            <p class="product-price">{{product.price}}</p>
+            <p class="product-price">{{product.price}}€</p>
             <p class="descritpion">{{product.description}}</p>
             <button class="btn btn-add">
                 <i class="bi bi-cart4"></i>
@@ -124,6 +124,7 @@ import { mapState } from 'vuex'
 .small, .small2, .small3, .small4 {
     flex:1;
     margin: 0.3rem;
+    cursor: pointer;
 }
 h1.product-title{
     font-size: 3rem;

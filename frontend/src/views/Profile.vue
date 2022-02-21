@@ -4,48 +4,47 @@
   <div class="row">
     <div class="col col-xl-10 form-container">
       <aside class="formulaire">
-        <form @submit.prevent="checkForm" class="form-group identity-details-container">
-            <!-- Modifier ma photo de profil -->
-            <div class="identity-container">
-              <div class="avatar">
-                <img :src="user.avatar"/><br>
-                <input v-if='!img_toggle' class="image" type="file" ref="image" @change="fileSelected()"><br>
-                <button @click="img_toggle = !img_toggle || updateToggle()" class="update-button">
-                  Modifier
-                </button><br>
-                <button v-if='!img_toggle' class="button" >
-                  Enregistrer
-                </button><br>
-                <button v-if='!img_toggle' @click="reload()" class="button">
-                  Annuler
-                </button><br>
-              </div>
-              
-              <br><br>
-              <div>
-                <label for="username">{{user.firstName}} </label>
-                <label for="username"> {{user.lastName}}</label><br>
-                <label for="email"> {{user.email}}</label><br>
-              </div>
+        <form @submit.prevent action="/users/:id/profile" method="PUT" enctype="multipart/form-data" class="form-group identity-details-container">
+          <!-- Modifier ma photo de profil -->
+          <div class="identity-container">
+            <div class="avatar">
+              <img :src="user.avatar" alt="Photo de profil"/><br>
+              <input v-if='!img_toggle' class="image" type="file" ref="image" name="image" @change="fileSelected()" ><br>
+              <button @click="img_toggle = !img_toggle || updateToggle()" class="update-button">
+                Modifier
+              </button><br>
+              <button @click="modifyImg()" v-if='!img_toggle' class="button" >
+                Enregistrer
+              </button><br>
+              <button v-if='!img_toggle' @click="reload()" class="button">
+                Annuler
+              </button><br>
             </div>
-            </form >
+            
+            <br>
+            <div>
+              <label for="username">{{user.firstName}} {{user.lastName}} </label><br>
+              <label for="email"> {{user.email}}</label><br>
+            </div>
+          </div>
+        </form >
         </aside>
         <section>
           <form @submit.prevent class="form-group address-container">
             <div>
-              <label>Données personnelles:</label><br><br>
-              <label for="address">Adresse : {{user.address}} </label><br> <textarea class="form-row__input" type="text" id="address" name="address" ref="address" v-model="address" placeholder="Adresse"></textarea><br>
-              <label for="postal_code">Code postal : {{user.postal_code}}</label><br><input  class="form-row__input" type="text" id="postal_code" name="postal_code" ref="postal_code" v-model="postal_code" placeholder="code postal"> <br>
-              <label for="city">Ville : {{user.city}}</label><br><input  class="form-row__input" type="text" id="city" name="city" ref="city" v-model="city" placeholder="Ville"> <br><br>
-              <button  class="button" >
+              <h3>Informations personnelles:</h3><br><br>
+              <label for="address">Adresse : </label><br><textarea class="form-row__input" type="text" id="address" name="address" ref="address" v-model="address" :placeholder="user.address"></textarea><br><br>
+              <label for="postal_code">Code postal : </label><input  class="form-row__input" type="text" id="postal_code" name="postal_code" ref="postal_code" v-model="postal_code" :placeholder="user.postal_code"> <br><br>
+              <label for="city">Ville : </label><input  class="form-row__input" type="text" id="city" name="city" ref="city" v-model="city" :placeholder="user.city"> <br><br>
+              <button @click="modifyAddress()" class="button" >
                 Enregistrer
               </button>
               
             </div>
           </form> <br>
           <form @submit.prevent class="form-group phone-container"> 
-            <label for="phone_number">Téléphone : 0{{user.phone_number}} </label><br><input class="form-row__input" type="text" id="phone_number" name="phone_number" ref="phone_number" v-model="phone_number" placeholder="Téléphone"> <br>
-            <button class="button" >
+            <label for="phone_number">Téléphone :</label><input class="form-row__input" type="text" id="phone_number" name="phone_number" ref="phone_number" v-model="phone_number" :placeholder="`0${user.phone_number}`"> <br>
+            <button @click="modifyNumber()" class="button" >
               Enregistrer
             </button>
           </form>
@@ -53,13 +52,13 @@
         <section class="form-group">
           <form @submit.prevent>
               <label for="phone_number">Modifier le mot de passe </label><br><input v-if='!pwd_toggle' class="form-row__input" type="password" id="password" name="password" ref="password" v-model="password" placeholder="Mot de passe" @keyup='check()'> <br>
-              <label v-if='!pwd_toggle'>Confirmer le mot de passe: </label><br><input v-if='!pwd_toggle' type="password" name="confirm_password" class="form-row__input" id="confirm_password"  @keyup='check();' /> <br><br>
+              <label v-if='!pwd_toggle'>Confirmer le mot de passe: </label><br><input v-if='!pwd_toggle' type="password" name="confirm_password" class="form-row__input" id="confirm_password" ref="confirm_password"  placeholder="Confirmer le mot de passe" @keyup='check();' /> <br><br>
                 <span id='message'></span>
               
               <button @click="pwd_toggle = !pwd_toggle || updateToggle()" class="update-button">
                 Modifier
               </button>
-              <button v-if='!pwd_toggle' class="button" >
+              <button @click="modifyPassword()" v-if='!pwd_toggle' class="button" >
                 Enregistrer
               </button><br><br>
               <button v-if='!pwd_toggle ' @click="reload()" class="button">
@@ -69,7 +68,7 @@
         </section>  
     </div>
     <form @submit.prevent class="password-container">
-      <button class="button btn-danger" data-bs-toggle="button" autocomplete="off">
+      <button @click="deleteProfile()" class="button btn-danger" data-bs-toggle="button" autocomplete="off">
         Supprimer le compte
       </button><br>
       <button @click="logout()" class="button btn-primary" data-bs-toggle="button" autocomplete="off">
@@ -140,7 +139,72 @@ export default {
           document.getElementById('message').innerHTML = 'Mot de passe non identique';
         }
       }
-    }
+    },
+    fileSelected: function () {
+      this.image = this.$refs.image.files[0];
+      this.user.avatar = URL.createObjectURL(this.image)
+        },
+    modifyImg: function () {
+      let data = {
+        avatar : this.image,
+      }
+      this.$store.dispatch('modifyAvatar', data, {
+      }).then(function () {
+          location.reload();
+      }, function (error) {
+          console.log(error);
+      })
+    },
+    modifyAddress: function () {
+      let payload ={
+        address: this.address,
+        postal_code: this.postal_code,
+        city: this.city
+      }
+      this.$store.dispatch('modifyAddress', payload, {
+        
+      }).then(() => {
+        location.reload();
+      }, function (error) {
+          console.log(error);
+      })
+    },
+    modifyNumber: function () {
+      let payload = {
+        phone_number: this.phone_number
+      }
+      this.$store.dispatch('modifyNumber', payload,{
+      }).then(() => {
+        location.reload();
+      }, function (error) {
+          console.log(error);
+      })
+    },
+    modifyPassword: function () {
+      let payload = {
+        password: this.password
+      } 
+      if(this.$refs.password.value === this.$refs.confirm_password.value) {
+          this.$store.dispatch('modifyPassword', payload,{
+        }).then(() => {
+          location.reload();
+        }, function (error) {
+            console.log(error);
+        })
+      }
+    },
+    deleteProfile: function () {
+      const self = this;
+      this.$store.dispatch('deleteProfile', {
+      })
+      .then(() => {
+        alert("Profil supprimé !");
+        self.$router.push('/')
+        }, function (error) {
+            console.log(error);
+        })
+      
+    },
   }
 }
 </script>
@@ -216,7 +280,9 @@ label {
   align-items: center;
 }
 .avatar img{
-  height: 150px
+  height: 150px;
+  object-fit: contain;
+  border-radius: 100px ;
 }
 .password-container button {
   width: 25%

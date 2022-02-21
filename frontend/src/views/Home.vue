@@ -7,9 +7,10 @@
       </div>
     </div>
     <Caroussel />
-    <hr>
+    
     <div class="container-fluid  mt-4 ">
       <div class="row product-container d-flex justify-content-center text-center">
+        <hr>
         <div class="product col col-6 w-25">
           <router-link to="/articles"><img src="../assets/img/card.png" alt="Photo Produits">
             <p class="title-product">Produits</p>
@@ -80,6 +81,9 @@ img{
   border-radius: 10px;
   -webkit-box-shadow: 0.5px 0.5px 10px 1px rgba(0,0,0,0.1);
   box-shadow: 0.5px 0.5px 10px 1px rgba(0,0,0,0.1);
+}
+.product-container {
+  margin: 100px
 }
 @media screen and (max-width: 800px){
   .product-container{

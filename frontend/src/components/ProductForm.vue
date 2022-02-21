@@ -41,7 +41,7 @@ export default {
     methods :{
         checkForm: function (e) {
             if (this.name && this.description && this.price) {
-                alert("Article Ajouté !");
+                // alert("Article Ajouté !");
                 this.$router.go("/articles");
                 return true;
             }

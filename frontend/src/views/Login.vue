@@ -30,7 +30,11 @@
         <input v-model="postal_code" class="form-row__input" type="text" placeholder="Code postal"/>
       </div>  
       <div class="form-row">
-        <input v-model="password" @change="isPwdValid" class="form-row__input" type="password" placeholder="Mot de passe"/>
+        <input v-model="password" @change="isPwdValid" class="form-row__input" id="password" type="password" ref="password" placeholder="Mot de passe" @keyup='check()'/>
+      </div>
+      <div class="form-row" v-if="mode == 'create'">
+        <input type="password" name="confirm_password" class="form-row__input" id="confirm_password" ref="confirm_password"  placeholder="Confirmer le mot de passe" @keyup='check();' />
+        <br><span id='message'></span>
       </div>
       <div class="form-row text-danger" v-if="mode == 'login' && status == 'error_login'">
         Adresse mail et/ou mot de passe invalide
@@ -84,7 +88,7 @@ export default {
   computed: {
     validatedFields: function () {
       if (this.mode == 'create') {
-        if (this.email != "" && this.username != "" && this.bio != "" && this.password != "") {
+        if (this.email != "" && this.lastName != "" && this.firstName != "" && this.phone_number != "" && this.password != "" && this.city != "" && this.postal_code != "") {
           return true;
         } else {
           return false;
@@ -119,20 +123,22 @@ export default {
     },
     signup: function () {
       const self = this;
-      this.$store.dispatch('createAccount', {
-        email: this.email,
-        firstName: this.firstName,
-        lastName: this.lastName,
-        address: this.address,
-        city: this.city,
-        postal_code: this.postal_code,
-        phone_number: this.phone_number,
-        password: this.password,
-      }).then(function () {
-        self.login();
-      }, function (error) {
-        console.log(error);
-      })
+      if(this.$refs.password.value === this.$refs.confirm_password.value) {
+        this.$store.dispatch('createAccount', {
+          email: this.email,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          address: this.address,
+          city: this.city,
+          postal_code: this.postal_code,
+          phone_number: this.phone_number,
+          password: this.password,
+        }).then(function () {
+          self.login();
+        }, function (error) {
+          console.log(error);
+        })
+      }
     },
     checkForm: function (e) {
       const email_regex = /^(([^<>()[\].,;:s@"]+(.[^<>()[\].,;:s@"]+)*)|(".+"))@((s[[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
@@ -150,6 +156,18 @@ export default {
         this.errors.push('Adresse mail déjà utilisée !');
       }
       e.preventDefault();
+    },
+    check: function() {
+      if(document.getElementById('password').value.length >= 1) {
+          if (document.getElementById('password').value ==
+          document.getElementById('confirm_password').value) {
+          document.getElementById('message').style.color = 'green';
+          document.getElementById('message').innerHTML = 'Mot de passe identique';
+        } else {
+          document.getElementById('message').style.color = 'red';
+          document.getElementById('message').innerHTML = 'Mot de passe non identique';
+        }
+      }
     },
   }
 }
