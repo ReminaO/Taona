@@ -6,10 +6,11 @@
     <div class="container d-flex flex-column">
       <div class="d-flex justify-content-center row">
         <Product v-for="product in products" :key="product.id" class="card col-3" style="width: 20rem;"
-        :img="product.img"
-        :name="product.name"
-        :price="product.price"
-        :id="product.id"
+          :img="product.img"
+          :name="product.name"
+          :price="product.price"
+          :id="product.id"
+          :description="product.description"
         />
       </div>
     </div>

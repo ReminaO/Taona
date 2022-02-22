@@ -22,18 +22,76 @@
                 Ajouter au panier
             </button>
         </div>
+        <div v-if="$store.state.user.isAdmin == true" class="card-footer">
+            <i class="bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#updateModal"></i><br>
+            <i @click="deleteProduct()" class="bi bi-trash3"></i>
+        </div>
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" action="/products/:userId/:id" method="PUT" enctype="multipart/form-data">
+                        <!-- Ajout des photos -->
+                        <input class="image" type="file" multiple ref="prodImg" name="prodImg" @change="fileSelected()">
+                        <br><br>
+                        <!-- Ajout des informations de l'article -->
+                        <input class="form-row__input" type="text" id="name" name="name" v-model="name" placeholder="Nom du produit"> <br><br>
+                        <textarea class="form-row__input" type="text" id="description" name="description" v-model="description" placeholder="Description"></textarea><br><br>
+                        <input class="form-row__input" type="text" id="price" name="price" v-model="price" placeholder="Prix"> <br><br>
+                    
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-bs-dismiss="modal">Annuler</button>
+                            <button @click="modifyProduct()" type="button" class="btn">Modifier</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
     </section> 
 </template>
 
 <script>
 import { mapState } from 'vuex'
+
+const axios = require('axios')
+
+let user = localStorage.getItem('user')
+if (!user) {
+    user = {
+    userId: -1,
+    token: '',
+    }
+} else {
+    try {
+    user = JSON.parse(user)
+    } catch (ex) {
+    user = {
+        userId: -1,
+        token: '',
+        }
+    }
+}
+
+const instance = axios.create({
+    baseURL: 'http://localhost:3000/api/',
+    headers: {'Authorization': 'Bearer '+ `${user.token}`}
+})
+
     export default {
         name: "Product",
         
         data(){
             return {
-                    product: '',
-                }
+                product: '',
+                name:'',
+                description:'',
+                price:''
+            }
         },
         computed: {
             products(){
@@ -41,7 +99,6 @@ import { mapState } from 'vuex'
             }
         },
         methods:{
-            ...mapState(["getOneProduct"]),
             thumbClick(){
                 const thumbs = document.querySelectorAll('.small')
                 const fullImg = document.getElementById('full')
@@ -78,13 +135,53 @@ import { mapState } from 'vuex'
             async initData (){
                 const response = await fetch(`http://localhost:3000/api/products/${this.$route.params.id}`)   
                 this.product = await response.json()
-            }
+            },
+        
+            
+            deleteProduct: function () {
+                const self = this;
+                instance.delete(`products/${user.userId}/${this.$route.params.id}`, {
+                })
+                .then(function () {
+                alert("Article supprimé !");
+                self.$router.push('/articles')
+                }, function (error) {
+                console.log(error);
+                })
+            },
+            fileSelected: function () {
+            this.img = this.$refs.prodImg.files[0];
+            this.thumbImg1 = this.$refs.prodImg.files[1];
+            this.thumbImg2 = this.$refs.prodImg.files[2];
+            this.thumbImg3 = this.$refs.prodImg.files[3];
+            this.thumbVideo = this.$refs.prodImg.files[4];
+        },
+            modifyProduct: function () {
+                const formData = new FormData();
+                formData.append('prodImg', this.img);
+                formData.append('prodImg', this.thumbImg1);
+                formData.append('prodImg', this.thumbImg2);
+                formData.append('prodImg', this.thumbImg3);
+                formData.append('prodImg', this.thumbVideo);
+                formData.append('description', this.description);
+                formData.append('price', this.price);
+                formData.append('name', this.name);
+                const self = this;
+                instance.put(`products/${user.userId}/${this.$route.params.id}`, formData, {
+                })
+                .then(function () {
+                alert("Article modifié !");
+                self.$router.push(`/articles`)
+                }, function (error) {
+                console.log(error);
+                })
+            },
+            
         },
         async created() {
             this.initData()
-        },
-        
-}
+        },    
+    }
 </script>
 <style scoped>
 
@@ -150,6 +247,69 @@ img{
     background-color: #672932;
     border:#d4a449 1px solid;
     margin-top: 10px
+}
+.modal{
+    backdrop-filter: blur(10px);
+}
+.modal-body{
+    background: #672932;
+    color: #d4a449;
+    border: 1px solid #d4a449;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 100px;
+    width: 100%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content{
+    background-color:#d4a449
+}
+i{
+    cursor: pointer;
+}
+.form-row__input {
+    padding:8px;
+    border: rgb(204, 43, 54) solid 1px;
+    border-radius: 8px;
+    background-color: #d4a449;
+    font-weight: 500;
+    font-size: 17px;
+    flex:1;
+    min-width: 100px;
+    color: white;
+}
+.form-row__input::placeholder {
+    color:#672932;
+    
+}
+.form-row__input {
+    outline:rgb(255, 101, 70);
+    
+}
+button {
+    background-color:#d4a449;
+    color:rgba(255,255,255,1);
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-size: 20px;
+    border: none;
+}
+button:hover {
+    background-color:#b46773;
+    color:rgba(255,255,255,1);
+}
+textarea, input {
+    width: 100%
+}
+.image {
+    background-color:#d4a449;
+    color:rgba(255,255,255,1);
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-size: 17px;
+    border: none;
 }
 @media screen and (max-width: 800px){
     .container{

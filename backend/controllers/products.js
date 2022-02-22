@@ -129,14 +129,14 @@ exports.modifyProduct = (req, res) => {
 
         // Met a jour l'article'
         productFound.update({
-          name : name,
-          description: description,
-          price: price,
-          img : img,
-          thumbImg1 : thumbImg1,
-          thumbImg2 : thumbImg2,
-          thumbImg3 : thumbImg3,
-          thumbVideo: thumbVideo
+          name : (name ? name : productFound.name),
+          description: (description ? description : productFound.description),
+          price: (price ? price : productFound.price),
+          img : (img ? img : productFound.img),
+          thumbImg1 : (thumbImg1 ? thumbImg1 : productFound.thumbImg1),
+          thumbImg2 : (thumbImg2 ? thumbImg2 : productFound.thumbImg2),
+          thumbImg3 : (thumbImg3 ? thumbImg3 : productFound.thumbImg3),
+          thumbVideo: (thumbVideo ? thumbVideo : productFound.thumbVideo)
         })
           .then(() => res.status(200).json({ message: 'Produit modifié !' }))
           .catch(error => res.status(400).json({ message: "Produit introuvable", error: error }))

@@ -43,6 +43,7 @@ const store = createStore({
     product: product,
     products:[],
     productInfos: {
+      id:"",
       name: '',
       price: '',
       description: '',

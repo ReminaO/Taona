@@ -8,10 +8,6 @@
                 <p class="card-text">{{name}}</p>
                 <p class="card-text">{{price}}€</p>
             </div>
-            <div v-if="$store.state.user.isAdmin == true" class="card-footer">
-            <i class="bi bi-pencil-square"></i>
-            <i class="bi bi-trash3"></i>
-            </div>
             </a>
         </div>
     </div>
