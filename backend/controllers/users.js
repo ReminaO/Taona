@@ -292,6 +292,7 @@ exports.modifyAddress = (req, res) => {
     const address = req.body.address;
     const postal_code = req.body.postal_code;
     const city = req.body.city;
+    const phone_number = req.body.phone_number;
 
     asyncLib.waterfall([
         // Vérifie que la requête est envoyé par un compte existant
@@ -313,48 +314,6 @@ exports.modifyAddress = (req, res) => {
                     address: (address ? address : userFound.address),
                     postal_code: (postal_code ? postal_code : userFound.postal_code),
                     city: (city ? city : userFound.city),
-                })
-                    .then(function () {
-                        done(userFound);
-                    })
-                    .catch(function () {
-                        res.status(500).json({ 'error' : 'Impossible de mettre a jour l\'utilisateur' });
-                    })
-            }
-        },
-        
-    ],
-        function (userFound) {
-            if (userFound) {
-                return res.status(201).json(userFound);
-            } else {
-                return res.status(500).json({ 'error': 'cannot update user profile' });
-            }
-        });
-    };
-        
-    // Controllers pour modifier l'adresse
-exports.modifyNumber = (req, res) => {
-    // Paramètres
-    const phone_number = req.body.phone_number;
-
-    asyncLib.waterfall([
-        // Vérifie que la requête est envoyé par un compte existant
-        function (done) {
-            models.User.findOne({
-                attributes: ['id', 'phone_number'],
-                where: { id: req.params.id}
-            }).then(function (userFound) {
-                done(null, userFound);
-            })
-                .catch(function () {
-                    return res.status(500).json({ 'error': 'impossible de vérifier l\'utilisateur' });
-                });
-        },
-        function (userFound, done) {
-            // Vérification que l'utilisateur soit le propriétaire du profil
-            if (userFound) {
-                userFound.update({
                     phone_number: (phone_number ? phone_number : userFound.phone_number),
                 })
                     .then(function () {
@@ -375,6 +334,7 @@ exports.modifyNumber = (req, res) => {
             }
         });
     };
+        
 // Controllers por effacer un profil grâce a l'ID
 exports.deleteProfile = (req, res) => {
     asyncLib.waterfall([

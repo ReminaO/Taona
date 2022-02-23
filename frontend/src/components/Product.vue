@@ -42,12 +42,12 @@ import { mapState } from 'vuex'
     }
     img{
         object-fit: fill;
-        margin-top: 10px;
+        margin-top: 20px;
         height: 350px;
         width: 100%
     }
     .card{
-        background-color: #d4a449;
+        background-color: #F7F7F7 ;
         border:#672932 1px solid;
         margin: 30px;
         position: relative

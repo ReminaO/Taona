@@ -166,19 +166,6 @@ const store = createStore({
           })
       })
     },
-    modifyNumber: ({ commit }, payload) => {
-      commit('setStatus', 'loading')
-      return new Promise((resolve, reject) => {
-        instance.put(`users/${user.userId}/number`, payload)
-          .then(function (response) {
-            resolve(response)
-          })
-          .catch(function (error) {
-            commit('setStatus', 'error_create')
-            reject(error)
-          })
-      })
-    },
     modifyPassword: ({ commit }, payload) => {
       commit('setStatus', 'loading')
       return new Promise((resolve, reject) => {

@@ -202,7 +202,7 @@ const instance = axios.create({
 .product-infos{
     flex: 1;
     padding: 2rem;
-    background-color:#d4a449 ;
+    background-color:#F7F7F7 ;
     border-radius:  0 10px 10px 0;
 }
 .full-img-container{

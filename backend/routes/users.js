@@ -18,7 +18,6 @@ router.get('/:id', auth, userCtrl.getOneProfile);
 router.put('/:id/profile', auth, multer, userCtrl.modifyProfile);
 router.put('/:id/password', auth, userCtrl.modifyPassword);
 router.put('/:id/address', auth, userCtrl.modifyAddress);
-router.put('/:id/number', auth, userCtrl.modifyNumber);
 router.delete('/:id', auth, userCtrl.deleteProfile);
 
 module.exports = router; // Export du fichier
