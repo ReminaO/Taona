@@ -41,9 +41,6 @@ export default {
     const self =  this;
     self.$store.dispatch('getProducts');
   },
-  methods:{
-    ...mapState(["getOneProduct"]),
-  }
 
 }
 </script>

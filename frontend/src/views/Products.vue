@@ -6,7 +6,7 @@
 // @ is an alias to /src
 import Produits from'@/components/ProduitsList'
 export default {
-  name: 'Home',
+  name: 'Products',
   components: {
     Produits
   }

@@ -11,7 +11,7 @@
                     <!-- Ajout des informations de l'article -->
                     <input class="form-row__input" type="text" id="name" name="name" :ref="name" v-model="name" placeholder="Nom du produit"> <br><br>
                     <textarea class="form-row__input" type="text" id="description" name="description" :ref="description" v-model="description" placeholder="Description"></textarea><br><br>
-                    <input class="form-row__input" type="text" id="price" name="price" :ref="price" v-model="price" placeholder="Prix"> <br><br>
+                    <input class="form-row__input" type="text" id="price" name="price" :ref="price" v-model="price" placeholder="Prix (Saisir en centimes)"> <br><br>
                     <p v-if="errors.length">
                     <b class="text-danger">Merci de corriger l'erreur suivante:</b>
                     <ul>
@@ -60,9 +60,6 @@ export default {
 
             e.preventDefault();
             }, 
-            // reload: function() {
-            // location.reload();
-            // }
         
         fileSelected: function () {
             this.img = this.$refs.prodImg.files[0];

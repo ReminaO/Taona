@@ -20,7 +20,7 @@
             <a class="nav-link" href="#">Astuces</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Panier</a>
+            <router-link class="nav-link" to="/panier">Panier <span class="text-center align-middle" v-if="$store.state.cart !== null">{{cart.length}}</span><span class="text-center align-middle" v-else>0</span></router-link>
           </li>
           <li v-if="$store.state.user.userId == -1" class="nav-item">
             <router-link class="nav-link" to="/connexion">Connexion</router-link>
@@ -46,6 +46,11 @@
 import { mapState } from 'vuex'
 export default {
   name: 'Nav',
+  computed: {
+    cart(){
+      return this.$store.state.cart
+  }
+  },
   methods:{
   logout: function () {
       this.$store.commit('logout');
@@ -67,5 +72,12 @@ img {
   padding:0;
   margin: 0;
 }
-
+span {
+  background-color: aliceblue;
+  color:grey;
+  border-radius: 50px;
+  padding-left: 6px;
+  padding-right: 6px;
+  
+}
 </style>

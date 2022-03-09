@@ -15,11 +15,23 @@
         </div>
         <div class="product-infos">
             <h1 class="product-title">{{product.name}}</h1>
-            <p class="product-price">{{product.price}}€</p>
-            <p class="descritpion">{{product.description}}</p>
-            <button class="btn btn-add">
+            <p class="product-price">{{product.price / 100}}€</p>
+            <p class="descritpion">{{product.description}}</p><br>
+            <select name="quantity" id="quantity-select" v-model="quantity">
+                <option value="">Quantité</option>
+                <option :value="1">1</option>
+                <option :value="2">2</option>
+                <option :value="3">3</option>
+                <option :value="4">4</option>
+                <option :value="5">5</option>
+            </select><br><br>
+            <button v-if="$store.state.user.userId !== -1 " @click.prevent="addToCart(product)" class="btn btn-add">
                 <i class="bi bi-cart4"></i>
                 Ajouter au panier
+            </button>
+            <button v-else @click="addToCart(product)" class="btn btn-add">
+                <i class="bi bi-cart4"></i>
+                <router-link class="btn-add" to="/connexion">Connexion</router-link>
             </button>
         </div>
         <div v-if="$store.state.user.isAdmin == true" class="card-footer">
@@ -30,7 +42,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Modification</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -56,7 +68,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 
 const axios = require('axios')
 
@@ -83,20 +94,23 @@ const instance = axios.create({
 })
 
     export default {
-        name: "Product",
+        name: "OneProduct",
         
         data(){
             return {
-                product: '',
+                // product: '',
                 name:'',
                 description:'',
-                price:''
+                price:'',
+                quantity: '',
+                // cart: []
             }
         },
         computed: {
-            products(){
+            product(){
                 return this.$store.state.products
-            }
+            },
+            
         },
         methods:{
             thumbClick(){
@@ -131,16 +145,14 @@ const instance = axios.create({
                     fullImg.setAttribute('src', imgSource)
             })
             },
-            
-            async initData (){
-                const response = await fetch(`http://localhost:3000/api/products/${this.$route.params.id}`)   
-                this.product = await response.json()
+            addToCart: function(product){
+                this.$store.commit('addCart', product)
+                // self.$router.push(`/panier`);
             },
-        
             
             deleteProduct: function () {
                 const self = this;
-                instance.delete(`products/${user.userId}/${this.$route.params.id}`, {
+                    this.$store.dispatch('deleteProduct', this.$route.params.id, {
                 })
                 .then(function () {
                 alert("Article supprimé !");
@@ -150,13 +162,14 @@ const instance = axios.create({
                 })
             },
             fileSelected: function () {
-            this.img = this.$refs.prodImg.files[0];
-            this.thumbImg1 = this.$refs.prodImg.files[1];
-            this.thumbImg2 = this.$refs.prodImg.files[2];
-            this.thumbImg3 = this.$refs.prodImg.files[3];
-            this.thumbVideo = this.$refs.prodImg.files[4];
-        },
+                this.img = this.$refs.prodImg.files[0];
+                this.thumbImg1 = this.$refs.prodImg.files[1];
+                this.thumbImg2 = this.$refs.prodImg.files[2];
+                this.thumbImg3 = this.$refs.prodImg.files[3];
+                this.thumbVideo = this.$refs.prodImg.files[4];
+            },
             modifyProduct: function () {
+                const self = this;
                 const formData = new FormData();
                 formData.append('prodImg', this.img);
                 formData.append('prodImg', this.thumbImg1);
@@ -166,7 +179,6 @@ const instance = axios.create({
                 formData.append('description', this.description);
                 formData.append('price', this.price);
                 formData.append('name', this.name);
-                const self = this;
                 instance.put(`products/${user.userId}/${this.$route.params.id}`, formData, {
                 })
                 .then(function () {
@@ -175,13 +187,13 @@ const instance = axios.create({
                 }, function (error) {
                 console.log(error);
                 })
-            },
-            
-        },
-        async created() {
-            this.initData()
-        },    
     }
+},
+
+        mounted(){
+            this.$store.dispatch( 'getOneProduct', this.$route.params.id)
+        }    
+}  
 </script>
 <style scoped>
 

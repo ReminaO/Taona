@@ -4,7 +4,6 @@ const axios = require('axios')
 
 
 let user = localStorage.getItem('user')
-let product = localStorage.getItem('product')
 if (!user) {
   user = {
     userId: -1,
@@ -40,7 +39,6 @@ const store = createStore({
       avatar: '',
       isAdmin:''
     },
-    product: product,
     products:[],
     productInfos: {
       id:"",
@@ -59,6 +57,7 @@ const store = createStore({
       quantity: '',
       amount: '',
     },
+    cart: []
   },
   mutations: {
     setStatus: function (state, status) {
@@ -70,10 +69,6 @@ const store = createStore({
     },
     userInfos: function (state, userInfos) {
       state.userInfos = userInfos
-    },
-    product: function (state, product) {
-      localStorage.setItem('product', JSON.stringify(product));
-      state.product = product;
     },
     productInfos: function (state, productInfos) {
       state.productInfos = productInfos
@@ -98,6 +93,13 @@ const store = createStore({
       }
       localStorage.clear();
     },
+    addCart: function (state, products) {
+      state.cart.push(products)
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+    },
+    getCart: function (state, cart) {
+      state.cart = cart
+    }
   },
   actions: {
     login: ({ commit }, userInfos) => {
@@ -196,6 +198,15 @@ const store = createStore({
           .catch(function () {})
       
     }, 
+    getOneProduct: ({ commit },id) => {
+      commit('setStatus', 'loading')
+        instance.get(`products/${id}`)
+          .then(function (response) {
+            commit('products', response.data)
+          })
+          .catch(function () {})
+      
+    }, 
     createProduct: ({ commit }, payload) => {
       commit('setStatus', 'loading')
       return new Promise((resolve, reject) => {
@@ -211,6 +222,7 @@ const store = createStore({
         instance.post(`products/${user.userId}`, formData)
           .then(function (response) {
             commit('setStatus', 'created')
+            commit('products', response.data)
             resolve(response)
           })
           .catch(function (error) {
@@ -219,7 +231,14 @@ const store = createStore({
           })
       })
     },
-    
+    deleteProduct: ({ commit }, id) => {
+      instance.delete(`products/${user.userId}/${id}`)
+        .then(() => {
+          commit('products', response.data)
+      })
+      .catch(function () {
+      });
+    },
   }
   })
 

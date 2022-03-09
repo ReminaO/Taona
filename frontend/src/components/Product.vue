@@ -2,13 +2,13 @@
     <section class="container d-flex ">
     <div class="container d-flex flex-column">
         <div class="d-flex justify-content-center row">
-            <a :href="`/article/${id}`">
-            <img :src="img" class="card-img-top" :alt="name" />
-            <div class="card-body">
-                <p class="card-text">{{name}}</p>
-                <p class="card-text">{{price}}€</p>
-            </div>
-            </a>
+            <router-link  @click.stop :to="`/article/${id}`">
+                <img :src="img" class="card-img-top" :alt="name" />
+                <div class="card-body">
+                    <p class="card-text">{{name}}</p>
+                    <p class="card-text">{{price/100}}€</p>
+                </div>
+            </router-link>
         </div>
     </div>
     </section>
