@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
     thumbImg1: DataTypes.STRING,
     thumbImg2: DataTypes.STRING,
     thumbImg3: DataTypes.STRING,
-    thumbVideo: DataTypes.STRING
+    thumbVideo: DataTypes.STRING,
+    quantity: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Product',

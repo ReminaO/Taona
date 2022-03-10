@@ -25,6 +25,9 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
+      quantity: {
+        type: Sequelize.INTEGER
+      },
       img: {
         type: Sequelize.STRING
       },

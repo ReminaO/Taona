@@ -12,6 +12,7 @@ exports.createProducts = (req, res) => {
   const name = req.body.name;
   const description = req.body.description;
   const price = req.body.price;
+  const quantity = 0;
   //Vérification d'un fichier existant ou laisse le lien vide
   const img = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[0].filename}` : null;
   const thumbImg1 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[1].filename}` : null;
@@ -54,6 +55,7 @@ exports.createProducts = (req, res) => {
             name: name,
             description: description,
             price: price,
+            quantity: quantity,
             img: img,
             thumbImg1: thumbImg1,
             thumbImg2: thumbImg2,
@@ -88,6 +90,7 @@ exports.modifyProduct = (req, res) => {
   const name = req.body.name;
   const description = req.body.description;
   const price = req.body.price;
+  const quantity = 0;
   //Vérification d'un fichier existant ou laisse le lien vide
   const img = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[0].filename}` : null;
   const thumbImg1 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[1].filename}` : null;
@@ -132,6 +135,7 @@ exports.modifyProduct = (req, res) => {
           name : (name ? name : productFound.name),
           description: (description ? description : productFound.description),
           price: (price ? price : productFound.price),
+          quantity: (quantity ? quantity : productFound.quantity),
           img : (img ? img : productFound.img),
           thumbImg1 : (thumbImg1 ? thumbImg1 : productFound.thumbImg1),
           thumbImg2 : (thumbImg2 ? thumbImg2 : productFound.thumbImg2),
