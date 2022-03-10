@@ -15,7 +15,7 @@
           </div>
           <div class="price">{{cart.price / 100}} €</div>
           <div class="quantity">{{cart.quantity}}</div>
-          <div class="total" ref="subTotal">{{ cart.price / 100}}€</div>
+          <div class="total" ref="subTotal">{{cart.quantity * cart.price / 100}}€</div>
         </div>
         <div class="basketTotalContainer">
           <h4 class="basketTotalTitle">Total</h4>
