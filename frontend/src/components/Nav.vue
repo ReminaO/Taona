@@ -20,7 +20,7 @@
             <a class="nav-link" href="#">Astuces</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/panier">Panier <span class="text-center align-middle" v-if="$store.state.cart !== null">{{cart.length}}</span><span class="text-center align-middle" v-else>0</span></router-link>
+            <router-link class="nav-link" to="/panier">Panier <span class="text-center cart align-middle" v-if="$store.state.cart !== null">{{cart.length}}</span><span class="text-center align-middle" v-else>0</span></router-link>
           </li>
           <li v-if="$store.state.user.userId == -1" class="nav-item">
             <router-link class="nav-link" to="/connexion">Connexion</router-link>
@@ -72,7 +72,7 @@ img {
   padding:0;
   margin: 0;
 }
-span {
+.cart {
   background-color: aliceblue;
   color:grey;
   border-radius: 50px;

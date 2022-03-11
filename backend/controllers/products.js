@@ -12,7 +12,7 @@ exports.createProducts = (req, res) => {
   const name = req.body.name;
   const description = req.body.description;
   const price = req.body.price;
-  const quantity = 0;
+  const quantity = 1;
   //Vérification d'un fichier existant ou laisse le lien vide
   const img = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[0].filename}` : null;
   const thumbImg1 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[1].filename}` : null;
@@ -90,7 +90,7 @@ exports.modifyProduct = (req, res) => {
   const name = req.body.name;
   const description = req.body.description;
   const price = req.body.price;
-  const quantity = 0;
+  const quantity = 1;
   //Vérification d'un fichier existant ou laisse le lien vide
   const img = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[0].filename}` : null;
   const thumbImg1 = req.body && req.files ? `${req.protocol}://${req.get('host')}/images/products/${req.files[1].filename}` : null;

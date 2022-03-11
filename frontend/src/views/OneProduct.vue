@@ -17,14 +17,6 @@
             <h1 class="product-title">{{product.name}}</h1>
             <p class="product-price">{{product.price / 100}}€</p>
             <p class="descritpion">{{product.description}}</p><br>
-            <select name="quantity" id="quantity-select" v-model="quantity">
-                <option value="">Quantité</option>
-                <option :value="1">1</option>
-                <option :value="2">2</option>
-                <option :value="3">3</option>
-                <option :value="4">4</option>
-                <option :value="5">5</option>
-            </select><br><br>
             <button v-if="$store.state.user.userId !== -1 " @click.prevent="addToCart(product)" class="btn btn-add">
                 <i class="bi bi-cart4"></i>
                 Ajouter au panier
@@ -192,6 +184,7 @@ const instance = axios.create({
 
         mounted(){
             this.$store.dispatch( 'getOneProduct', this.$route.params.id)
+            this.$refs.quantity
         }    
 }  
 </script>

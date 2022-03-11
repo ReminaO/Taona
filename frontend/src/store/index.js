@@ -41,10 +41,11 @@ const store = createStore({
     },
     products:[],
     productInfos: {
-      id:"",
+      id:'',
       name: '',
       price: '',
       description: '',
+      quantity: 1,
       img: '',
       thumbImg1: '',
       thumbImg2: '',
@@ -93,13 +94,40 @@ const store = createStore({
       }
       localStorage.clear();
     },
-    addCart: function (state, products) {
+    addToCart: function (state, products) {
       state.cart.push(products)
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
     getCart: function (state, cart) {
       state.cart = cart
-    }
+    },
+    addItem: function (state, payload) {
+      let item = payload;
+      item = { ...item, quantity:1 }
+      if (state.cart.length > 0) {
+        let bool = state.cart.some(i => i.id === item.id)
+        if (bool) {
+          let itemIndex = state.cart.findIndex(el => el.id === item.id)
+          state.cart[itemIndex]["quantity"] += 1
+        } else {
+          state.cart.push(item)
+        }
+      }
+    },
+    removeItem: function (state, payload) {
+      if (state.cart.length > 0) {
+        let bool = state.cart.some(i => i.id === payload.id)
+        if (bool) {
+          let index = state.cart.findIndex(el => el.id === payload.id)
+          if (state.cart[index]["quantity"] !== 0){
+            state.cart[index]["quantity"] -= 1
+          }
+          if (state.cart[index]["quantity"] === 0) {
+            state.cart.splice(index, 1)
+          }
+        }
+      }
+    },
   },
   actions: {
     login: ({ commit }, userInfos) => {
@@ -223,7 +251,6 @@ const store = createStore({
           .then(function (response) {
             commit('setStatus', 'created')
             commit('products', response.data)
-            resolve(response)
           })
           .catch(function (error) {
             commit('setStatus', 'error_create')
@@ -238,6 +265,12 @@ const store = createStore({
       })
       .catch(function () {
       });
+    },
+    addItem({ commit }, payload) {
+      commit("addItem", payload)
+    },
+    removeItem({ commit }, payload) {
+      commit("removeItem", payload)
     },
   }
   })

@@ -14,12 +14,16 @@
             <span> {{cart.name}}</span>
           </div>
           <div class="price">{{cart.price / 100}} €</div>
-          <div class="quantity">{{cart.quantity}}</div>
+          <div class="quantity">
+            <button @click="removeQuantity(cart)">-</button>
+            <span class="quantity-span">{{cart.quantity}}</span>
+            <button @click="addQuantity(cart)">+</button>
+          </div>
           <div class="total" ref="subTotal">{{cart.quantity * cart.price / 100}}€</div>
         </div>
         <div class="basketTotalContainer">
           <h4 class="basketTotalTitle">Total</h4>
-          <h4 class="basketTotal"> = {{total}}€</h4>
+          <h4 class="basketTotal"> = {{total / 100}}€</h4>
         </div>
       </div>
       <div class="emptyBasket-container" v-else>
@@ -41,7 +45,7 @@ export default {
   },
   data () {
     return {
-      
+      quantity: ""
     }
   },
   computed:{
@@ -60,7 +64,14 @@ export default {
     removeItem(index){
       this.carts.splice(this.carts.indexOf(index), 1)
     },
-    
+    addQuantity (product) {
+        this.$store.dispatch('addItem', product)
+        console.log(product)
+    },
+    removeQuantity (product) {
+        this.$store.dispatch('removeItem', product)
+        console.log(product)
+    }
   }
 }
 </script>
@@ -106,12 +117,14 @@ export default {
       width : 20%;
       display: flex;
       align-items: center;
+      justify-content: center
     }
 
     .total {
       width: 10%;
       display: flex;
       align-items: center;
+      justify-content: center
     }
 
     .cart-container {
@@ -125,6 +138,7 @@ export default {
       width: 30%;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
     .product img {
       display: flex;
@@ -144,7 +158,7 @@ export default {
     }
 
     .basketTotalTitle{
-      width: 5%;
+      width: 10%;
     }
 
     .basketTotal {
@@ -168,4 +182,100 @@ export default {
     i {
       cursor: pointer;
     }
+
+    button {
+    background-color:#d4a449;
+    color:rgba(255,255,255,1);
+    border-radius: 8px;
+    padding: 5px 15px;
+    font-size: 20px;
+    border: none;
+}
+.quantity-span{
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 5px;
+  border: 1px #672932 solid;
+  border-radius: 5px
+}
+@media screen and (max-width: 500px)
+{/*Style page du panier*/
+    .product-container{
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin:0 auto;
+        margin-top: 50px;
+    }
+
+    .product-container img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+    }
+    .product-header {
+        display: flex;
+    }
+    .cart-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .color{
+        visibility: hidden;
+        width: 0%;
+    }
+
+    .color-choice{
+        visibility: hidden;
+        width: 0%;
+    }
+
+    .price {
+        visibility: hidden;
+        width: 0%;
+    }
+
+    .quantity {
+        visibility: hidden;
+        width: 0%;
+    }
+    
+    .total {
+        width: 20%;
+        align-items: center;
+    }
+
+    .product span {
+        width : 0%;
+        visibility: hidden;
+    }
+    .product  {
+        width : 80%;
+        align-items: center;
+    }
+
+    .product-title {
+        width : 100%
+    }
+
+    .basketTotalTitle{
+        width: 40%;
+    }
+    
+    .basketTotal {
+        width : 50%;
+    }
+
+    .basketTotalContainer{
+        width:100%;
+        display:flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 10px 0;
+        border-top: #672932 4px solid;
+    }
+  }
 </style>
