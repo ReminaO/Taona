@@ -138,7 +138,7 @@ const instance = axios.create({
             })
             },
             addToCart: function(product){
-                this.$store.commit('addCart', product)
+                this.$store.commit('addToCart', product)
                 // self.$router.push(`/panier`);
             },
             
