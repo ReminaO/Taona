@@ -34,8 +34,6 @@
 </template>
 
 <script>
-let cart = localStorage.getItem('cart')
-const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
 // @ is an alias to /src
 export default {
@@ -65,12 +63,10 @@ export default {
       this.carts.splice(this.carts.indexOf(index), 1)
     },
     addQuantity (product) {
-        this.$store.dispatch('addItem', product)
-        console.log(product)
+      this.$store.dispatch('addItem', product)
     },
     removeQuantity (product) {
-        this.$store.dispatch('removeItem', product)
-        console.log(product)
+      this.$store.dispatch('removeItem', product)
     }
   }
 }

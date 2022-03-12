@@ -95,7 +95,7 @@ const instance = axios.create({
                 description:'',
                 price:'',
                 quantity: '',
-                // cart: []
+                cart: []
             }
         },
         computed: {
@@ -138,10 +138,9 @@ const instance = axios.create({
             })
             },
             addToCart: function(product){
-                this.$store.commit('addToCart', product)
+                this.$store.dispatch('addItem', product)
                 // self.$router.push(`/panier`);
             },
-            
             deleteProduct: function () {
                 const self = this;
                     this.$store.dispatch('deleteProduct', this.$route.params.id, {
@@ -181,11 +180,9 @@ const instance = axios.create({
                 })
     }
 },
-
         mounted(){
             this.$store.dispatch( 'getOneProduct', this.$route.params.id)
-            this.$refs.quantity
-        }    
+        },
 }  
 </script>
 <style scoped>

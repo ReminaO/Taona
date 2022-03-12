@@ -1,9 +1,12 @@
 import { createStore } from 'vuex'
+import vuejsStorage from 'vuejs-storage'
+
 
 const axios = require('axios')
 
 
 let user = localStorage.getItem('user')
+let cart = localStorage.getItem('cart')
 if (!user) {
   user = {
     userId: -1,
@@ -26,6 +29,7 @@ const instance = axios.create({
 
 // Create a new store instance.
 const store = createStore({
+  
   state: {
     status: '',
     user: user,
@@ -58,8 +62,18 @@ const store = createStore({
       quantity: '',
       amount: '',
     },
-    cart: []
+    cart: [],
+    carts: cart
   },
+  plugins: [
+    vuejsStorage({
+      keys: ['cart'],
+      //keep state.count in localStorage
+      namespace: 'cartItem',
+      driver: vuejsStorage.drivers.localStorage
+      //if you want to use sessionStorage instead of localStorage
+    })
+  ],
   mutations: {
     setStatus: function (state, status) {
       state.status = status
@@ -94,12 +108,18 @@ const store = createStore({
       }
       localStorage.clear();
     },
-    addToCart: function (state, products) {
-      state.cart.push(products)
-      localStorage.setItem("cart", JSON.stringify(state.cart));
-    },
-    getCart: function (state, cart) {
-      state.cart = cart
+    addToCart: function (state, payload) {
+      let item = payload;
+      item = { ...item }
+      let bool = state.cart.some(i => i.id === item.id)
+      if (!bool) {
+          // state.cart[index]["quantity"] += 1
+          state.cart.push(item)
+          // localStorage.setItem("cart", JSON.stringify(state.cart));
+      }
+      // if (bool) { 
+      //   localStorage.setItem("cart", JSON.stringify(state.cart));
+      // }
     },
     addItem: function (state, payload) {
       let item = payload;
@@ -129,6 +149,7 @@ const store = createStore({
       }
     },
   },
+  
   actions: {
     login: ({ commit }, userInfos) => {
       commit('setStatus', 'loading')
@@ -268,11 +289,12 @@ const store = createStore({
     },
     addItem({ commit }, payload) {
       commit("addItem", payload)
+      commit("addToCart", payload)
     },
     removeItem({ commit }, payload) {
       commit("removeItem", payload)
     },
-  }
+  }  
   })
 
 

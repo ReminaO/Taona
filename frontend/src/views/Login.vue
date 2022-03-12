@@ -81,7 +81,7 @@ export default {
   },
   mounted: function () {
     if (this.$store.state.user.userId != -1) {
-      this.$router.go('/wall');
+      this.$router.go('/');
       return ;
     }
   },
