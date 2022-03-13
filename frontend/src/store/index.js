@@ -100,6 +100,7 @@ const store = createStore({
         token: '',
       }
       localStorage.clear()
+      state.cart.splice(0, 100)
     },
     deleteInfos: function (state) {
       state.user = {
