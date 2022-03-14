@@ -26,14 +26,14 @@
                     <i class="bi bi-cart4"></i>
                     <router-link class="btn-add" to="/connexion">Connexion</router-link>
                 </button>
-                <!-- <a href="#" @click="like">
+                <a href="#" @click="like">
                     <svg v-if="productInfos.liked" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="liked" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
                     </svg>
                     <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="not-liked" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
                     </svg>
-                </a> -->
+                </a>
             </div>
             <div v-if="$store.state.user.isAdmin == true" class="card-footer">
                 <i class="bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#updateModal"></i><br>
