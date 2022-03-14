@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Comments', {
+    await queryInterface.createTable('Likes', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,28 +9,25 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users',
-          key: 'id',
+          model: "Users",
+          key: "id",
         },
-        onDelete: 'CASCADE',
+        onDelete: "cascade",
+        onUpdate: "no action",
       },
       productId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Products',
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
+          type: Sequelize.INTEGER,
+          references: {
+            model: "Products",
+            key: "id",
+          },
+          onDelete: "cascade",
+          onUpdate: "no action",
       },
-      username: {
-        type: Sequelize.STRING
-      },
-      content: {
-        type: Sequelize.STRING
+      likeState: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +40,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Comments');
+    await queryInterface.dropTable('Likes');
   }
 };

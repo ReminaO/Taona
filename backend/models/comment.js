@@ -37,11 +37,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     content: DataTypes.STRING,
-    one: DataTypes.BOOLEAN,
-    two: DataTypes.BOOLEAN,
-    three: DataTypes.BOOLEAN,
-    four: DataTypes.BOOLEAN,
-    five: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Comment',

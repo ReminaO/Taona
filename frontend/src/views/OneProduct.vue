@@ -1,65 +1,101 @@
 <template>
-    <section class="container product-container mt-100" >
-        <div class="product-images" >
-            <div class="full-img-container">
-                <img id="full" :src="product.img" :alt="product.name" class="figure-img img-fluid rounded ">
-            </div>
-            <div class="thumbnails-container">
-                <div class="thumbnails-container" >
-                    <img :src="product.thumbImg1" :alt="product.name" @click="thumbClick()" class="img-thumbnail small img-fluid rounded" style="height:100px; width: 100px" /> 
-                    <img :src="product.thumbImg2" :alt="product.name" @click="thumbClick2()" class="img-thumbnail small2 img-fluid rounded" style="height:100px; width: 100px" /> 
-                    <img :src="product.thumbImg3" :alt="product.name" @click="thumbClick3()" class="img-thumbnail small3 img-fluid rounded" style="height:100px; width: 100px" /> 
-                    <img :src="product.thumbVideo" :alt="product.name" @click="thumbClick4()" class="img-thumbnail small4 img-fluid rounded" style="height:100px; width: 100px" /> 
+    <div>
+        <section class="container product-container mt-100" >
+            <div class="product-images" >
+                <div class="full-img-container">
+                    <img id="full" :src="product.img" :alt="product.name" class="figure-img img-fluid rounded ">
+                </div>
+                <div class="thumbnails-container">
+                    <div class="thumbnails-container" >
+                        <img :src="product.thumbImg1" :alt="product.name" @click="thumbClick()" class="img-thumbnail small img-fluid rounded" style="height:100px; width: 100px" /> 
+                        <img :src="product.thumbImg2" :alt="product.name" @click="thumbClick2()" class="img-thumbnail small2 img-fluid rounded" style="height:100px; width: 100px" /> 
+                        <img :src="product.thumbImg3" :alt="product.name" @click="thumbClick3()" class="img-thumbnail small3 img-fluid rounded" style="height:100px; width: 100px" /> 
+                        <img :src="product.thumbVideo" :alt="product.name" @click="thumbClick4()" class="img-thumbnail small4 img-fluid rounded" style="height:100px; width: 100px" /> 
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="product-infos">
-            <h1 class="product-title">{{product.name}}</h1>
-            <p class="product-price">{{product.price / 100}}€</p>
-            <p class="descritpion">{{product.description}}</p><br>
-            <button v-if="$store.state.user.userId !== -1 " @click.prevent="addToCart(product)" class="btn btn-add">
-                <i class="bi bi-cart4"></i>
-                Ajouter au panier
-            </button>
-            <button v-else @click="addToCart(product)" class="btn btn-add">
-                <i class="bi bi-cart4"></i>
-                <router-link class="btn-add" to="/connexion">Connexion</router-link>
-            </button>
-        </div>
-        <div v-if="$store.state.user.isAdmin == true" class="card-footer">
-            <i class="bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#updateModal"></i><br>
-            <i @click="deleteProduct()" class="bi bi-trash3"></i>
-        </div>
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modification</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form class="form-group" action="/products/:userId/:id" method="PUT" enctype="multipart/form-data">
-                        <!-- Ajout des photos -->
-                        <input class="image" type="file" multiple ref="prodImg" name="prodImg" @change="fileSelected()">
-                        <br><br>
-                        <!-- Ajout des informations de l'article -->
-                        <input class="form-row__input" type="text" id="name" name="name" v-model="name" placeholder="Nom du produit"> <br><br>
-                        <textarea class="form-row__input" type="text" id="description" name="description" v-model="description" placeholder="Description"></textarea><br><br>
-                        <input class="form-row__input" type="text" id="price" name="price" v-model="price" placeholder="Prix"> <br><br>
-                    
-                        <div class="modal-footer">
-                            <button type="button" class="btn" data-bs-dismiss="modal">Annuler</button>
-                            <button @click="modifyProduct()" type="button" class="btn">Modifier</button>
-                        </div>
-                    </form>
-                </div>
+            <div class="product-infos">
+                <h1 class="product-title">{{product.name}}</h1>
+                <p class="product-price">{{product.price / 100}}€</p>
+                <p class="descritpion">{{product.description}}</p><br>
+                <button v-if="$store.state.user.userId !== -1" @click.prevent="addToCart(product)" class="btn btn-add">
+                    <i class="bi bi-cart4"></i>
+                    Ajouter au panier
+                </button>
+                <button v-else @click="addToCart(product)" class="btn btn-add">
+                    <i class="bi bi-cart4"></i>
+                    <router-link class="btn-add" to="/connexion">Connexion</router-link>
+                </button>
+                <!-- <a href="#" @click="like">
+                    <svg v-if="productInfos.liked" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="liked" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="not-liked" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+                    </svg>
+                </a> -->
+            </div>
+            <div v-if="$store.state.user.isAdmin == true" class="card-footer">
+                <i class="bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#updateModal"></i><br>
+                <i @click="deleteProduct()" class="bi bi-trash3"></i>
+            </div>
+            <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modification</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-group" action="/products/:userId/:id" method="PUT" enctype="multipart/form-data">
+                            <!-- Ajout des photos -->
+                            <input class="image" type="file" multiple ref="prodImg" name="prodImg" @change="fileSelected()">
+                            <br><br>
+                            <!-- Ajout des informations de l'article -->
+                            <input class="form-row__input" type="text" id="name" name="name" v-model="name" placeholder="Nom du produit"> <br><br>
+                            <textarea class="form-row__input" type="text" id="description" name="description" v-model="description" placeholder="Description"></textarea><br><br>
+                            <input class="form-row__input" type="text" id="price" name="price" v-model="price" placeholder="Prix"> <br><br>
+                        
+                            <div class="modal-footer">
+                                <button type="button" class="btn" data-bs-dismiss="modal">Annuler</button>
+                                <button @click="modifyProduct()" type="button" class="btn">Modifier</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section> 
+        </section>
+        <section>
+            <CommentForm/>
+            <div v-if="comment.length > 0">
+                <div 
+                    v-for="(comment) in comment.filter((comment) => { 
+                    return comment.productId == $store.state.products.id 
+                    })" 
+                    :key="comment.id"
+                    class="comment-content">
+                    <div class="comment-display">
+                    <img :src="user.avatar" class='icon-image img-fluid' alt="avatar">
+                    <div class="comment-display__content">
+                        <p class="comment-display__username"> {{ comment.username }} </p>
+                        <p class="comment-display__comment"> {{ comment.content }} </p>
+                    </div>
+                    </div>
+                    <div>
+                    <button v-if="this.$store.state.user.userId == comment.userId || this.$store.state.user.isAdmin == 1" name="delete" class="button deleteBtn" data-bs-toggle="button" autocomplete="off" @click="deleteComment(comment.id)">
+                    <i class="bi bi-trash3"></i>
+                    </button>
+                    </div> 
+                </div>
+            </div>
+            
+        </section>    
+    </div>
 </template>
 
 <script>
+import CommentForm from '@/components/CommentForm'
 
 const axios = require('axios')
 
@@ -87,7 +123,9 @@ const instance = axios.create({
 
     export default {
         name: "OneProduct",
-        
+        components: {
+            CommentForm
+        },
         data(){
             return {
                 // product: '',
@@ -102,9 +140,19 @@ const instance = axios.create({
             product(){
                 return this.$store.state.products
             },
+            productInfos() {
+                return this.$store.state.productInfos
+            },
+            comment(){
+                return this.$store.state.comments
+            },
+            user(){
+                return this.$store.state.userInfos
+            },
             
         },
         methods:{
+            ...mapActions(["switchLike"]),
             thumbClick(){
                 const thumbs = document.querySelectorAll('.small')
                 const fullImg = document.getElementById('full')
@@ -178,7 +226,13 @@ const instance = axios.create({
                 }, function (error) {
                 console.log(error);
                 })
-    }
+            },
+            like() {
+                let payload = {
+                productId: this.product.id,
+                };
+                this.switchLike(payload);
+            },
 },
         mounted(){
             this.$store.dispatch( 'getOneProduct', this.$route.params.id)

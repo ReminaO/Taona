@@ -55,6 +55,7 @@ const store = createStore({
       thumbImg2: '',
       thumbImg3: '',
       thumbVideo: '',
+      liked: false
     },
     orders:[],
     orderInfos: {
@@ -63,7 +64,19 @@ const store = createStore({
       amount: '',
     },
     cart: [],
-    carts: cart
+    carts: cart,
+    comments: [],
+    commentInfos: {
+      userId: '',
+      productId: '',
+      username: '',
+      content: '',
+      one: '',
+      two: '',
+      three: '',
+      four: '',
+      five: ''
+    }
   },
   plugins: [
     vuejsStorage({
@@ -85,11 +98,35 @@ const store = createStore({
     userInfos: function (state, userInfos) {
       state.userInfos = userInfos
     },
-    productInfos: function (state, productInfos) {
-      state.productInfos = productInfos
+    productInfos: function (state, data) {
+      state.productInfos.id = data.id;
+      state.productInfos.name = data.name;
+      state.productInfos.price = data.price;
+      state.productInfos.description = data.description;
+      state.productInfos.quantity = 1;
+      state.productInfos.img = data.img;
+      state.productInfos.thumbImg1 = data.thumbImg1;
+      state.productInfos.thumbImg2 = data.thumbImg2;
+      state.productInfos.thumbImg3 = data.thumbImg3;
+      state.productInfos.thumbVideo = data.thumbVideo;
+      state.productInfos.liked= false
+      for (let like of data.products.Likes) {
+        if (like.UserId === data.user.userId) {
+          if (like.likeState) {
+            state.productInfos.liked = true;
+          }
+          break;
+        }
+     }
     },
     products: function (state, products) {
       state.products = products;
+    },
+    commentInfos: function (state, commentInfos) {
+      state.commentInfos = commentInfos
+    },
+    comments: function (state, comments) {
+      state.comments = comments;
     },
     orderInfos: function (state, orderInfos) {
       state.orderInfos = orderInfos
@@ -244,15 +281,16 @@ const store = createStore({
         instance.get(`products`)
           .then(function (response) {
             commit('products', response.data)
+            commit('productInfos', response.data)
           })
           .catch(function () {})
-      
     }, 
     getOneProduct: ({ commit },id) => {
       commit('setStatus', 'loading')
         instance.get(`products/${id}`)
           .then(function (response) {
             commit('products', response.data)
+            commit('productInfos', response.data)
           })
           .catch(function () {})
       
@@ -261,18 +299,20 @@ const store = createStore({
       commit('setStatus', 'loading')
       return new Promise((resolve, reject) => {
         const formData = new FormData();
-        formData.append('prodImg', payload.img);
-        formData.append('prodImg', payload.thumbImg1);
-        formData.append('prodImg', payload.thumbImg2);
-        formData.append('prodImg', payload.thumbImg3);
-        formData.append('prodImg', payload.thumbVideo);
-        formData.append('name', payload.name);
-        formData.append('description', payload.description);
-        formData.append('price', payload.price);
+        formData.append('prodImg', payload.img)
+        formData.append('prodImg', payload.thumbImg1)
+        formData.append('prodImg', payload.thumbImg2)
+        formData.append('prodImg', payload.thumbImg3)
+        formData.append('prodImg', payload.thumbVideo)
+        formData.append('name', payload.name)
+        formData.append('description', payload.description)
+        formData.append('price', payload.price)
         instance.post(`products/${user.userId}`, formData)
           .then(function (response) {
             commit('setStatus', 'created')
             commit('products', response.data)
+            commit('productInfos', response.data)
+
           })
           .catch(function (error) {
             commit('setStatus', 'error_create')
@@ -294,6 +334,19 @@ const store = createStore({
     },
     removeItem({ commit }, payload) {
       commit("removeItem", payload)
+    },
+    getAllComments: ({ commit }) => {
+      commit('setStatus', 'loading')
+        instance.get(`comments`)
+          .then(function (response) {
+            commit('comments', response.data)
+          })
+          .catch(function () {})
+    },
+    switchLike({ commit }, payload) {
+      instance.post("likes/switch", payload).then(() => {
+        commit('productInfos', payload.id);
+      });
     },
   }  
   })

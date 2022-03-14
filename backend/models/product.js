@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
           name: 'productId',
           allowNull: false,
         }
-    }),
+      }),
+      models.Product.hasMany(models.Like),
       models.Product.belongsTo(models.User, {
         onDelete: 'cascade',
         hooks: true,

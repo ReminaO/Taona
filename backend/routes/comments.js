@@ -12,7 +12,7 @@ const commentsCtrl = require('../controllers/comments');
 router.post('/:id', auth, commentsCtrl.createComment);
 router.post('/switch', auth, commentsCtrl.switch);
 router.delete('/:id/', auth, commentsCtrl.deleteComment);
-router.get('/', auth, commentsCtrl.getAllComments);
+router.get('/', commentsCtrl.getAllComments);
 
 
 module.exports = router;//Export du fichier
