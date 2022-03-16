@@ -8,7 +8,7 @@ Taona is an e-commerce website which sells boxes and accessories for Black Hair
 
 Clone the repo and follow the instructions for the backend and the frontend 
 
-### Here are the dependancies you need to install for the backend:
+### Here are the dependencies you need to install for the backend:
 
 run `npm install` to install the dependancies.
 
@@ -71,7 +71,7 @@ console.log('Database is connected successfully !');
 }); 
 module.exports = conn;
 `
-### Here are the dependancies you need to install for the frontend:
+### Here are the dependencies you need to install for the frontend:
 
 run `npm install` to install the dependancies.
 
