@@ -9,24 +9,25 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "Users",
           key: "id",
         },
         onDelete: "cascade",
-        onUpdate: "no action",
       },
       productId: {
+          allowNull: false,
           type: Sequelize.INTEGER,
           references: {
             model: "Products",
             key: "id",
           },
           onDelete: "cascade",
-          onUpdate: "no action",
       },
       likeState: {
+        allowNull: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {

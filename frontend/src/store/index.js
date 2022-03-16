@@ -71,12 +71,14 @@ const store = createStore({
       productId: '',
       username: '',
       content: '',
-      one: '',
-      two: '',
-      three: '',
-      four: '',
-      five: ''
-    }
+
+    },
+    likes: [],
+    likeInfos: {
+      userId: '',
+      productId: '',
+      likeState: '',
+    },
   },
   plugins: [
     vuejsStorage({
@@ -110,8 +112,8 @@ const store = createStore({
       state.productInfos.thumbImg3 = data.thumbImg3;
       state.productInfos.thumbVideo = data.thumbVideo;
       state.productInfos.liked= false
-      for (let like of data.products.Likes) {
-        if (like.UserId === data.user.userId) {
+      for (let like of state.likes) {
+        if (like.UserId === user.userId) {
           if (like.likeState) {
             state.productInfos.liked = true;
           }
@@ -127,6 +129,12 @@ const store = createStore({
     },
     comments: function (state, comments) {
       state.comments = comments;
+    },
+    likes: function (state, likes) {
+      state.likes = likes;
+    },
+    likeInfos: function (state, likeInfos) {
+      state.likeInfos = likeInfos
     },
     orderInfos: function (state, orderInfos) {
       state.orderInfos = orderInfos
@@ -151,13 +159,9 @@ const store = createStore({
       item = { ...item }
       let bool = state.cart.some(i => i.id === item.id)
       if (!bool) {
-          // state.cart[index]["quantity"] += 1
+          
           state.cart.push(item)
-          // localStorage.setItem("cart", JSON.stringify(state.cart));
       }
-      // if (bool) { 
-      //   localStorage.setItem("cart", JSON.stringify(state.cart));
-      // }
     },
     addItem: function (state, payload) {
       let item = payload;
@@ -343,9 +347,9 @@ const store = createStore({
           })
           .catch(function () {})
     },
-    switchLike({ commit }, payload) {
-      instance.post("likes/switch", payload).then(() => {
-        commit('productInfos', payload.id);
+    switchLike({ commit }, id) {
+      instance.post(`likes/switch/${user.userId}/${id}`).then((response) => {
+        commit('likes', response.data);
       });
     },
   }  

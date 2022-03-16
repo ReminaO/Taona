@@ -9,9 +9,8 @@ const auth = require('../middleware/auth');
 const commentsCtrl = require('../controllers/comments');
 
 //Routes pour appeler les controllers comment
-router.post('/:id', auth, commentsCtrl.createComment);
-router.post('/switch', auth, commentsCtrl.switch);
-router.delete('/:id/', auth, commentsCtrl.deleteComment);
+router.post('/:userId/:productId', auth, commentsCtrl.createComment);
+router.delete('/:userId/:productId', auth, commentsCtrl.deleteComment);
 router.get('/', commentsCtrl.getAllComments);
 
 

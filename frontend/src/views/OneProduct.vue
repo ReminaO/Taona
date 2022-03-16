@@ -18,22 +18,26 @@
                 <h1 class="product-title">{{product.name}}</h1>
                 <p class="product-price">{{product.price / 100}}€</p>
                 <p class="descritpion">{{product.description}}</p><br>
-                <button v-if="$store.state.user.userId !== -1" @click.prevent="addToCart(product)" class="btn btn-add">
-                    <i class="bi bi-cart4"></i>
-                    Ajouter au panier
-                </button>
+                <div v-if="$store.state.user.userId !== -1">
+                    <button  @click.prevent="addToCart(product)" class="btn btn-add">
+                        <i class="bi bi-cart4"></i>
+                        Ajouter au panier
+                    </button>
+                    <div @click="like(likes.id)" class="btn like-btn">
+                        <svg v-if="productInfos.liked" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="liked" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+                        </svg>
+                        <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="not-liked" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+                        </svg>
+                    </div>
+                    <span class="nb-likes align-baseline align-middle ms-1">{{ nbLikes }}</span>
+                </div>
                 <button v-else @click="addToCart(product)" class="btn btn-add">
                     <i class="bi bi-cart4"></i>
                     <router-link class="btn-add" to="/connexion">Connexion</router-link>
                 </button>
-                <a href="#" @click="like">
-                    <svg v-if="productInfos.liked" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="liked" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-                    </svg>
-                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="not-liked" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-                    </svg>
-                </a>
+                
             </div>
             <div v-if="$store.state.user.isAdmin == true" class="card-footer">
                 <i class="bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#updateModal"></i><br>
@@ -95,6 +99,7 @@
 </template>
 
 <script>
+import { mapActions} from 'vuex';
 import CommentForm from '@/components/CommentForm'
 
 const axios = require('axios')
@@ -133,7 +138,10 @@ const instance = axios.create({
                 description:'',
                 price:'',
                 quantity: '',
-                cart: []
+                cart: [],
+                UserId: '' ,
+                ProductId: '',
+                likes:[]
             }
         },
         computed: {
@@ -148,6 +156,16 @@ const instance = axios.create({
             },
             user(){
                 return this.$store.state.userInfos
+            },
+            // likes(){
+            //     return this.$store.state.likes
+            // },
+            nbLikes() {
+            let count = 0;
+            for (let like of this.likes){
+                like.likeState ? count++ : null;
+            }
+            return count;
             },
             
         },
@@ -228,10 +246,7 @@ const instance = axios.create({
                 })
             },
             like() {
-                let payload = {
-                productId: this.product.id,
-                };
-                this.switchLike(payload);
+                this.$store.dispatch( 'switchLike', this.$route.params.id)
             },
 },
         mounted(){
@@ -366,6 +381,24 @@ textarea, input {
     padding: 10px 25px;
     font-size: 17px;
     border: none;
+}
+.liked {
+    fill: #ff0000;
+    transform: scale(1);
+    transition: all 0.15s ease-in-out;
+}
+.liked:hover {
+    fill: lighten(#ff0000, 10);
+    transform: scale(1.1);
+}
+.not-liked {
+    fill: gray;
+    transform: scale(1);
+    transition: all 0.15s ease-in-out;
+}
+.not-liked:hover {
+    fill: darkgray;
+    transform: scale(1.1);
 }
 @media screen and (max-width: 800px){
     .container{

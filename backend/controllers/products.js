@@ -224,9 +224,13 @@ exports.deleteProduct = (req, res) => {
       // 2. Affiche les article
       function (done) {
         models.Product.findAll({
-          include: [{ // Relie le produit avec la tables Comments  
-            model: models.Comment,
-          }
+          include: [ // Relie le produit avec la tables Comments  
+            {
+              model: models.Comment
+            },
+            {
+              model: models.Like,
+           },
         ]
         }).then(function (products) {
           done(products)
@@ -254,9 +258,13 @@ exports.deleteProduct = (req, res) => {
       function (done) {
         models.Product.findOne({
           where: { id: req.params.id },
-          include: [{ // Relie le produit avec la tables Comments  
-            model: models.Comment,
-          }
+          include: [ // Relie le produit avec la tables Comments  
+            {
+              model: models.Comment
+            },
+            {
+              model: models.Like,
+            },
         ]
         }).then(function (products) {
           done(products)

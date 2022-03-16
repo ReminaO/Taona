@@ -6,7 +6,7 @@
       Publier
     </button>
     <button v-else>
-      <router-link class="btn btn-publish" to="/connexion">Connexion</router-link>
+      <router-link class="btn button" to="/connexion">Connexion</router-link>
     </button>
   </div><br>
 </div>

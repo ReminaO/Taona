@@ -1,62 +1,54 @@
 const Models = require("../models");
 
+//import des modèles
+const models = require('../models/');
+// import du module
+const asyncLib = require('async');
 //Ajout d'un like
-exports.switch = (request, response) => {
-    Models.Like.findOne({
-        where: {
-            ProductId: request.body.productId,
-            UserId: response.locals.userId,
+exports.switchLike = (req, res, next) => {
+    // Paramètres
+
+    const userId = req.params.userId;
+
+    asyncLib.waterfall([
+        // 1. recherche l'utilsateur
+        function(done) {
+            models.User.findOne({
+                where: { id: userId },
+                attributes : ["id"]
+            })
+            .then(function(userFound) {
+                done(null, userFound);
+            })
+            .catch(function(err) {
+            return res.status(500).json({ 'error': 'Impossible d\'atteindre l\'utilisateur' });
+            });
         },
-    })
-        .then((like) => {
-            if (like) {
-                Models.Like.update(
-                {
-                    likeState: !like.likeState,
-                },
-                {
-                    where: {
-                        id: like.id,
-                    },
-                }
-                )
-                .then(() => {
-                    response.status(200).json({
-                        message: "Like modifié !",
-                    });
-                })
-                .catch((error) => {
-                    response.status(500).json(error);
-                });
-            } else {
-                Models.Product.findOne({
-                where: {
-                    id: request.body.id,
-                },
-                }).then((post) => {
-                if (post) {
-                    Models.Like.create({
-                        UserId: response.locals.userId,
-                        ProductId: product.id,
-                        likeState: true,
+        
+        // 2. si trouvé créé le commentaire
+        function (userFound, done) {
+            if (userFound) {
+                // Créé le like et l'enregistre dans la BDD
+                models.Like.create({
+                    UserId: userFound.id,
+                    ProductId: req.params.productId,
+                    likeState: !req.body.likeState
                     })
-                        .then(() => {
-                            response.status(200).json({
-                            message: "Like ajouté !",
-                            });
-                        })
-                        .catch((error) => {
-                            response.status(500).json(error);
-                        });
-                } else {
-                    response.status(404).json({
-                        message: "Post introuvable !",
-                    });
-                }
-                });
+                    .then(function(newComment) {
+                        done(newComment);
+                    })
+                    .catch(() => res.status(400).json({ message: "erreur controller like" }));
+            } else {
+                res.status(404).json({ 'error': 'user not found' });
             }
-        })
-        .catch((error) => {
-            response.status(500).json(error);
-        });
-    };
+        },
+
+        // 3. Confirmation une fois le commenatire créé
+    ], function(newComment) {
+        if (newComment) {
+            return res.status(201).json(newComment);
+        } else {
+            return res.status(500).json({ 'error': 'le like ne peut être modifié' });
+        }
+    })
+};

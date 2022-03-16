@@ -7,21 +7,21 @@ const asyncLib = require('async');
 exports.createComment = (req, res, next) => {
     // Paramètres
     const content = req.body.content;
-    const productId = req.params.id;
+    const userId = req.params.userId;
 
     if (comment == null) {
         return res.status(400).json({ 'error': 'Champs manquant' });
     }
 
     asyncLib.waterfall([
-        // 1. recherche l'utilisateur
+        // 1. recherche l'utilsateur
         function(done) {
-            models.Product.findOne({
-                where: { id: productId },
-                attributes : ["id"]
+            models.User.findOne({
+                where: { id: userId },
+                attributes : ["id", "username"]
             })
-            .then(function(productFound) {
-                done(null, productFound);
+            .then(function(userFound) {
+                done(null, userFound);
             })
             .catch(function(err) {
             return res.status(500).json({ 'error': 'Impossible d\'atteindre l\'utilisateur' });
@@ -29,14 +29,14 @@ exports.createComment = (req, res, next) => {
         },
         
         // 2. si trouvé créé le commentaire
-        function (productFound, done) {
-            if (productFound) {
+        function (userFound, done) {
+            if (userFound) {
                 // Créé le commentaire et l'enregistre dans la BDD
                 models.Comment.create({
-                    content: content,
-                    userName: response.locals.firstName,
-                    UserId: response.locals.userId,
-                    ProductId: productFound.id,
+                content: content,
+                userId: userFound.id,
+                productId: req.params.productId,
+                username: userFound.username,
                     })
                     .then(function(newComment) {
                         done(newComment);
@@ -59,34 +59,33 @@ exports.createComment = (req, res, next) => {
 
 // Controllers pour effacer un commentaire grâce a l'ID
 exports.deleteComment = (req, res, next) => {
-    const userId = req.params.id;
+    const userId = req.params.userId;
 
     asyncLib.waterfall([
 
     // Vérifie que l'utilisateur soit existant
     function(done) {
         models.User.findOne({
-            attributes : ["id"],
-            where: { id: req.body.id }
-        }).then(function(userFound) {
-            done(null, userFound);
-        })
-        .catch(function(err) {
-            return res.status(500).json({ 'error': 'Utilisateur inexistant' });
-        });
+                where: { id: userId }
+            }).then(function(userFound) {
+                done(null, userFound);
+            })
+            .catch(function(err) {
+                return res.status(500).json({ 'error': 'Utilisateur inexistant' });
+            });
     },
 
     // appel du commentaire concerné
     function(userFound, done) {
         models.Comment.findOne({
-            where: { id: req.params.id }
-        })
-        .then(function(commentFound) {
-            done(null, userFound, commentFound);
-        })
-        .catch(function(err) {
-            return res.status(500).json({ 'error': 'commentaire non trouvé' });
-        });
+                where: { id: req.params.id }
+            })
+            .then(function(commentFound) {
+                done(null, userFound, commentFound);
+            })
+            .catch(function(err) {
+                return res.status(500).json({ 'error': 'commentaire non trouvé' });
+            });
     },
 
     function(userFound, commentFound, done) {
@@ -96,7 +95,7 @@ exports.deleteComment = (req, res, next) => {
 
             // Suppression du commentaire
             models.Comment.destroy({
-                    where: { id: req.body.id }
+                    where: { id: req.params.id }
                 })
                 .then(() => res.status(200).json({ message: 'Commentaire supprimé !' }))
                 .catch(error => res.status(400).json({ error }));
@@ -116,6 +115,7 @@ exports.deleteComment = (req, res, next) => {
     });
 };
 
+
   // Controllers pour afficher toutes les commentaires
 exports.getAllComments = (req, res, next) => {
     models.Comment.findAll({
@@ -132,70 +132,3 @@ exports.getAllComments = (req, res, next) => {
         .catch(() => res.status(400).json({ error: "Erreur lors de l'affichage des commentaires" }));
 };
 
-exports.switch = (request, response) => {
-    Models.Comment.findOne({
-        where: {
-            ProductId: request.body.productId,
-            UserId: response.locals.userId,
-        },
-    })
-    .then((like) => {
-        if (like) {
-            Models.Comment.update(
-            {
-                one: !like.one,
-                two: !like.two,
-                three: !like.three,
-                four: !like.four,
-                five: !like.five,
-            },
-            {
-                where: {
-                    id: like.id,
-                },
-            }
-            )
-            .then(() => {
-                response.status(200).json({
-                    message: "Like modifié !",
-                });
-            })
-            .catch((error) => {
-                response.status(500).json(error);
-            });
-        } else {
-            Models.Product.findOne({
-            where: {
-                id: request.body.productId,
-            },
-            }).then((post) => {
-            if (post) {
-                Models.Comment.create({
-                    UserId: response.locals.userId,
-                    PostId: product.id,
-                    one: true,
-                    two: true,
-                    three: true,
-                    four: true,
-                    five: true,
-                })
-                    .then(() => {
-                        response.status(200).json({
-                        message: "Like ajouté !",
-                        });
-                    })
-                    .catch((error) => {
-                        response.status(500).json(error);
-                    });
-            } else {
-                response.status(404).json({
-                    message: "Produit introuvable !",
-                });
-            }
-            });
-        }
-    })
-    .catch((error) => {
-        response.status(500).json(error);
-    });
-};
