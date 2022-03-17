@@ -347,8 +347,13 @@ const store = createStore({
           })
           .catch(function () {})
     },
-    switchLike({ commit }, id) {
-      instance.post(`likes/switch/${user.userId}/${id}`).then((response) => {
+    productLike({ commit }, productId) {
+      instance.post(`likes/${user.userId}/${productId}/like`).then((response) => {
+        commit('likes', response.data);
+      });
+    },
+    productDislike({ commit }, id) {
+      instance.post(`likes/${user.userId}/${productId}/dislike`).then((response) => {
         commit('likes', response.data);
       });
     },

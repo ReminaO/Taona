@@ -1,54 +1,200 @@
-const Models = require("../models");
-
 //import des modèles
 const models = require('../models/');
 // import du module
 const asyncLib = require('async');
 //Ajout d'un like
-exports.switchLike = (req, res, next) => {
-    // Paramètres
+// Constants
+const DISLIKED = 0;
+const LIKED    = 1;
 
-    const userId = req.params.userId;
+// Routes
+module.exports = {
+    likeProduct: function (req, res) {
+        // Params
+    var userId    = req.params.userId;
+    var productId = req.params.productId;
+
+    if (productId <= 0) {
+        return res.status(400).json({ 'error': 'invalid parameters' });
+    }
 
     asyncLib.waterfall([
-        // 1. recherche l'utilsateur
         function(done) {
+        models.Product.findOne({
+            where: { id: productId }
+        })
+        .then(function(productFound) {
+            done(null, productFound);
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to verify product' });
+        });
+    },
+        function(productFound, done) {
+        if(productFound) {
             models.User.findOne({
-                where: { id: userId },
-                attributes : ["id"]
+            where: { id: userId }
+        })
+        .then(function(userFound) {
+            done(null, productFound, userFound);
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to verify user' });
+        });
+        } else {
+            res.status(404).json({ 'error': 'post already liked' });
+        }
+    },
+        function(productFound, userFound, done) {
+        if(userFound) {
+            models.Like.findOne({
+                where: {
+                    UserId: userId,
+                    ProductId: productId
+                }
             })
-            .then(function(userFound) {
-                done(null, userFound);
+            .then(function(userAlreadyLikedFound) {
+                done(null, productFound, userFound, userAlreadyLikedFound);
             })
             .catch(function(err) {
-            return res.status(500).json({ 'error': 'Impossible d\'atteindre l\'utilisateur' });
+                return res.status(500).json({ 'error': 'unable to verify if user already liked' });
             });
-        },
-        
-        // 2. si trouvé créé le commentaire
-        function (userFound, done) {
-            if (userFound) {
-                // Créé le like et l'enregistre dans la BDD
-                models.Like.create({
-                    UserId: userFound.id,
-                    ProductId: req.params.productId,
-                    likeState: !req.body.likeState
-                    })
-                    .then(function(newComment) {
-                        done(newComment);
-                    })
-                    .catch(() => res.status(400).json({ message: "erreur controller like" }));
             } else {
-                res.status(404).json({ 'error': 'user not found' });
+                res.status(404).json({ 'error': 'user does not exist' });
             }
-        },
-
-        // 3. Confirmation une fois le commenatire créé
-    ], function(newComment) {
-        if (newComment) {
-            return res.status(201).json(newComment);
+    },
+        function(productFound, userFound, userAlreadyLikedFound, done) {
+        if(!userAlreadyLikedFound) {
+            productFound.addUser(userFound, { isLike: userAlreadyLikedFound.isLike === LIKED })
+            .then(function (alreadyLikeFound) {
+            done(null, productFound, userFound);
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to set user reaction' });
+        });
         } else {
-            return res.status(500).json({ 'error': 'le like ne peut être modifié' });
+            if (userAlreadyLikedFound.isLike === DISLIKED) {
+                userAlreadyLikedFound.update({
+                isLike: LIKED,
+            }).then(function() {
+                done(null, productFound, userFound);
+            }).catch(function(err) {
+                res.status(500).json({ 'error': 'cannot update user reaction' });
+            });
+        } else {
+            res.status(409).json({ 'error': 'product already liked' });
         }
-    })
-};
+        }
+    },
+        function(productFound, userFound, done) {
+        productFound.update({
+            likes: productFound.likes + 1,
+        }).then(function() {
+            done(productFound);
+        }).catch(function(err) {
+            res.status(500).json({ 'error': 'cannot update product like counter' });
+        });
+    },
+    ], function(productFound) {
+        if (productFound) {
+        return res.status(201).json(productFound);
+        } else {
+        return res.status(500).json({ 'error': 'cannot update product' });
+        }
+    });
+},
+    dislikeProduct: function(req, res) {
+        // Params
+    var userId    = req.params.userId
+    var productId = req.params.productId;
+
+    if (productId <= 0) {
+        return res.status(400).json({ 'error': 'invalid parameters' });
+    }
+
+    asyncLib.waterfall([
+    function(done) {
+        models.Product.findOne({
+            where: { id: productId }
+        })
+        .then(function(productFound) {
+            done(null, productFound);
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to verify product' });
+        });
+    },
+        function(productFound, done) {
+        if(productFound) {
+            models.User.findOne({
+            where: { id: userId }
+        })
+        .then(function(userFound) {
+            done(null, productFound, userFound);
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to verify user' });
+        });
+        } else {
+            res.status(404).json({ 'error': 'post already liked' });
+        }
+    },
+        function(productFound, userFound, done) {
+        if(userFound) {
+            models.Like.findOne({
+            where: {
+                UserId: userId,
+                ProductId: productId
+            }
+        })
+            .then(function(userAlreadyLikedFound) {
+            done(null, productFound, userFound, userAlreadyLikedFound);
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to verify if user already liked' });
+        });
+        } else {
+            res.status(404).json({ 'error': 'user does not exist' });
+        }
+    },
+        function(productFound, userFound, userAlreadyLikedFound, done) {
+        if(!userAlreadyLikedFound) {
+        productFound.addUser(userFound, { isLike: userAlreadyLikedFound.isLike == DISLIKED })
+        .then(function (alreadyLikeFound) {
+            done(null, productFound, userFound);
+        })
+        .catch(function(err) {
+            return res.status(500).json({ 'error': 'unable to set user reaction' });
+        });
+        } else {
+        if (userAlreadyLikedFound.isLike === LIKED) {
+            userAlreadyLikedFound.update({
+            isLike: DISLIKED,
+        }).then(function() {
+            done(null, productFound, userFound);
+        }).catch(function(err) {
+            res.status(500).json({ 'error': 'cannot update user reaction' });
+        });
+        } else {
+            res.status(409).json({ 'error': 'product already disliked' });
+        }
+    }
+    },
+        function(productFound, userFound, done) {
+        productFound.update({
+            likes: productFound.likes - 1,
+        }).then(function() {
+            done(productFound);
+        }).catch(function(err) {
+            res.status(500).json({ 'error': 'cannot update product like counter' });
+        });
+    },
+], function(productFound) {
+        if (productFound) {
+        return res.status(201).json(productFound);
+        } else {
+        return res.status(500).json({ 'error': 'cannot update product' });
+    }
+    });
+}
+}

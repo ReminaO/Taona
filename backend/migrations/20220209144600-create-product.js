@@ -25,6 +25,10 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
+      likes: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       quantity: {
         type: Sequelize.INTEGER
       },

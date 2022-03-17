@@ -23,7 +23,7 @@
                         <i class="bi bi-cart4"></i>
                         Ajouter au panier
                     </button>
-                    <div @click="like(likes.id)" class="btn like-btn">
+                    <div @click="like()" class="btn like-btn">
                         <svg v-if="productInfos.liked" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="liked" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
                         </svg>
@@ -31,7 +31,7 @@
                             <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
                         </svg>
                     </div>
-                    <span class="nb-likes align-baseline align-middle ms-1">{{ nbLikes }}</span>
+                    <span class="nb-likes align-baseline align-middle ms-1">{{ product.likes }}</span>
                 </div>
                 <button v-else @click="addToCart(product)" class="btn btn-add">
                     <i class="bi bi-cart4"></i>
@@ -160,13 +160,6 @@ const instance = axios.create({
             // likes(){
             //     return this.$store.state.likes
             // },
-            nbLikes() {
-            let count = 0;
-            for (let like of this.likes){
-                like.likeState ? count++ : null;
-            }
-            return count;
-            },
             
         },
         methods:{
@@ -246,7 +239,10 @@ const instance = axios.create({
                 })
             },
             like() {
-                this.$store.dispatch( 'switchLike', this.$route.params.id)
+                this.$store.dispatch( 'productLike', this.$route.params.id)
+            },
+            dislike() {
+                this.$store.dispatch( 'productDislike', this.$route.params.id)
             },
 },
         mounted(){

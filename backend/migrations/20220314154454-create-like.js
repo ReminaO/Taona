@@ -26,9 +26,9 @@ module.exports = {
           },
           onDelete: "cascade",
       },
-      likeState: {
+      isLike : {
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

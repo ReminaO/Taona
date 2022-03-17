@@ -56,6 +56,7 @@ exports.createProducts = (req, res) => {
             description: description,
             price: price,
             quantity: quantity,
+            likes: 0,
             img: img,
             thumbImg1: thumbImg1,
             thumbImg2: thumbImg2,

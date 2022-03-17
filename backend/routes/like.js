@@ -7,6 +7,7 @@ const likeController = require("../controllers/like");
 const auth = require('../middleware/auth');
 
 //Ajout / suppression d'un like
-router.post("/switch/:userId/:productId", auth, likeController.switchLike);
+router.post("/:userId/:productId/like", auth, likeController.likeProduct);
+router.post("/:userId/:productId/dislike", auth, likeController.dislikeProduct);
 
 module.exports = router;
