@@ -14,7 +14,7 @@ exports.createOrder = (req, res, next) => {
   // Paramètres
   const userId =  req.params.id;
   const quantity  = req.body.quantity;
-  const productId = response.locals.userId;
+  const productId = response.params.userId;
   const amount = req.body.amount;
   
 
@@ -71,7 +71,7 @@ exports.deleteOrder = (req, res, next) => {
       function (done) {
         models.User.findOne({
           attributes: ['isAdmin'],
-          where: { isAdmin: true }
+          where: { id: req.params.id }
         }).then(function (userFound) {
           done(null, userFound);
         })
@@ -83,7 +83,7 @@ exports.deleteOrder = (req, res, next) => {
       // Affichage du message ciblé
       function (userFound, done) {
         models.Order.findOne({
-          where: { id: req.params.id }
+          where: { id: req.params.orderId }
         })
           .then(function (orderFound) {
             done(null, userFound, orderFound);
@@ -100,7 +100,7 @@ exports.deleteOrder = (req, res, next) => {
 
           // Suppression du message
           models.Order.destroy({
-            where: { id: req.params.id }
+            where: { id: req.params.orderId }
           })
             .then(() => res.status(200).json({ message: 'commande supprimée !' }))
             .catch(error => res.status(400).json({ message: "commande introuvable", error: error }))
@@ -172,34 +172,35 @@ exports.getAllOrders = (req, res, next) => {
 
 //Récupération d'un reçu
 exports.getOrder = (request, response) => {
-  models.Order.findOne({
-    include: [
-      {
-          model: models.User,
-      },
-      {
-          model: models.Product,
-      },
-    ],
-    where: {
-      id: request.params.id,
+  asyncLib.waterfall([
+
+    // 2. Affiche les article
+    function (done) {
+      models.Product.findOne({
+        where: { id: req.params.id },
+        include: [ // Relie le produit avec la tables Comments  
+          {
+            model: models.User
+          },
+          {
+            model: models.Product,
+          },
+      ]
+      }).then(function (products) {
+        done(products)
+      }).catch(function (err) {
+        console.log(err);
+        res.status(500).json({ "error": "Champs invalide" });
+      });
     },
-})
-    .then((post) => {
-      if (post) {
-          let viewer = {
-            userId: response.locals.userId,
-            isadmin: response.locals.isadmin,
-          };
-          response.status(200).json({ post, viewer });
+    // 3. Confirmation, une fois vérifié
+  ],
+    function (products) {
+      if (products) {
+        return res.status(201).json(products);
       } else {
-          response.status(404).json({
-            message: "Ce reçu n'a pas été trouvé...",
-          });
+        return res.status(500).json({ 'error': 'Le produit ne peut être affiché' });
       }
     })
-    .catch((error) => {
-      response.status(500).json(error);
-    });
 };
 

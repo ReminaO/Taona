@@ -158,7 +158,11 @@ exports.login = (req, res) => {
                     // Limite la validité du token a 24h
                     { expiresIn: process.env.DB_EXPIRES_IN }
                 ),
-                isAdmin: userFound.isAdmin
+                isAdmin: userFound.isAdmin,
+                address: userFound.address,
+                postal_code: userFound.postal_code,
+                city: userFound.city,
+                phone_number: userFound.phone_number
             });
         } else {
             return res.status(500).json({ 'error': 'cannot log on user' });
