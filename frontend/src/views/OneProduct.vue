@@ -16,6 +16,19 @@
             </div>
             <div class="product-infos">
                 <h1 class="product-title">{{product.name}}</h1>
+                <div v-if="$store.state.user.userId !== -1">
+                    <div @click="like" class="btn like-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill btn-like" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                        </svg>
+                    </div>
+                    <span class="nb-likes align-baseline align-middle ms-1">{{ product.likes }}</span>
+                    <div @click="dislike" class="btn dislike-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heartbreak-fill btn-dislike" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8.931.586 7 3l1.5 4-2 3L8 15C22.534 5.396 13.757-2.21 8.931.586ZM7.358.77 5.5 3 7 7l-1.5 3 1.815 4.537C-6.533 4.96 2.685-2.467 7.358.77Z"/>
+                        </svg>
+                    </div>
+                </div>
                 <p class="product-price">{{product.price / 100}}€</p>
                 <p class="descritpion">{{product.description}}</p><br>
                 <div v-if="$store.state.user.userId !== -1">
@@ -23,21 +36,8 @@
                         <i class="bi bi-cart4"></i>
                         Ajouter au panier
                     </button>
-                    <div @click="like()" class="btn like-btn">
-                        <svg v-if="productInfos.liked" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="liked" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-                        </svg>
-                        <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="not-liked" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-                        </svg>
-                    </div>
-                    <span class="nb-likes align-baseline align-middle ms-1">{{ product.likes }}</span>
                 </div>
-                <button v-else @click="addToCart(product)" class="btn btn-add">
-                    <i class="bi bi-cart4"></i>
-                    <router-link class="btn-add" to="/connexion">Connexion</router-link>
-                </button>
-                
+                <router-link v-else @click="addToCart(product)" class="btn nav-link" to="/connexion">Connexion</router-link>
             </div>
             <div v-if="$store.state.user.isAdmin == true" class="card-footer">
                 <i class="bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#updateModal"></i><br>
@@ -70,21 +70,21 @@
                 </div>
             </div>
         </section>
-        <section>
-            <CommentForm/>
+        <section class="container comment-container">
+            <h4>Avis</h4><br><br>
+            <CommentForm v-bind="product"/>
             <div v-if="comment.length > 0">
                 <div 
                     v-for="(comment) in comment.filter((comment) => { 
                     return comment.productId == $store.state.products.id 
                     })" 
                     :key="comment.id"
-                    class="comment-content">
+                    class=" comment-content">
                     <div class="comment-display">
-                    <img :src="user.avatar" class='icon-image img-fluid' alt="avatar">
-                    <div class="comment-display__content">
-                        <p class="comment-display__username"> {{ comment.username }} </p>
-                        <p class="comment-display__comment"> {{ comment.content }} </p>
-                    </div>
+                        <div class="comment-display__content">
+                            <p class="comment-display__username"> {{ comment.username }} </p>
+                            <p class="comment-display__comment"> {{ comment.content }} </p>
+                        </div>
                     </div>
                     <div>
                     <button v-if="this.$store.state.user.userId == comment.userId || this.$store.state.user.isAdmin == 1" name="delete" class="button deleteBtn" data-bs-toggle="button" autocomplete="off" @click="deleteComment(comment.id)">
@@ -99,7 +99,6 @@
 </template>
 
 <script>
-import { mapActions} from 'vuex';
 import CommentForm from '@/components/CommentForm'
 
 const axios = require('axios')
@@ -141,8 +140,22 @@ const instance = axios.create({
                 cart: [],
                 UserId: '' ,
                 ProductId: '',
-                likes:[]
+                likes:[],
             }
+        },
+        created() {
+            if( window.localStorage ){
+                if( !localStorage.getItem('firstLoad') ){
+                localStorage['firstLoad'] = true;
+                window.location.reload();
+                } else
+                localStorage.removeItem('firstLoad');
+            }
+        },
+        mounted(){
+            const self = this;
+            self.$store.dispatch( 'getOneProduct', this.$route.params.id)
+            self.$store.dispatch( 'getAllComments' );
         },
         computed: {
             product(){
@@ -157,13 +170,8 @@ const instance = axios.create({
             user(){
                 return this.$store.state.userInfos
             },
-            // likes(){
-            //     return this.$store.state.likes
-            // },
-            
         },
         methods:{
-            ...mapActions(["switchLike"]),
             thumbClick(){
                 const thumbs = document.querySelectorAll('.small')
                 const fullImg = document.getElementById('full')
@@ -206,7 +214,7 @@ const instance = axios.create({
                 })
                 .then(function () {
                 alert("Article supprimé !");
-                self.$router.push('/articles')
+                this. $router.go()
                 }, function (error) {
                 console.log(error);
                 })
@@ -233,28 +241,39 @@ const instance = axios.create({
                 })
                 .then(function () {
                 alert("Article modifié !");
-                self.$router.push(`/articles`)
+                this. $router.go()
+                }, function (error) {
+                console.log(error);
+                })
+            },
+            deleteComment: function (id) {
+                const self = this;
+                    this.$store.dispatch('deleteComment', id, {
+                })
+                .then(function () {
+                alert("Commentaire supprimé !");
+                this. $router.go()
                 }, function (error) {
                 console.log(error);
                 })
             },
             like() {
                 this.$store.dispatch( 'productLike', this.$route.params.id)
+                this. $router.go()
             },
             dislike() {
                 this.$store.dispatch( 'productDislike', this.$route.params.id)
+                this. $router.go()
             },
 },
-        mounted(){
-            this.$store.dispatch( 'getOneProduct', this.$route.params.id)
-        },
+        
 }  
 </script>
 <style scoped>
 
 .product-container {
     width:80%;
-    background-color: white;
+    /* background-color: white; */
     color: #672932;
     display: flex;
     margin-top: 100px;
@@ -265,12 +284,16 @@ const instance = axios.create({
     flex: 1;
     background-color: #672932;
     border-radius: 10px 0 0 10px;
+    -webkit-box-shadow: 0 5px 5px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 5px 2px rgba(0,0,0,0.1);
 }
 .product-infos{
     flex: 1;
     padding: 2rem;
     background-color:#F7F7F7 ;
     border-radius:  0 10px 10px 0;
+    -webkit-box-shadow: 0 5px 5px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 5px 2px rgba(0,0,0,0.1);
 }
 .full-img-container{
     display: flex;
@@ -300,8 +323,8 @@ p.product-price{
 p.description{
     font-size: 2rem;
 }
-button.btn-add{
-    background-color: black;
+.btn-add, .nav-link{
+    background-color: #672932;
     color: white;
     font-size: 1rem;
     padding: 1rem;
@@ -309,7 +332,12 @@ button.btn-add{
     border: none;
     margin: 1rem 0;
 }
-img{
+.nav-link:hover, .btn-add:hover {
+    background-color: #b46773;
+    color:rgba(255,255,255,1);
+}
+
+.img-fluid{
     object-fit: fill;
     background-color: #672932;
     border:#d4a449 1px solid;
@@ -359,12 +387,13 @@ button {
     background-color:#d4a449;
     color:rgba(255,255,255,1);
     border-radius: 8px;
-    padding: 10px 25px;
+    padding: 10px 15px;
+    margin: 5px;
     font-size: 20px;
     border: none;
 }
 button:hover {
-    background-color:#b46773;
+    background-color: #672932;
     color:rgba(255,255,255,1);
 }
 textarea, input {
@@ -378,24 +407,59 @@ textarea, input {
     font-size: 17px;
     border: none;
 }
-.liked {
-    fill: #ff0000;
+.btn-like {
+    fill: green;
     transform: scale(1);
     transition: all 0.15s ease-in-out;
 }
-.liked:hover {
-    fill: lighten(#ff0000, 10);
+.btn-like:hover {
+    fill: lighten(green, 10%);
     transform: scale(1.1);
 }
-.not-liked {
-    fill: gray;
+.btn-dislike {
+    fill: red;
     transform: scale(1);
     transition: all 0.15s ease-in-out;
 }
-.not-liked:hover {
-    fill: darkgray;
+.btn-dislike:hover {
+    fill: lighten(red, 10%);
     transform: scale(1.1);
 }
+.comment-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    border:#672932 solid 1px;
+    margin-bottom: 50px;
+    position: relative;
+    left: 25%;
+    border-radius: 10px;
+    width:50%;
+    -webkit-box-shadow: 0 5px 5px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 5px 2px rgba(0,0,0,0.1);
+}
+.comment-display {
+    display: flex;
+    
+}
+
+.comment-display__username {
+    float:left;
+    margin: 30px;
+    text-decoration: underline #672932;
+    -moz-text-decoration-style: wavy;
+    text-decoration-style: wavy
+}
+.comment-display__comment {
+    display: flex;
+    margin: 30px;
+}
+.comment-container{
+    display: flex;
+    flex-direction: column;
+    position: relative
+}
+
 @media screen and (max-width: 800px){
     .container{
         height: auto;

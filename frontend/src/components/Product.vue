@@ -2,7 +2,7 @@
     <section class="container d-flex ">
     <div class="container d-flex flex-column">
         <div class="d-flex justify-content-center row">
-            <router-link  @click.stop :to="`/article/${id}`">
+            <router-link :to="`/article/${id}`">
                 <img :src="img" class="card-img-top" :alt="name" />
                 <div class="card-body">
                     <p class="card-text">{{name}}</p>
@@ -30,7 +30,7 @@ import { mapState } from 'vuex'
         },
         methods:{
             ...mapState(["getOneProduct"]),
-            },
+        },
         props: ["name", "img", "price", "id"],
     }
 </script>

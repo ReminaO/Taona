@@ -1,13 +1,12 @@
 <template>
 <div class="container w-50">
   <div class="card comment-publish">
-    <input class="form-row__input form-control" type="text" id="comment" ref="comment" name="comment" v-model="comment" placeholder="Votre Commentaire..."><br>
-    <button @click="addPost()" v-if="$store.state.user.userId !== -1"  ref="comment" class="button" data-bs-toggle="button" autocomplete="off">
+    <textarea class="form-row__input form-control" v-bind="$attrs" type="text" id="content" ref="content" name="content" v-model="content" placeholder="Votre avis compte..."></textarea><br>
+    <p>maximum 255 caractères</p>
+    <button @click="addPost($attrs)" v-bind="$attrs" v-if="$store.state.user.userId !== -1"  ref="content" class="button" data-bs-toggle="button" autocomplete="off">
       Publier
     </button>
-    <button v-else>
-      <router-link class="btn button" to="/connexion">Connexion</router-link>
-    </button>
+    <router-link v-else class="btn button" to="/connexion">Connexion</router-link>
   </div><br>
 </div>
 </template>
@@ -26,7 +25,6 @@ if (!user) {
 } else {
   try {
     user = JSON.parse(user);
-    //instance.defaults.headers.common = {'Authorization': `bearer ${user.token}`};
   } catch (ex) {
     user = {
       userId: -1,
@@ -43,7 +41,7 @@ export default {
   name: 'CommentForm',
   data () {
     return{
-      comment : '',
+      content : '',
     } 
   },
   computed : {
@@ -51,21 +49,16 @@ export default {
     user(){
       this.$store.state.user
     }
-    },     
-  
-  mounted: function () {
-    this.$store.dispatch('getAllComments');
-  },
-  
+    },       
   methods :{
-    
     addPost: function () {
-      instance.post(`${user.userId}`, {
-        comment: this.comment
+      let productId = this.$refs.content.id;
+      instance.post(`${user.userId}/${productId}`, {
+        content: this.content
       })
       .then(response => {
-        this.comment = response.data.comment
-        this.$router.go("/wall");
+        this.content = response.data.content
+        location.reload()
       });
     },
   },
@@ -88,7 +81,7 @@ export default {
     background-color: #ffffff;
     border: none;
   }
-  button{
+  .button{
     background-color: #672932;
     color: white;
     font-size: 1rem;
@@ -96,9 +89,9 @@ export default {
     outline: none;
     border: none;
     margin: 1rem 0;
-    border-radius: 10px
+    border-radius: 5px
 }
-button:hover {
+.button:hover {
   background-color:#b46773;
   color:rgba(255,255,255,1);
 }
@@ -109,5 +102,8 @@ button:hover {
   border: solid 1px #672932;
   border-radius : 10px;
   padding: 10px
+}
+p{
+  font-size: 10px;
 }
 </style>

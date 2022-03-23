@@ -100,26 +100,8 @@ const store = createStore({
     userInfos: function (state, userInfos) {
       state.userInfos = userInfos
     },
-    productInfos: function (state, data) {
-      state.productInfos.id = data.id;
-      state.productInfos.name = data.name;
-      state.productInfos.price = data.price;
-      state.productInfos.description = data.description;
-      state.productInfos.quantity = 1;
-      state.productInfos.img = data.img;
-      state.productInfos.thumbImg1 = data.thumbImg1;
-      state.productInfos.thumbImg2 = data.thumbImg2;
-      state.productInfos.thumbImg3 = data.thumbImg3;
-      state.productInfos.thumbVideo = data.thumbVideo;
-      state.productInfos.liked= false
-      for (let like of state.likes) {
-        if (like.UserId === user.userId) {
-          if (like.likeState) {
-            state.productInfos.liked = true;
-          }
-          break;
-        }
-     }
+    productInfos: function (state, productInfos) {
+      state.productInfos = productInfos
     },
     products: function (state, products) {
       state.products = products;
@@ -132,9 +114,6 @@ const store = createStore({
     },
     likes: function (state, likes) {
       state.likes = likes;
-    },
-    likeInfos: function (state, likeInfos) {
-      state.likeInfos = likeInfos
     },
     orderInfos: function (state, orderInfos) {
       state.orderInfos = orderInfos
@@ -334,7 +313,6 @@ const store = createStore({
     },
     addItem({ commit }, payload) {
       commit("addItem", payload)
-      commit("addToCart", payload)
     },
     removeItem({ commit }, payload) {
       commit("removeItem", payload)
@@ -347,12 +325,20 @@ const store = createStore({
           })
           .catch(function () {})
     },
+    deleteComment: ({ commit }, id) => {
+      commit('setStatus', 'loading')
+        instance.delete(`comments/${user.userId}/${id}`)
+          .then(function (response) {
+            commit('comments', response.data)
+          })
+          .catch(function () {})
+    },
     productLike({ commit }, productId) {
       instance.post(`likes/${user.userId}/${productId}/like`).then((response) => {
         commit('likes', response.data);
       });
     },
-    productDislike({ commit }, id) {
+    productDislike({ commit }, productId) {
       instance.post(`likes/${user.userId}/${productId}/dislike`).then((response) => {
         commit('likes', response.data);
       });

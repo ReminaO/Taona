@@ -9,16 +9,16 @@ exports.createComment = (req, res, next) => {
     const content = req.body.content;
     const userId = req.params.userId;
 
-    if (comment == null) {
+    if (content == null) {
         return res.status(400).json({ 'error': 'Champs manquant' });
     }
 
     asyncLib.waterfall([
-        // 1. recherche l'utilsateur
+        // 1. recherche l'utilisateur
         function(done) {
             models.User.findOne({
                 where: { id: userId },
-                attributes : ["id", "username"]
+                attributes : ["id", "firstName"]
             })
             .then(function(userFound) {
                 done(null, userFound);
@@ -33,15 +33,15 @@ exports.createComment = (req, res, next) => {
             if (userFound) {
                 // Créé le commentaire et l'enregistre dans la BDD
                 models.Comment.create({
-                content: content,
-                userId: userFound.id,
-                productId: req.params.productId,
-                username: userFound.username,
-                    })
-                    .then(function(newComment) {
-                        done(newComment);
-                    })
-                    .catch(() => res.status(400).json({ message: "erreur controller commentaire" }));
+                    content: content,
+                    userId: userFound.id,
+                    productId: req.params.productId,
+                    username: userFound.firstName,
+                })
+                .then(function(newComment) {
+                    done(newComment);
+                })
+                .catch(() => res.status(400).json({ message: "erreur controller commentaire" }));
             } else {
                 res.status(404).json({ 'error': 'user not found' });
             }

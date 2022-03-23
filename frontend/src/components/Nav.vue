@@ -64,6 +64,8 @@ export default {
 <style scoped>
 .navbar{
   background-color:#333333;
+  -webkit-box-shadow: 0 5px 5px 0 rgba(0,0,0,0.1);
+box-shadow: 0 5px 5px 0 rgba(0,0,0,0.1);
 }
 img { 
   height: 50px;

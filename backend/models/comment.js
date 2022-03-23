@@ -13,14 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.Comment.belongsTo(models.User, {
         onDelete: 'cascade',
-        hooks: true,
         foreignKey: {
           name: 'userId',
           allowNull: false }
       });
+      models.User.hasMany(models.Comment)
       models.Comment.belongsTo(models.Product, {
         onDelete: 'cascade',
-        hooks: true,
         foreignKey: {
           name: 'productId',
           allowNull: false}
@@ -29,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Comment.init({
-    userName: {
+    username: {
       type: DataTypes.STRING,
       references : {
         model : 'User',
