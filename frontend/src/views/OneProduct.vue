@@ -83,7 +83,7 @@
                     <div class="comment-display">
                         <div class="comment-display__content">
                             <p class="comment-display__username"> {{ comment.username }} </p>
-                            <p class="comment-display__comment"> {{ comment.content }} </p>
+                            <p class="comment-display__comment"> "{{ comment.content }}" </p>
                         </div>
                     </div>
                     <div>
