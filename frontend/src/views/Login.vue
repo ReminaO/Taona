@@ -79,6 +79,15 @@ export default {
       errors: []
     }
   },
+  created() {
+    if( window.localStorage ){
+        if( !localStorage.getItem('firstLoad') ){
+        localStorage['firstLoad'] = true;
+        window.location.reload();
+        } else
+        localStorage.removeItem('firstLoad');
+    }
+},
   mounted: function () {
     if (this.$store.state.user.userId != -1) {
       this.$router.go('/');
@@ -116,7 +125,7 @@ export default {
         email: this.email,
         password: this.password,
       }).then(function () {
-        self.$router.push('/');
+        self.$router.push('/panier');
       }, function (error) {
         console.log(error);
       })
@@ -135,6 +144,7 @@ export default {
           password: this.password,
         }).then(function () {
           self.login();
+          self.$router.push('/articles')
         }, function (error) {
           console.log(error);
         })

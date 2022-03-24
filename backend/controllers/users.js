@@ -159,6 +159,8 @@ exports.login = (req, res) => {
                     { expiresIn: process.env.DB_EXPIRES_IN }
                 ),
                 isAdmin: userFound.isAdmin,
+                firstName: userFound.firstName,
+                lastName: userFound.lastName,
                 address: userFound.address,
                 postal_code: userFound.postal_code,
                 city: userFound.city,

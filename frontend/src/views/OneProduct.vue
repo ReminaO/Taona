@@ -31,13 +31,12 @@
                 </div>
                 <p class="product-price">{{product.price / 100}}€</p>
                 <p class="descritpion">{{product.description}}</p><br>
-                <div v-if="$store.state.user.userId !== -1">
-                    <button  @click.prevent="addToCart(product)" class="btn btn-add">
+                <div>
+                    <button  @click="addToCart(product)" class="btn btn-add">
                         <i class="bi bi-cart4"></i>
                         Ajouter au panier
                     </button>
                 </div>
-                <router-link v-else @click="addToCart(product)" class="btn nav-link" to="/connexion">Connexion</router-link>
             </div>
             <div v-if="$store.state.user.isAdmin == true" class="card-footer">
                 <i class="bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#updateModal"></i><br>
@@ -205,6 +204,7 @@ const instance = axios.create({
             })
             },
             addToCart: function(product){
+                const self = this;
                 this.$store.dispatch('addItem', product)
                 // self.$router.push(`/panier`);
             },
@@ -317,7 +317,8 @@ h1.product-title{
     font-size: 3rem;
 }
 p.product-price{
-    font-size: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
     margin: 2rem 0;
 }
 p.description{

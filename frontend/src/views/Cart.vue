@@ -1,6 +1,10 @@
 <template>
     <section>
-      <div class="product-container" v-if="$store.state.cart.length > 0">
+      <div v-if="$store.state.user.userId == -1" class="connexion-container">
+        <img src="../assets/img/Logo3.png" alt="Logo"/>
+        <router-link class="btn nav-link" to="/connexion">Connexion</router-link>
+      </div>
+      <div class="product-container" v-else-if="$store.state.cart.length > 0">
         <div class="product-header">
           <h5 class="product-title">Article <span v-if="$store.state.cart.length >1"> s </span></h5>
           <h5 class="price">Prix</h5>
@@ -25,6 +29,9 @@
           <h4 class="basketTotalTitle">Total</h4>
           <h4 class="basketTotal"> = {{total / 100}}€</h4>
         </div>
+        <button class="btn btn-success check-btn">
+          Valider la commande
+        </button>
       </div>
       <div class="emptyBasket-container" v-else>
         <h1>Panier Vide</h1>
@@ -72,18 +79,33 @@ export default {
 }
 </script>
 <style scoped>
-.emptyBasket-container img{
+
+.emptyBasket-container img, .connexion-container img{
   height: 300px;
   margin:0;
   padding:0
 }
-.emptyBasket-container {
+.emptyBasket-container, .connexion-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 100px;
   color: #672932
+}
+.nav-link{
+    background-color: #672932;
+    color: white;
+    font-size: 1rem;
+    padding: 1rem;
+    outline: none;
+    border: none;
+    margin: 1rem 0;
+    width: 40%
+}
+.nav-link:hover {
+    background-color: #b46773;
+    color:rgba(255,255,255,1);
 }
  .product-container{
     max-width: 70%;
@@ -195,6 +217,11 @@ export default {
   margin: 5px;
   border: 1px #672932 solid;
   border-radius: 5px
+}
+.check-btn {
+  position: relative;
+  left: 75%;
+  width: 25%
 }
 @media screen and (max-width: 500px)
 {/*Style page du panier*/

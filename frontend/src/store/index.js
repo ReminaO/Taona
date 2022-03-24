@@ -313,6 +313,7 @@ const store = createStore({
     },
     addItem({ commit }, payload) {
       commit("addItem", payload)
+      commit("addToCart", payload)
     },
     removeItem({ commit }, payload) {
       commit("removeItem", payload)
