@@ -1,7 +1,7 @@
 <template>
     <section>
       <div v-if="$store.state.user.userId == -1" class="connexion-container">
-        <img src="../assets/img/Logo3.png" alt="Logo"/>
+        <img src="../assets/img/Logo3.png" class="img-fluid" alt="Logo"/>
         <router-link class="btn nav-link" to="/connexion">Connexion</router-link>
       </div>
       <div class="product-container" v-else-if="$store.state.cart.length > 0">
@@ -35,7 +35,7 @@
       </div>
       <div class="emptyBasket-container" v-else>
         <h1>Panier Vide</h1>
-        <img src="../assets/img/Logo3.png" alt="Logo"/>
+        <img src="../assets/img/Logo3.png" class="img-fluid" alt="Logo"/>
       </div>
     </section>
 </template>
@@ -100,8 +100,8 @@ export default {
     padding: 1rem;
     outline: none;
     border: none;
-    margin: 1rem 0;
-    width: 40%
+    margin: 0;
+    /* width: 40% */
 }
 .nav-link:hover {
     background-color: #b46773;
