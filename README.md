@@ -12,7 +12,7 @@ Clone the repo and follow the instructions for the backend and the frontend
 
 run `npm install` to install the dependancies.
 
-- NodeJS 12.14 or 14.0
+- NodeJS 16.13.1
 - Express
 - jsonwebtoken
 - async-waterfall
