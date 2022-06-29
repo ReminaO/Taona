@@ -8,7 +8,7 @@
     </div>
     <div class="contact-container">
       <div class="contact-form">
-        <form action="https://formsubmit.co/your@email.com" method="POST">
+        <form action="https://formsubmit.co/contact@taonacosmetics.com" method="POST">
           <img src="../assets/img/Logo3.png" alt="Logo TaonaCosmetics"><br>
           <label for="firstName">Prénom :</label>
           <input id="firstName" name="firstName" required/><br>
