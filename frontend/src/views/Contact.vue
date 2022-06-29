@@ -11,13 +11,13 @@
         <form action="https://formsubmit.co/your@email.com" method="POST">
           <img src="../assets/img/Logo3.png" alt="Logo TaonaCosmetics"><br>
           <label for="firstName">Prénom :</label>
-          <input id="firstName" name="firstName"/><br>
+          <input id="firstName" name="firstName" required/><br>
           <label for="lastName">Nom :</label>
-          <input id="lastName" name="lastName"/><br>
+          <input id="lastName" name="lastName" required/><br>
           <label for="email">Email :</label>
-          <input id="email" name="email"/><br>
+          <input id="email" name="email" required/><br>
           <label for="message">Message :</label><br>
-          <textarea name="message" id="message" cols="100" rows="10"></textarea><br>
+          <textarea name="message" id="message" cols="100" rows="10" required></textarea><br>
           <button type="submit"> Envoyer</button>
         </form> 
       </div>
