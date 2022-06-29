@@ -212,13 +212,10 @@ export default {
     flex:1;
     min-width: 100px;
     color: white;
+    outline:rgb(255, 101, 70);
   }
   .form-row__input::placeholder {
     color:#672932;
-    
-  }
-.form-row__input {
-    outline:rgb(255, 101, 70);
     
   }
   .logo img{

@@ -7,9 +7,9 @@
             <div class="col-6">
                 <h5>Liens utiles</h5>
                 <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">Accueil</a></li>
+                <li class="nav-item mb-2"><router-link to="/" class="nav-link p-0 ">Accueil</router-link></li>
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">Qui sommes-nous ?</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">Contact</a></li>
+                <li class="nav-item mb-2"><router-link to="/contact" class="nav-link p-0 ">Contact</router-link></li>
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">FAQs</a></li>
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 ">Conditions Générales de ventes</a></li>
                 </ul>
