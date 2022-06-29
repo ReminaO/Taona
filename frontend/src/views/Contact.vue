@@ -8,16 +8,16 @@
     </div>
     <div class="contact-container">
       <div class="contact-form">
-        <form>
+        <form action="https://formsubmit.co/your@email.com" method="POST">
           <img src="../assets/img/Logo3.png" alt="Logo TaonaCosmetics"><br>
           <label for="firstName">Prénom :</label>
-          <input id="firstName"/><br>
+          <input id="firstName" name="firstName"/><br>
           <label for="lastName">Nom :</label>
-          <input id="lastName"/><br>
+          <input id="lastName" name="lastName"/><br>
           <label for="email">Email :</label>
-          <input id="email"/><br>
+          <input id="email" name="email"/><br>
           <label for="message">Message :</label><br>
-          <textarea name="" id="message" cols="100" rows="10"></textarea><br>
+          <textarea name="message" id="message" cols="100" rows="10"></textarea><br>
           <button type="submit"> Envoyer</button>
         </form> 
       </div>
