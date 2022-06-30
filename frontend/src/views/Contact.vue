@@ -8,14 +8,14 @@
     </div>
     <div class="contact-container">
       <div class="contact-form">
-        <form action="https://formsubmit.co/contact@taonacosmetics.com" method="POST">
+        <form action="https://formsubmit.co/cb371dfc9a5e756ce73f98745a0f1d77" method="POST">
           <img src="../assets/img/Logo3.png" alt="Logo TaonaCosmetics"><br>
           <label for="firstName">Prénom :</label>
-          <input id="firstName" name="firstName" required/><br>
-          <label for="lastName">Nom :</label>
-          <input id="lastName" name="lastName" required/><br>
+          <input id="firstName" type="text" name="firstName" required/><br>
+          <label for="lastName" >Nom :</label>
+          <input id="lastName" type="text" name="lastName" required/><br>
           <label for="email">Email :</label>
-          <input id="email" name="email" required/><br>
+          <input id="email" type="email" name="email" required/><br>
           <label for="message">Message :</label><br>
           <textarea name="message" id="message" cols="100" rows="10" required></textarea><br>
           <button type="submit"> Envoyer</button>
