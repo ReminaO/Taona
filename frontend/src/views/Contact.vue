@@ -3,7 +3,7 @@
     <div class="p-5 mb-4 banner jumbotron">
         <div class="container-fluid py-5">
           <h1 class="display-5 fw-bold">Contactez-nous !</h1>
-          <p class="col-md-8 fs-4">Laissez nous un messsage pour nous poser vos question ou partager votre expérience</p>
+          <p class="col-md-8 fs-4">Laissez nous un messsage pour nous poser vos questions ou partager votre expérience</p>
         </div>
     </div>
     <div class="contact-container">
