@@ -21,8 +21,8 @@
                 <p>Monthly digest of whats new and exciting from us.</p>
                 <div class="d-flex w-100 gap-2">
                     <label for="newsletter1" class="visually-hidden">Email address</label>
-                    <input id="newsletter1" type="text" class="form-control" placeholder="Email" data-kwimpalastatus="alive" data-kwimpalaid="1643547080098-0" data-form-type="email">
-                    <button class="btn btn-primary" type="button" data-form-type="action,subscribe">S'inscrire</button>
+                    <input id="newsletter1" name="email_address" type="text" class="form-control" v-model="email_address" placeholder="Email" data-kwimpalastatus="alive" data-kwimpalaid="1643547080098-0" data-form-type="email">
+                    <button class="btn btn-primary" type="button" data-form-type="action,subscribe" @click="subscribe()" >S'inscrire</button>
                 </div> 
                 </form>
             </div>
@@ -42,9 +42,46 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+const axios = require('axios')
+let user = localStorage.getItem('user')
+if (!user) {
+    user = {
+    userId: -1,
+    token: '',
+    }
+} else {
+    try {
+    user = JSON.parse(user)
+    } catch (ex) {
+    user = {
+        userId: -1,
+        token: '',
+        }
+    }
+}
+const instance = axios.create({
+    baseURL: 'http://localhost:3000/audience',
+    headers: {'Authorization': 'Bearer '+ `${user.token}`}
+})
 export default {
-  name: 'Footer',
-
+    name: 'Footer',
+    data(){
+            return {
+                email_address:""
+            }
+        },
+    methods: {
+        subscribe(){
+            instance.post(`/lists/14fd06490a/members`, {
+                email_address: this.email_address,
+            })
+            .then(function () {
+                self.$router.push('/confirmnews');
+            }, function (error) {
+                console.log(error);
+            })
+        }
+    },
 }
 </script>
 <style scoped>

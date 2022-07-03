@@ -10,6 +10,8 @@ import About from '../views/About.vue'
 import CGV from '../views/Cgv.vue'
 import Tips from '../views/Tips.vue'
 import Login from '../views/Login.vue'
+import ConfirmNews from '../views/ConfirmNews.vue'
+
 
 const routes = [
   {
@@ -96,6 +98,14 @@ const routes = [
     path: '/astuces',
     name: 'Astuces',
     component: Tips,
+    meta: {
+      title: 'Astuces',
+    },
+  },
+  {
+    path: '/confirmnews',
+    name: 'Confirmation newsletter',
+    component: ConfirmNews,
     meta: {
       title: 'Astuces',
     },
