@@ -25,6 +25,9 @@
           <li v-if="$store.state.user.userId == -1" class="nav-item">
             <router-link class="nav-link" to="/connexion">Connexion</router-link>
           </li>
+          <!-- <li v-if="$store.state.user.userId == -1" class="nav-item">
+            <router-link class="nav-link" to="/confirmnews">NewsletterConfirm</router-link>
+          </li> -->
           <li v-else class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Mon compte

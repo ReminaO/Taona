@@ -16,13 +16,18 @@
             </div>
 
             <div class="col-4 offset-1">
-                <form data-form-type="newsletter">
+                <form @submit="checkForm" data-form-type="newsletter">
                 <h5>Souscrivez à notre Newsletter</h5>
                 <p>Monthly digest of whats new and exciting from us.</p>
                 <div class="d-flex w-100 gap-2">
                     <label for="newsletter1" class="visually-hidden">Email address</label>
                     <input id="newsletter1" name="email_address" type="text" class="form-control" v-model="email_address" placeholder="Email" data-kwimpalastatus="alive" data-kwimpalaid="1643547080098-0" data-form-type="email">
                     <button class="btn btn-primary" type="button" data-form-type="action,subscribe" @click="subscribe()" >S'inscrire</button>
+                    <p v-if="errors.length">
+                        <span>
+                            <p class="text-danger" v-for="error in errors" :key='error.index'>{{ error }}</p>
+                        </span>
+                    </p>
                 </div> 
                 </form>
             </div>
@@ -67,20 +72,32 @@ export default {
     name: 'Footer',
     data(){
             return {
-                email_address:""
+                email_address:"",
+                errors:[]
             }
         },
     methods: {
         subscribe(){
-            instance.post(`/lists/14fd06490a/members`, {
+            instance.post(`/lists/${process.env.LIST_ID}/members`, {
                 email_address: this.email_address,
             })
             .then(function () {
-                self.$router.push('/confirmnews');
+                this.$router.push('/confirmnews');
             }, function (error) {
                 console.log(error);
             })
-        }
+        },
+        checkForm(e) {
+            const email_regex = /^(([^<>()[\].,;:s@"]+(.[^<>()[\].,;:s@"]+)*)|(".+"))@((s[[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
+            const email = this.email_address;
+            
+            this.errors = [];
+            
+            if (!email_regex.test(email)) {
+                this.errors.push('Merci de saisir le bon format d\'adresse mail !');
+            }
+            e.preventDefault();
+        },
     },
 }
 </script>
@@ -95,10 +112,10 @@ export default {
     color: #672932
 }
 @media screen and (max-width: 800px){
-  .footer-container{
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-  }
+    .footer-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 </style>
