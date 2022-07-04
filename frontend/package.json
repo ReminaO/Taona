@@ -12,7 +12,6 @@
     "bootstrap-icons": "^1.8.1",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
-    "dotenv": "^16.0.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuejs-storage": "^3.1.0",

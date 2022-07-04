@@ -46,7 +46,7 @@
 </footer>
 </template>
 <script>
-import { mapState } from 'vuex'
+
 const axios = require('axios')
 let user = localStorage.getItem('user')
 if (!user) {
@@ -78,11 +78,12 @@ export default {
         },
     methods: {
         subscribe(){
-            instance.post(`/lists/${process.env.LIST_ID}/members`, {
+            const self = this;
+            instance.post(`/lists/14fd06490a/members`, {
                 email_address: this.email_address,
             })
             .then(function () {
-                this.$router.push('/confirmnews');
+                self.$router.push('/confirmnews');
             }, function (error) {
                 console.log(error);
             })
@@ -96,7 +97,6 @@ export default {
             if (!email_regex.test(email)) {
                 this.errors.push('Merci de saisir le bon format d\'adresse mail !');
             }
-            e.preventDefault();
         },
     },
 }
