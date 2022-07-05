@@ -11,6 +11,7 @@ import CGV from '../views/Cgv.vue'
 import Tips from '../views/Tips.vue'
 import Login from '../views/Login.vue'
 import ConfirmNews from '../views/ConfirmNews.vue'
+import Faqs from '../views/Faqs.vue'
 
 
 const routes = [
@@ -107,7 +108,15 @@ const routes = [
     name: 'Confirmation newsletter',
     component: ConfirmNews,
     meta: {
-      title: 'Astuces',
+      title: 'Newsletter',
+    },
+  },
+  {
+    path: '/faqs',
+    name: 'FAQs',
+    component: Faqs,
+    meta: {
+      title: 'FAQs',
     },
   },
 ]
