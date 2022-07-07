@@ -24,11 +24,11 @@
         <textarea v-model="address" class="form-row__input" type="text" placeholder="Adresse"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
-        <input v-model="city" class="form-row__input" type="text" placeholder="ville"/>
-      </div>
-      <div class="form-row" v-if="mode == 'create'">
         <input v-model="postal_code" class="form-row__input" type="text" placeholder="Code postal"/>
-      </div>  
+      </div> 
+      <div class="form-row" v-if="mode == 'create'">
+        <input v-model="city" class="form-row__input" type="text" placeholder="Ville"/>
+      </div>
       <div class="form-row">
         <input v-model="password" @change="isPwdValid" class="form-row__input" id="password" type="password" ref="password" placeholder="Mot de passe" @keyup='check()'/>
       </div>
@@ -125,7 +125,7 @@ export default {
         email: this.email,
         password: this.password,
       }).then(function () {
-        self.$router.push('/panier');
+        self.$router.go(-1);
       }, function (error) {
         console.log(error);
       })
@@ -144,7 +144,7 @@ export default {
           password: this.password,
         }).then(function () {
           self.login();
-          self.$router.push('/articles')
+          self.$router.push('/')
         }, function (error) {
           console.log(error);
         })
@@ -238,7 +238,7 @@ export default {
     border: none;
     }
   button:hover {
-    background-color:#b46773;
+    background-color:#672932;
     color:rgba(255,255,255,1);
 }
 .button--disabled {

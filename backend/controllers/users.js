@@ -164,7 +164,8 @@ exports.login = (req, res) => {
                 address: userFound.address,
                 postal_code: userFound.postal_code,
                 city: userFound.city,
-                phone_number: userFound.phone_number
+                phone_number: userFound.phone_number,
+                email: userFound.email
             });
         } else {
             return res.status(500).json({ 'error': 'cannot log on user' });

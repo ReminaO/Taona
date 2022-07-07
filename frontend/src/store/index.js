@@ -37,11 +37,12 @@ const store = createStore({
       firstName: '',
       lastName: '',
       email: '',
+      address:'',
       postal_code: '',
       city: '',
       phone_number: '',
       avatar: '',
-      isAdmin:''
+      isAdmin: '',
     },
     products:[],
     productInfos: {
@@ -57,6 +58,7 @@ const store = createStore({
       thumbVideo: '',
       liked: false
     },
+    preOrder:[],
     orders:[],
     orderInfos: {
       product: '',
@@ -115,16 +117,29 @@ const store = createStore({
     likes: function (state, likes) {
       state.likes = likes;
     },
-    orderInfos: function (state, orderInfos) {
-      state.orderInfos = orderInfos
+    orderInfos: function (state, orderInfos, carts) {
+      state.orderInfos = {
+        product: cart.name,
+        quantity: cart.quantity,
+        total() {
+          let price = 0;
+          cart.map(item => {
+              price += item["quantity"] * item["price"]
+          })
+          return price
+        },
+        amount : total()
+      }
+      state.preOrder.push(orderInfos)
     },
+    
     logout: function (state) {
       state.user = {
         userId: -1,
         token: '',
       }
       localStorage.clear()
-      state.cart.splice(0, 100)
+      // state.cart.splice(0, 100)
     },
     deleteInfos: function (state) {
       state.user = {

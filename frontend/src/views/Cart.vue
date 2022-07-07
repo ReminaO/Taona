@@ -1,10 +1,16 @@
 <template>
     <section>
-      <div v-if="$store.state.user.userId == -1" class="connexion-container">
+      <div class="p-5 mb-4 banner jumbotron">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Panier <i class="bi bi-cart4"></i></h1>
+                <!-- <p class="col-md-8 fs-4">Sublimez vos cheveux et ceux de vos proches, grâce à la Taona Box. Pas moins de 8 accessoires pour prendre soin de votre chevelure !</p> -->
+            </div>
+        </div> 
+      <!-- <div v-if="$store.state.user.userId == -1" class="connexion-container">
         <img src="../assets/img/Logo3.png" class="img-fluid" alt="Logo"/>
         <router-link class="btn nav-link" to="/connexion">Connexion</router-link>
-      </div>
-      <div class="product-container" v-else-if="$store.state.cart.length > 0">
+      </div> -->
+      <div class="product-container" v-if="$store.state.cart.length > 0">
         <div class="product-header">
           <h5 class="product-title">Article <span v-if="$store.state.cart.length >1"> s </span></h5>
           <h5 class="price">Prix</h5>
@@ -13,7 +19,6 @@
         </div>
         <div v-for="cart in carts" :key="cart.id" class="cart-container">
           <div class= "product">
-            <i @click="removeItem(cart)" class="bi bi-trash3"></i>
             <img :src="cart.img" :alt="cart.name">
             <span> {{cart.name}}</span>
           </div>
@@ -29,9 +34,15 @@
           <h4 class="basketTotalTitle">Total</h4>
           <h4 class="basketTotal"> = {{total / 100}}€</h4>
         </div>
-        <button class="btn btn-success check-btn">
-          Valider la commande
-        </button>
+        <div class="check-container">
+          <!-- <button v-if="$store.state.user.userId == 1" class="btn check-btn">
+            Enregistrer mon panier
+          </button>
+          <router-link to="/connexion"><button v-if="$store.state.user.userId == -1" class="btn check-btn">Enregistrer mon panier</button></router-link> -->
+          <router-link to="/precommande"><button class="btn check-btn">
+            Valider la commande
+          </button></router-link>
+        </div>
       </div>
       <div class="emptyBasket-container" v-else>
         <h1>Panier Vide</h1>
@@ -79,7 +90,15 @@ export default {
 }
 </script>
 <style scoped>
-
+.banner{
+    background-color: #672932;
+    color: #d4a449;
+    -webkit-box-shadow: 0 15px 15px 5px rgba(103,41,50,0.1);
+    box-shadow: 0 15px 15px 5px rgba(103,41,50,0.1);
+}
+.check-container{
+  display:flex;
+}
 .emptyBasket-container img, .connexion-container img{
   height: 300px;
   margin:0;
@@ -113,7 +132,8 @@ export default {
     flex-direction: column;
     justify-content: space-around;
     margin:0 auto;
-    margin-top: 50px;
+    margin-top: 100px;
+    margin-bottom: 100px;
   }
 
     .product-header {
@@ -219,9 +239,17 @@ export default {
   border-radius: 5px
 }
 .check-btn {
-  position: relative;
+  /* position: relative;
   left: 75%;
-  width: 25%
+  width: 25%; */
+  margin-right: 50px;
+  margin-bottom: 50px;
+  margin-top:50px
+
+}
+.check-btn:hover{
+  background-color: #672932;
+  color: white
 }
 @media screen and (max-width: 500px)
 {/*Style page du panier*/
