@@ -215,7 +215,7 @@ h3{
     justify-content: center;
     /* margin: 0 auto; */
     border-bottom: #672932 4px solid;
-  }
+}
 .cart-container {
     width: 70%;
     display: flex;
@@ -239,46 +239,46 @@ h3{
     margin-top:50px;
 }
     .product-title {
-      width: 40%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
+        width: 40%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
     }
 
     .product img {
-      display: flex;
-      width: 30%;
-      height: 70px;
-      object-fit: contain;
-      margin-left: 30px;
-      margin-right: 30px
+        display: flex;
+        width: 30%;
+        height: 70px;
+        object-fit: contain;
+        margin-left: 30px;
+        margin-right: 30px
     }
     .price {
-      width : 20%;
-      display: flex;
-      align-items: center;
-      justify-content: center
+        width : 20%;
+        display: flex;
+        align-items: center;
+        justify-content: center
     }
 
     .total {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center
     }
 
     .quantity {
-      width: 10%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+        width: 10%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .basketTotalContainer{
-      display:flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      padding: 10px 0;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 10px 0;
     }
 
     .basketTotalTitle{
@@ -288,25 +288,25 @@ h3{
     }
 
     .basketTotal {
-      width : 100%;
-      display:flex;
-      justify-content: center;
+        width : 100%;
+        display:flex;
+        justify-content: center;
     }
 
     .product {
-      width: 50%;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 10px 0;
+        width: 50%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 10px 0;
         
     }
 .quantity-span{
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin: 5px;
-  border-radius: 5px
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 5px;
+    border-radius: 5px
 }
 </style>
