@@ -73,7 +73,6 @@ const store = createStore({
       productId: '',
       username: '',
       content: '',
-
     },
     likes: [],
     likeInfos: {
@@ -81,7 +80,6 @@ const store = createStore({
       productId: '',
       likeState: '',
     },
-    
   },
   plugins: [
     vuejsStorage({
