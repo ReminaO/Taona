@@ -81,6 +81,7 @@ const store = createStore({
       productId: '',
       likeState: '',
     },
+    
   },
   plugins: [
     vuejsStorage({

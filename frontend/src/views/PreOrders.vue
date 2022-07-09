@@ -6,66 +6,113 @@
                 <p class="col-md-8 fs-4">Sublimez vos cheveux et ceux de vos proches, grâce à la Taona Box. Pas moins de 8 accessoires pour prendre soin de votre chevelure !</p>
             </div>
         </div> 
-        <div class="product-container" v-if="$store.state.cart.length > 0">
-            <div class="product-header">
-            <h5 class="product-title">Article <span v-if="$store.state.cart.length >1"> s </span></h5>
-            <h5 class="price">Prix</h5>
-            <h5 class="quantity">Quantité</h5>
-            <h5 class="total">Sous-total</h5>
-            </div>   
-            <div v-for="cart in carts" :key="cart.id" class="cart-container">
-                <div class= "product">
-                    <img :src="cart.img" :alt="cart.name">
-                    <span> {{cart.name}}</span>
+        <!-- <div class="basket-container"> -->
+            <div class="product-container" v-if="$store.state.cart.length > 0">
+                
+                <div class="product-header">
+                <h5 class="product-title">Article <span v-if="$store.state.cart.length >1"> s </span></h5>
+                <h5 class="price">Prix</h5>
+                <h5 class="quantity">Quantité</h5>
+                <h5 class="total">Sous-total</h5>
+                </div>   
+                <div v-for="cart in carts" :key="cart.id" class="cart-container">
+                    <div class= "product">
+                        <img :src="cart.img" :alt="cart.name">
+                        <span> {{cart.name}}</span>
+                    </div>
+                    <div class="price">{{cart.price / 100}} €</div>
+                    <div class="quantity">
+                        <button @click="removeQuantity(cart)">-</button>
+                        <span class="quantity-span">{{cart.quantity}}</span>
+                        <button @click="addQuantity(cart)">+</button>
+                    </div>
+                    <div class="total" ref="subTotal">{{cart.quantity * cart.price / 100}}€</div>
                 </div>
-                <div class="price">{{cart.price / 100}} €</div>
-                <div class="quantity">
-                    <button @click="removeQuantity(cart)">-</button>
-                    <span class="quantity-span">{{cart.quantity}}</span>
-                    <button @click="addQuantity(cart)">+</button>
+                <div class="promo-container">
+                    <div>
+                        <input id="promotion" v-model="promo" placeholder="Ajouter un code promo"/>
+                    </div>
+                    <div class="promotion-container" >
+                        <h4 class="basketTotalTitle">Promotion</h4>
+                        <h4 class="basketTotal"> <span class="equal">=</span> {{total/100 * sale/100}}€</h4>
+                    </div>
                 </div>
-                <div class="total" ref="subTotal">{{cart.quantity * cart.price / 100}}€</div>
+                <div class="deliveryContainer">
+                    <h4 class="basketTotalTitle">Frais de Livraison</h4>
+                    <h4 class="basketTotal" v-if="total > 2500"> <span class="equal">=</span> Gratuit</h4>
+                    <h4 class="basketTotal" v-else> <span class="equal">=</span> 4.55€</h4>
+                </div>
+                <div class="basketTotalContainer">
+                    <h4 class="basketTotalTitle">Total</h4>
+                    <h4 class="basketTotal" v-if="total > 2500 && !sale"> <span class="equal">=</span> {{total/100 }}€</h4>
+                    <h4 class="basketTotal" v-else-if="total > 2500 && sale !=0" > <span class="equal">=</span> {{promotion}}€</h4>
+                    <h4 class="basketTotal" v-else-if="total < 2500 && sale !=0"> <span class="equal">=</span> {{promotion}}€</h4>
+                    <h4 class="basketTotal" v-else> <span class="equal">=</span> {{(total / 100) + 4.55}}€</h4>
+                </div>
+                <div class="check-container">
+                    <router-link to="/infolivraison" ><button class="btn check-btn" @click="preOrder()">
+                        Confirmer la commande
+                    </button></router-link>
+                </div>
             </div>
-            <div class="promotionContainer">
-                <h4 class="basketTotalTitle">Promotion</h4>
-                <h4 class="basketTotal"> = %</h4>
+            <div class="emptyBasket-container" v-else>
+                <h1>Panier Vide</h1>
+                <img src="../assets/img/Logo3.png" class="img-fluid" alt="Logo"/>
             </div>
-            <div class="deliveryContainer">
-                <h4 class="basketTotalTitle">Frais de Livraison</h4>
-                <h4 class="basketTotal" v-if="total > 2500"> = Gratuit</h4>
-                <h4 class="basketTotal" v-else> = 4.55€</h4>
-            </div>
-            <div class="basketTotalContainer">
-                <h4 class="basketTotalTitle">Total</h4>
-                <h4 class="basketTotal" v-if="total > 2500"> = {{(total / 100)}}€</h4>
-                <h4 class="basketTotal" v-else> = {{(total / 100) + 4.55}}€</h4>
-            </div>
-            <div class="check-container">
-                <router-link to="/infolivraison"><button class="btn check-btn">
-                    Confirmer la commande
-                </button></router-link>
-            </div>
-        </div>
-        <div class="emptyBasket-container" v-else>
-            <h1>Panier Vide</h1>
-            <img src="../assets/img/Logo3.png" class="img-fluid" alt="Logo"/>
-        </div>
+            
+        <!-- </div>     -->
     </section>
 </template>
 
 <script>
+let sale = localStorage.getItem('sale')
 
+function getSale(code){
+            let codes = {
+                newYear: 10,
+                sale: 20
+            };
+            
+            let sale = ( codes[code] != undefined) ? codes[code] : 0;
+            
+            return sale
+
+        }
 export default {
+    data(){
+        return {
+            promo:""
+        }
+    },
     computed: {
         carts() {
             return this.$store.state.cart
         },
+        
+        sale(){
+            localStorage.setItem('sale', JSON.stringify(getSale( this.promo )/100))
+			return getSale( this.promo );
+		},
         total() {
-        let price = 0;
-        this.$store.state.cart.map(item => {
-            price += item["quantity"] * item["price"]
-        })
-        return price
+            let price = 0;
+            this.$store.state.cart.map(item => {
+                price += item["quantity"] * item["price"]
+            })
+            return price
+        },
+        promotion(){
+            if (this.sale && this.total < 2500) {
+                return this.total/100 - (this.total/100 * this.sale/100) + 4.55
+            }
+            else if(this.sale && this.total > 2500){
+                return this.total/100 - (this.total/100 * this.sale/100)
+            } 
+            else if(this.total > 2500 && !this.sale){
+                return this.total/100 
+            }
+            else if(!this.sale && this.total < 2500){
+                return this.total/100 + 4.55
+            }
         }
     },
     methods:{
@@ -77,6 +124,10 @@ export default {
         },
         removeQuantity (product) {
             this.$store.dispatch('removeItem', product)
+        },
+        preOrder(){
+            console.log("ça fonctionne !")
+            localStorage.getItem(this.sale)
         }
     }
 }
@@ -89,6 +140,53 @@ export default {
     -webkit-box-shadow: 0 15px 15px 5px rgba(103,41,50,0.1);
     box-shadow: 0 15px 15px 5px rgba(103,41,50,0.1);
 }
+.equal {
+    font-size:15px;
+    margin: 10px;
+    margin-top:5px;
+}
+.promo-container{
+    margin-top: 20px;
+
+}
+.promotion-container{
+        display:flex;
+        justify-content: flex-end;
+        width: 100%;
+        padding: 10px 0;
+    }
+input{
+    margin-top:20px;
+    padding:8px;
+    border: #672932 solid 1px;
+    border-radius: 8px;
+    background-color: white;
+    font-weight: 500;
+    font-size: 20px;
+    flex:1;
+    min-width: 100px;
+    color: #672932;
+    outline:rgb(255, 101, 70);
+    display: flex;
+    justify-content: left;
+}
+label{
+    margin-top:20px;
+    display: flex;
+    justify-content: left;
+}
+.basket-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+}
+.cart-container {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        border-bottom: #672932 2px solid;
+    }
 .check-container{
     display:flex;
 }
@@ -123,7 +221,7 @@ export default {
         max-width: 70%;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        /* justify-content: space-around; */
         margin:0 auto;
         margin-top: 100px;
         margin-bottom: 100px;
@@ -158,13 +256,6 @@ export default {
         justify-content: center
     }
 
-    .cart-container {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        border-bottom: #672932 2px solid;
-    }
-
     .quantity {
         width: 30%;
         display: flex;
@@ -188,13 +279,7 @@ export default {
         border-top: #672932 4px solid;
 
     }
-    .promotionContainer{
-        display:flex;
-        justify-content: flex-end;
-        width: 100%;
-        padding: 10px 0;
-        border-top: #672932 4px solid;
-    }
+    
     .deliveryContainer{
         display:flex;
         justify-content: flex-end;
@@ -203,10 +288,12 @@ export default {
     }
     .basketTotalTitle{
         width: 100%;
+        font-size: 20px;
     }
 
     .basketTotal {
         width : 15%;
+        font-size:20px
     }
 
     .product {

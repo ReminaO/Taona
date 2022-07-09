@@ -16,7 +16,7 @@
                         <h3>Ou Commander en tant qu'invité</h3>
                         <form @submit="checkForm">
                             <div class="form-row">
-                                <input v-model="email" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail" required/>
+                                <input v-model="email_address" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail" required/>
                             </div>
                             <div class="form-row">
                                 <input v-model="firstName" class="form-row__input" type="text" placeholder="Prénom" required/>
@@ -36,8 +36,14 @@
                             <div class="form-row">
                                 <input v-model="city" class="form-row__input" type="text" placeholder="Ville" required/>
                             </div>
-                            
-                            <router-link to="/connexion"><button class="btn check-btn">Commander</button></router-link>
+                            <p v-if="errors.length">
+                                <span>
+                                    <p class="text-danger" v-for="error in errors" :key='error.index'>{{ error }}</p>
+                                </span>
+                            </p>
+                            <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
+                            <label for="newsletter"> "Je m'inscrits à la newsletter pour recevoir des nouvelles de la marque Taona Cosmetics et des promotions"</label><br>
+                            <button class="btn check-btn" @click="order()"><router-link to="">Commander</router-link></button>
                         </form>
                     </div>
                     <div v-else-if="$store.state.user.userId == 1">
@@ -64,8 +70,9 @@
                             <div class="form-row">
                                 <input v-model="$store.state.user.city" class="form-row__input" type="text" />
                             </div>
-                            
-                            <router-link to="/connexion"><button class="btn check-btn">Commander</button></router-link>
+                            <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
+                            <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br>
+                            <button class="btn check-btn" @click="order()"><router-link to="">Commander</router-link></button>
                         </form>
                     </div>
                 </div>
@@ -84,9 +91,21 @@
                     <div class="price">{{cart.price / 100}} €</div>
 
                 </div>
-                <div class="basketTotalContainer">
-                    <h4 class="basketTotalTitle">Total</h4>
-                    <h4 class="basketTotal"> = {{total / 100}}€</h4>
+                <div class="promotion-container" >
+                    <h4 class="basketTotalTitle">Promotion</h4>
+                    <h4 class="basketTotal"> <span class="equal">=</span> {{total/100 * sale}}€</h4>
+                </div>
+                <div class="deliveryContainer">
+                    <h4 class="basketTotalTitle">Frais de Livraison</h4>
+                    <h4 class="basketTotal" v-if="total > 2500"> <span class="equal">=</span> Gratuit</h4>
+                    <h4 class="basketTotal" v-else> <span class="equal">=</span> 4.55€</h4>
+                </div>
+                <div class="basketTotalContainer ">
+                    <h4 class="basketTotalTitle ">Total</h4>
+                    <h4 class="basketTotal " v-if="total > 2500 && !sale"> <span class="equal">=</span> {{total/100 }}€</h4>
+                    <h4 class="basketTotal " v-else-if="total > 2500 && sale !=0" > <span class="equal">=</span> {{promotion/100}}€</h4>
+                    <h4 class="basketTotal " v-else-if="total < 2500 && sale !=0"> <span class="equal">=</span> {{promotion/100}}€</h4>
+                    <h4 class="basketTotal " v-else> <span class="equal">=</span> {{(total / 100) + 4.55}}€</h4>
                 </div>
             </aside>
         </div>
@@ -94,12 +113,14 @@
 </template>
 
 <script>
+
+
 export default {
     data: function () {
     return {
         mode: 'login',
         id: '',
-        email: '',
+        email_address: '',
         firstName: '',
         lastName: '',
         address: '',
@@ -107,12 +128,17 @@ export default {
         postal_code: '',
         phone_number: '',
         password:'',
-        errors: []
+        errors: [],
+        newsletter:[]
         }
     },
     computed:{
         carts() {
             return this.$store.state.cart
+        },
+        sale(){
+            let sale = localStorage.getItem('sale')
+            return sale
         },
         total() {
             let price = 0;
@@ -120,6 +146,20 @@ export default {
                 price += item["quantity"] * item["price"]
             })
             return price
+        },
+        promotion(){
+            if (this.sale && this.total < 2500) {
+                return this.total - (this.total * this.sale) + 4.55
+            }
+            else if(this.sale && this.total > 2500){
+                return this.total - (this.total * this.sale)
+            } 
+            else if(this.total > 2500 && !this.sale){
+                return this.total 
+            }
+            else if(!this.sale && this.total < 2500){
+                return this.total + 4.55
+            }
         }
     },
     methods: {
@@ -140,6 +180,15 @@ export default {
             }
             e.preventDefault();
         },
+        order(){
+            const self = this;
+            // if(this.newsletter){
+            //     instance.post(`/lists/14fd06490a/members`, {
+            //     email_address: this.email_address,
+            //     })
+            // }
+            console.log(this.sale)
+        },
     },
 }
 </script>
@@ -151,8 +200,33 @@ export default {
     -webkit-box-shadow: 0 15px 15px 5px rgba(103,41,50,0.1);
     box-shadow: 0 15px 15px 5px rgba(103,41,50,0.1);
 }
-h3{
+.equal {
+    font-size:15px;
+    margin: 10px;
+    margin-top:5px;
+}
+h3, label{
     color:#672932
+}
+a {
+  text-decoration: none;
+  color: white
+}
+a:hover {
+  text-decoration: none;
+  color: white
+}
+.promotion-container{
+        display:flex;
+        justify-content: flex-end;
+        width: 100%;
+        padding: 10px 0;
+    }
+.deliveryContainer{
+    display:flex;
+    justify-content: flex-end;
+    width: 80%;
+    padding: 10px 0;
 }
 .connexion-container{
     margin: 50px;
@@ -160,6 +234,9 @@ h3{
 .information-container{
     display: flex;
     justify-content: space-between;
+}
+.container-fluid{
+    width:95%
 }
 .form-container{
     margin: 50px;
@@ -277,20 +354,25 @@ h3{
         display:flex;
         justify-content: center;
         align-items: center;
-        width: 100%;
+        width:70%;
         padding: 10px 0;
+        border-top:#672932 solid 3px
+        
     }
 
     .basketTotalTitle{
         display:flex;
         justify-content: center;
         width: 100%;
+        font-size:20px
     }
 
     .basketTotal {
         width : 100%;
         display:flex;
-        justify-content: center;
+        font-size:20px
+
+        /* justify-content: center; */
     }
 
     .product {
@@ -308,5 +390,13 @@ h3{
     padding-bottom: 5px;
     margin: 5px;
     border-radius: 5px
+}
+@media screen and (max-width: 500px)
+{
+.information-container{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
 }
 </style>
