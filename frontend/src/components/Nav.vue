@@ -54,8 +54,13 @@
         return this.$store.state.cart
     },
       cartCount(){
-      return this.cart.length || 0;
-    },
+      let quantity = 0
+      this.cart.forEach(item =>{
+        quantity +=item.quantity
+      })
+      return quantity
+      }
+  
   },
     methods:{
     logout: function () {
