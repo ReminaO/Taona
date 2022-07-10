@@ -16,6 +16,35 @@ body, html{
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;/* soit 10px*/
 }
+img{
+  border-radius: 4px
+}
+.form-row {
+    display: flex;
+    margin: 16px 0px;
+    gap:16px;
+    flex-wrap: wrap;
+    justify-content: left;
+  }
+  .form-row__input {
+    margin-top:20px;
+    padding:8px;
+    border: #672932 solid 1px;
+    border-radius: 8px;
+    background-color: white;
+    font-weight: 500;
+    font-size: 20px;
+    flex:1;
+    max-width: 50%;
+    color: #672932;
+    outline:rgb(255, 101, 70);
+    display: flex;
+    justify-content: left;
+  }
+  .form-row__input::placeholder {
+    color:#672932;
+    
+  }
 </style>
 
 <script>

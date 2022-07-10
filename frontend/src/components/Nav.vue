@@ -20,7 +20,7 @@
             <a class="nav-link" href="#">Astuces</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/panier">Panier <span class="text-center cart align-middle" v-if="$store.state.cart !== null">{{cart.length}}</span><span class="text-center align-middle" v-else>0</span></router-link>
+            <router-link class="nav-link"  to="/panier">Panier <span class="text-center cart align-middle" >{{cartCount}}</span></router-link>
           </li>
           <li v-if="$store.state.user.userId == -1" class="nav-item">
             <router-link class="nav-link" to="/connexion">Connexion</router-link>
@@ -46,20 +46,23 @@
 </header>
 </template>
 <script>
-import { mapState } from 'vuex'
-export default {
-  name: 'Nav',
-  computed: {
-    cart(){
-      return this.$store.state.cart
-  }
+  import { mapState } from 'vuex'
+  export default {
+    name: 'Nav',
+    computed: {
+      cart(){
+        return this.$store.state.cart
+    },
+      cartCount(){
+      return this.cart.length || 0;
+    },
   },
-  methods:{
-  logout: function () {
-      this.$store.commit('logout');
-      this.$router.push('/');
+    methods:{
+    logout: function () {
+        this.$store.commit('logout');
+        this.$router.push('/');
+      }
     }
-  }
 
 }
 

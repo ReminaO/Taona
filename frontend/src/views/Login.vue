@@ -9,31 +9,31 @@
       <p class="card__subtitle" v-if="mode == 'login'">Tu n'as pas encore de compte ? <span class="card__action" @click="switchToCreateAccount()">Créer un compte</span></p>
       <p class="card__subtitle" v-else>Tu as déjà un compte ? <span class="card__action" @click="switchToLogin()">Se connecter</span></p>
       <div class="form-row">
-        <input v-model="email" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail"/>
+        <input v-model="email" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail*"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
-        <input v-model="firstName" class="form-row__input" type="text" placeholder="Prénom"/>
+        <input v-model="firstName" class="form-row__input" type="text" placeholder="Prénom*"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
-        <input v-model="lastName" class="form-row__input" type="text" placeholder="Nom"/>
+        <input v-model="lastName" class="form-row__input" type="text" placeholder="Nom*"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
-        <input v-model="phone_number" class="form-row__input" type="text" placeholder="Téléphone"/>
+        <input v-model="phone_number" class="form-row__input" type="text" placeholder="Téléphone*"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
-        <textarea v-model="address" class="form-row__input" type="text" placeholder="Adresse"/>
+        <textarea v-model="address" class="form-row__input" type="text" placeholder="Adresse*"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
-        <input v-model="postal_code" class="form-row__input" type="text" placeholder="Code postal"/>
+        <input v-model="postal_code" class="form-row__input" type="text" placeholder="Code postal*"/>
       </div> 
       <div class="form-row" v-if="mode == 'create'">
-        <input v-model="city" class="form-row__input" type="text" placeholder="Ville"/>
+        <input v-model="city" class="form-row__input" type="text" placeholder="Ville*"/>
       </div>
       <div class="form-row">
-        <input v-model="password" @change="isPwdValid" class="form-row__input" id="password" type="password" ref="password" placeholder="Mot de passe" @keyup='check()'/>
+        <input v-model="password" @change="isPwdValid" class="form-row__input" id="password" type="password" ref="password" placeholder="Mot de passe*" @keyup='check()'/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
-        <input type="password" name="confirm_password" class="form-row__input" id="confirm_password" ref="confirm_password"  placeholder="Confirmer le mot de passe" @keyup='check();' />
+        <input type="password" name="confirm_password" class="form-row__input" id="confirm_password" ref="confirm_password"  placeholder="Confirmer le mot de passe*" @keyup='check();' />
         <br><span id='message'></span>
       </div>
       <div class="form-row text-danger" v-if="mode == 'login' && status == 'error_login'">
@@ -187,36 +187,13 @@ export default {
   .card {
     text-align: center;
     width: 50%;
-    background: #672932;
+    background: white;
     color: #d4a449;
     background-position: 50% 50%;
-    border: 1px solid #d4a449;
+    border: 1px solid #672932;
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 100px;
-  }
-  .form-row {
-    display: flex;
-    margin: 16px 0px;
-    gap:16px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .form-row__input {
-    padding:8px;
-    border: rgb(204, 43, 54) solid 1px;
-    border-radius: 8px;
-    background-color: #d4a449;
-    font-weight: 500;
-    font-size: 20px;
-    flex:1;
-    min-width: 100px;
-    color: white;
-    outline:rgb(255, 101, 70);
-  }
-  .form-row__input::placeholder {
-    color:#672932;
-    
   }
   .logo img{
     height: 300px;
@@ -228,6 +205,9 @@ export default {
     align-items: center; 
     margin: 0;
     padding: 0;
+  }
+  .form-row__input {
+    max-width: 100%;
   }
   button {
     background-color:#d4a449;

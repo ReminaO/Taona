@@ -102,11 +102,8 @@
                 </div>
                 <div class="basketTotalContainer ">
                     <h4 class="basketTotalTitle ">Total</h4>
-                    <h4 class="basketTotal " v-if="total > 2500 && !sale"> <span class="equal">=</span> {{total/100 }}€</h4>
-                    <h4 class="basketTotal " v-else-if="total > 2500 && sale !=0" > <span class="equal">=</span> {{promotion/100}}€</h4>
-                    <h4 class="basketTotal " v-else-if="total < 2500 && sale !=0"> <span class="equal">=</span> {{promotion/100}}€</h4>
-                    <h4 class="basketTotal " v-else> <span class="equal">=</span> {{(total / 100) + 4.55}}€</h4>
-                </div>
+                    <h4 class="basketTotal"> <span class="equal">=</span> {{promotion/100}}€</h4>
+                </div> 
             </aside>
         </div>
     </main>  
@@ -149,7 +146,7 @@ export default {
         },
         promotion(){
             if (this.sale && this.total < 2500) {
-                return this.total - (this.total * this.sale) + 4.55
+                return this.total - (this.total * this.sale) + 455
             }
             else if(this.sale && this.total > 2500){
                 return this.total - (this.total * this.sale)
@@ -158,7 +155,7 @@ export default {
                 return this.total 
             }
             else if(!this.sale && this.total < 2500){
-                return this.total + 4.55
+                return this.total + 455
             }
         }
     },
@@ -187,7 +184,8 @@ export default {
             //     email_address: this.email_address,
             //     })
             // }
-            console.log(this.sale)
+            console.log('Total :', this.promotion)
+            console.log('Réduction :',this.sale)
         },
     },
 }
