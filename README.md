@@ -31,7 +31,8 @@ On Windows, these installations require to use PowerShell in administrator mode.
 
 
 ### For the database create a folder `config` with a file named `config.json` with custom information:
-```{
+```
+{
   "development": {
     "username": "",
     "password": "",
@@ -53,9 +54,11 @@ On Windows, these installations require to use PowerShell in administrator mode.
     "host": "",
     "dialect": "mysql"
   }
-}```
+}
+```
 ### Create a file database.js with custom information :
-```var mysql = require('mysql');
+```
+var mysql = require('mysql');
 
 var conn = mysql.createConnection({
   host: 'localhost', 
