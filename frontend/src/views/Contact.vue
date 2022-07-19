@@ -89,12 +89,6 @@ export default {
     display: flex;
     align-items: center;
   }
-.banner{
-  background-color: #672932;
-  color: #d4a449;
-  -webkit-box-shadow: 0 15px 15px 5px rgba(103,41,50,0.1);
-box-shadow: 0 15px 15px 5px rgba(103,41,50,0.1);
-}
 button {
   background-color:#d4a449;
   color:rgba(255,255,255,1);

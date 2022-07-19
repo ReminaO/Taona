@@ -45,7 +45,7 @@ body{
     color: white;
 }
 .container{
-    height: 100vh;
+    height: 80vh;
     display: flex;
     justify-content: center;
     flex-direction: column;
