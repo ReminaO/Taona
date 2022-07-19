@@ -31,33 +31,31 @@ On Windows, these installations require to use PowerShell in administrator mode.
 
 
 ### For the database create a folder `config` with a file named `config.json` with custom information:
-`{
+```{
   "development": {
     "username": "",
     "password": "",
     "database": "database_development",
-    "host": "127.0.0.1",
+    "host": "",
     "dialect": "mysql"
   },
   "test": {
     "username": "",
     "password": "",
     "database": "database_test",
-    "host": "127.0.0.1",
+    "host": "",
     "dialect": "mysql"
   },
   "production": {
     "username": "",
     "password": "",
     "database": "database_production",
-    "host": "127.0.0.1",
+    "host": "",
     "dialect": "mysql"
   }
-}
-`
+}```
 ### Create a file database.js with custom information :
-`
-var mysql = require('mysql');
+```var mysql = require('mysql');
 
 var conn = mysql.createConnection({
   host: 'localhost', 
@@ -70,7 +68,7 @@ if (err) throw err;
 console.log('Database is connected successfully !'); 
 }); 
 module.exports = conn;
-`
+```
 ### Here are the dependencies you need to install for the frontend:
 
 run `npm install` to install the dependancies.
@@ -95,7 +93,7 @@ If the server runs on another port for any reason, this is printed to the consol
 
 ### Frontend
 
-For the frontend run 'npm run serve'. This should run the frontend.
+For the frontend run `npm run serve`. This should run the frontend.
 
 The server should run on `localhost` with default port `8080`. 
 
