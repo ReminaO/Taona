@@ -9,14 +9,14 @@
     <Caroussel />
     
     <div class="container-fluid  mt-4 ">
-      <div class="row product-container d-flex justify-content-center text-center">
+      <div class="row product-container">
         <hr>
-        <div class="product col col-6 w-25">
+        <div class="product">
           <router-link to="/articles"><img src="../assets/img/card.png" alt="Photo Produits">
             <p class="title-product">Produits</p>
           </router-link>
         </div>
-        <div class="product col col-6 w-25">
+        <div class="product">
           <router-link to="/astuces"><img src="../assets/img/card.png" alt="Photo Astuces">
             <p class="title-tips">Astuces</p>
           </router-link>
@@ -45,6 +45,8 @@ export default {
 .product{
   position: relative;
   margin: 30px;
+  width:40%;
+  text-align:center
 }
 .product:hover {
   text-decoration: underline;
@@ -54,8 +56,8 @@ export default {
 }
 .title-product, .title-tips {
   position: absolute;
-  bottom: 100px;
-  left: 39%;
+  bottom: 115px;
+  left: 42%;
   backdrop-filter: blur(10px);
   background-color: white;
   border-radius: 10px;
@@ -79,20 +81,77 @@ img{
   box-shadow: 0.5px 0.5px 10px 1px rgba(0,0,0,0.1);
 }
 .product-container {
-  margin: 100px
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin:0 0 50px
 }
-@media screen and (max-width: 800px){
+@media screen and (max-width: 890px){
   .product-container{
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin:0 0 50px
+
   }
-  .title-product, .title-tips {
+.title-product, .title-tips {
   position: absolute;
   bottom: 60px;
-  left: 85%;
+  left: 38%;
+  font-size:20px
   }
   img{
-    height: 200px
+    height: 180px
+  }
+
+}
+@media screen and (max-width: 590px){
+  .product-container{
+    flex-direction: row;
+    justify-content: center;
+    /* flex-wrap: wrap; */
+    margin:0 0 50px
+
+  }
+.product{
+  position: relative;
+  margin: 0;
+  width:50%;
+}
+.title-product, .title-tips {
+  position: absolute;
+  bottom: 60px;
+  left: 35%;
+  font-size:20px
+  }
+  img{
+    height: 180px
+  }
+
+}
+@media screen and (max-width: 390px){
+  .product-container{
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin:0 0 50px
+
+  }
+  .product{
+  position: relative;
+  margin: 0;
+  width:50%;
+}
+.title-product, .title-tips {
+  position: absolute;
+  bottom: 23px;
+  left: 23%;
+  font-size:15px
+  }
+img{
+    height: 100px
   }
 }
 </style>

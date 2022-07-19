@@ -83,7 +83,8 @@ p{
     padding: 0.5rem;
     opacity: 1; /* modification de cette valeur en Javascript*/
     transition: 0.5s;
-    color:white
+    color:white;
+    flex-wrap:wrap
 }
 .cookies.hide{
     opacity:0;
@@ -111,5 +112,11 @@ p{
 }
 .btn.btn-deny:hover{
     color: black;
+}
+@media screen and (max-width: 500px)
+{
+    .cookies {
+        width: 100%
+    }
 }
 </style>
