@@ -3,7 +3,7 @@
         <!-- DIV cookies -->
         <div class="cookies">
             <div class="cookies-texte">
-                <p>En poursuivant, vous acceptez l'utilisation des cookies par le site afin de vous proposer des contenus adaptés et réaliser des statistiques.
+                <p>En poursuivant, vous acceptez l'utilisation des cookies par le site afin de vous d'améliorer votre expérience utilisateur.
                 </p>
             </div>
             <div class="cookies-btn">
@@ -68,12 +68,15 @@ body{
     flex-direction: column;
     align-items: center;
 } */
+p{
+    margin-left: 30px;
+}
 .cookies{
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;/*nécessaire de préciser une width si position:fixed*/
-    background-color: #672932;
+    background-color: #b46773;
     display: flex;
     justify-content: space-between;/*positionner les DIV enfants*/
     align-items: center;/*centrer verticalement*/
@@ -98,16 +101,15 @@ body{
     margin-right:10px
 }
 .btn.btn-danger{
-    background-color: #d4a449;
+    background-color: #672932;
 }
 .btn.btn-danger:hover{
-    background-color: #b46773;
+    background-color: #d4a449;
 }
 .btn.btn-deny{
-    background-color: #672932;
+    background-color: #b46773;
 }
 .btn.btn-deny:hover{
-    color: #b46773;
-    background-color: #672932;
+    color: black;
 }
 </style>
