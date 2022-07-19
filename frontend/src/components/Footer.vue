@@ -22,7 +22,7 @@
                 <div class="d-flex w-100 gap-2">
                     <label for="newsletter1" class="visually-hidden">Email address</label>
                     <input id="newsletter1" name="email_address" type="text" class="form-control" v-model="email_address" placeholder="Email" data-kwimpalastatus="alive" data-kwimpalaid="1643547080098-0" data-form-type="email">
-                    <button class="btn btn-primary" type="button" data-form-type="action,subscribe" @click="subscribe()" >S'inscrire</button>
+                    <button class="btn" type="button" data-form-type="action,subscribe" @click="subscribe()" >S'inscrire</button>
                     <p v-if="errors.length">
                         <span>
                             <p class="text-danger" v-for="error in errors" :key='error.index'>{{ error }}</p>
@@ -110,6 +110,14 @@ export default {
 }
 .link-dark{
     color: #672932
+}
+.btn{
+    background-color: #d4a449;
+    color:white
+}
+.btn:hover{
+    background-color: #672932;
+    color:white
 }
 @media screen and (max-width: 800px){
     .footer-container{

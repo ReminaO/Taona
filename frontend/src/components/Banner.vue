@@ -44,13 +44,13 @@ body{
     font-family: arial;
     color: white;
 }
-.container{
-    height: 80vh;
+/* .container{
+    /* height: 80vh; 
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-}
+} */
 .cookies{
     position: fixed;
     bottom: 0;
