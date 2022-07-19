@@ -76,7 +76,7 @@ p{
     bottom: 0;
     left: 0;
     width: 100%;/*nécessaire de préciser une width si position:fixed*/
-    background-color: #b46773;
+    background-color: rgb(110, 49, 52, 0.5);
     display: flex;
     justify-content: space-between;/*positionner les DIV enfants*/
     align-items: center;/*centrer verticalement*/
@@ -84,7 +84,9 @@ p{
     opacity: 1; /* modification de cette valeur en Javascript*/
     transition: 0.5s;
     color:white;
-    flex-wrap:wrap
+    flex-wrap:wrap;
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
 }
 .cookies.hide{
     opacity:0;
