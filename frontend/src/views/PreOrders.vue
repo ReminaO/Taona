@@ -49,7 +49,7 @@
                 </div>
                 <div class="check-container">
                     <router-link to="/infolivraison" ><button class="btn check-btn" @click="preOrder()">
-                        Confirmer la commande
+                        Valider la commande
                     </button></router-link>
                 </div>
             </div>

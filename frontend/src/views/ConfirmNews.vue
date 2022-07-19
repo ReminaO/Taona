@@ -6,6 +6,11 @@
         <router-link class="nav-link" aria-current="page" to="/"><i class="bi bi-arrow-left"> </i> Retour à l'accueil</router-link>
     </main>    
 </template>
+<script>
+export default {
+    name: 'Confirm Newsletter',
+}
+</script>
 <style scoped>
 .news-container{
     display: flex;

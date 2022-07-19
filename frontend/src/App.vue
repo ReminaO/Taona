@@ -2,6 +2,7 @@
   <body>
     <Nav/>
     <router-view :key='$route.path'/>
+    <Banner />
     <Footer/>
   </body>
 </template>
@@ -51,12 +52,14 @@ img{
 // @ is an alias to /src
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
+import Banner from '@/components/Banner'
 
 export default {
   name: 'App',
   components: {
     Nav,
-    Footer
+    Footer,
+    Banner
   }
 }
 </script>

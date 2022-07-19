@@ -42,8 +42,8 @@
                                 </span>
                             </p>
                             <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
-                            <label for="newsletter"> "Je m'inscrits à la newsletter pour recevoir des nouvelles de la marque Taona Cosmetics et des promotions"</label><br>
-                            <button class="btn check-btn" @click="order()"><router-link to="">Commander</router-link></button>
+                            <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br>
+                            <button class="btn check-btn" @click="order()"><router-link to="">Confirmer la commande</router-link></button>
                         </form>
                     </div>
                     <div v-else-if="$store.state.user.userId == 1">
@@ -72,7 +72,7 @@
                             </div>
                             <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
                             <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br>
-                            <button class="btn check-btn" @click="order()"><router-link to="">Commander</router-link></button>
+                            <button class="btn check-btn" @click="order()"><router-link to="">Confirmer la commande</router-link></button>
                         </form>
                     </div>
                 </div>

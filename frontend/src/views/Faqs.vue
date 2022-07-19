@@ -42,6 +42,7 @@
 </template>
 <script>
 export default {
+    name: 'FAQs',
     data (){
         return {
             mode: 'close',

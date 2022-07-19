@@ -40,7 +40,7 @@
           </button>
           <router-link to="/connexion"><button v-if="$store.state.user.userId == -1" class="btn check-btn">Enregistrer mon panier</button></router-link> -->
           <router-link to="/precommande"><button class="btn check-btn">
-            Valider la commande
+            Commander
           </button></router-link>
         </div>
       </div>
