@@ -24,7 +24,7 @@ export default {
     methods: {
         cookieBtn(){
             //setting cookie for 1 month, cookie will be expired automatically
-            document.cookie="Taona=TaonaCosmetics; Secure; max-age="+60*60*24*30
+            document.cookie="Taona=TaonaCosmetics; SameSite=Lax; Secure; max-age="+60*60*24*30
             const cookies = document.querySelector('.cookies')
             if(document.cookie){
                 // cookies.style.opacity = "0"; //hide cookie box once cookie set
