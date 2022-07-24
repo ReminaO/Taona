@@ -11,6 +11,7 @@
                 <div class="connexion-container">
                     <router-link to="/connexion"><button v-if="$store.state.user.userId == -1" class="btn check-btn">Connexion</button></router-link>
                 </div>
+                <MondialRelay />
                 <div class="form-container">
                     <div v-if="$store.state.user.userId == -1">
                         <h3>Ou Commander en tant qu'invité</h3>
@@ -110,9 +111,13 @@
 </template>
 
 <script>
+import MondialRelay from '@/components/MondialRelay'
 
 
 export default {
+    components:{
+        MondialRelay
+    },
     data: function () {
     return {
         mode: 'login',

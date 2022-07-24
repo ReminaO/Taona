@@ -20,6 +20,7 @@
 
 <script>
 export default {
+    name: 'Cookies Banner',
     
     methods: {
         cookieBtn(){
