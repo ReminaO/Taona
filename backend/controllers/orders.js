@@ -1,5 +1,6 @@
 //Import des modules
 const asyncLib = require('async');
+const ShortUniqueId = require('short-unique-id')
 // const uuid = require("uuid")
 //import des modèles
 const models = require('../models');
@@ -10,11 +11,13 @@ const ITEMS_LIMIT = 50;
 // Controllers pour créer un message
 exports.createOrder = (req, res, next) => {
   
-
+  const uid = new ShortUniqueId({
+    dictionary: 'number', // the default
+  }, { length: 10 });
+  
   // Paramètres
   const userId =  req.params.userId;
   const quantity  = req.body.quantity;
-  const productId = req.params.id;
   const amount = req.body.price;
   
 
@@ -38,8 +41,8 @@ exports.createOrder = (req, res, next) => {
     function (userFound, done) {
       if (userFound) {
         models.Order.create({
+          id:uid,
           UserId: userId,
-          ProductId: productId,
           amount: amount,
           product: models.Product.name,
           quantity: quantity

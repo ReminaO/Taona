@@ -24,6 +24,7 @@
     "mysql2": "^2.3.3",
     "sequelize": "^6.16.1",
     "sequelize-cli": "^6.4.1",
+    "short-unique-id": "^4.4.4",
     "stripe": "^8.202.0",
     "uuid": "^8.3.2"
   }
