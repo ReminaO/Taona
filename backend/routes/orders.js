@@ -9,8 +9,8 @@ const auth = require('../middleware/auth');
 const orderCtrl = require('../controllers/orders');
 
 //Routes pour appeler les controllers cart
-router.post('/:id/:userdId', auth, orderCtrl.createOrder);
-router.delete('/:id/:userdId', auth, orderCtrl.deleteOrder);
+router.post('/:id/:userdId', orderCtrl.createOrder);
+router.delete('/:id/:userdId', orderCtrl.deleteOrder);
 router.get('/', auth, orderCtrl.getAllOrders);
 router.get('/:id', auth, orderCtrl.getOrder);
 
