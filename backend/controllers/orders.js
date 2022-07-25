@@ -1,6 +1,6 @@
 //Import des modules
 const asyncLib = require('async');
-const uuid = require("uuid")
+// const uuid = require("uuid")
 //import des modèles
 const models = require('../models');
 
@@ -12,10 +12,10 @@ exports.createOrder = (req, res, next) => {
   
 
   // Paramètres
-  const userId =  req.params.id;
+  const userId =  req.params.userId;
   const quantity  = req.body.quantity;
-  const productId = response.params.userId;
-  const amount = req.body.amount;
+  const productId = req.params.id;
+  const amount = req.body.price;
   
 
   asyncLib.waterfall([
@@ -38,8 +38,7 @@ exports.createOrder = (req, res, next) => {
     function (userFound, done) {
       if (userFound) {
         models.Order.create({
-          id: uuid.v4(),
-          UserId: userFound.id,
+          UserId: userId,
           ProductId: productId,
           amount: amount,
           product: models.Product.name,
@@ -71,7 +70,7 @@ exports.deleteOrder = (req, res, next) => {
       function (done) {
         models.User.findOne({
           attributes: ['isAdmin'],
-          where: { id: req.params.id }
+          where: { id: req.params.userId }
         }).then(function (userFound) {
           done(null, userFound);
         })
@@ -83,7 +82,7 @@ exports.deleteOrder = (req, res, next) => {
       // Affichage du message ciblé
       function (userFound, done) {
         models.Order.findOne({
-          where: { id: req.params.orderId }
+          where: { id: req.params.id }
         })
           .then(function (orderFound) {
             done(null, userFound, orderFound);
@@ -100,7 +99,7 @@ exports.deleteOrder = (req, res, next) => {
 
           // Suppression du message
           models.Order.destroy({
-            where: { id: req.params.orderId }
+            where: { id: req.params.id }
           })
             .then(() => res.status(200).json({ message: 'commande supprimée !' }))
             .catch(error => res.status(400).json({ message: "commande introuvable", error: error }))
