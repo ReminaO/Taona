@@ -9,7 +9,7 @@ const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"
 // Controllers pour créer un compte
 exports.signup = (req, res, next) => {
     //Paramètres
-    const email = req.body.email;
+    const email = req.body.email_address;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const password = req.body.password;

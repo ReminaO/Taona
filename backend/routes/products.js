@@ -13,6 +13,7 @@ const multer = require('../middleware/product');
 
 //Routes pour appeler les controllers produits
 router.post('/:id', auth, multer, productsCtrl.createProducts);
+router.post('/order', multer, productsCtrl.orderProducts);
 router.put('/:userId/:id', auth, multer, productsCtrl.modifyProduct);
 router.delete('/:userId/:id', auth, productsCtrl.deleteProduct);
 router.get('/', productsCtrl.getAllProducts);

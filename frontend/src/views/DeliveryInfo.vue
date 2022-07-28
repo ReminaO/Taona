@@ -8,74 +8,53 @@
         </div>
         <div class="information-container">
             <section class="container-fluid">
-                <div class="connexion-container">
-                    <router-link to="/connexion"><button v-if="$store.state.user.userId == -1" class="btn check-btn">Connexion</button></router-link>
+                <div class="delivery-choice">
+                    <p>Merci de sélectionner un mode de livraison</p>
+                    <div>
+                        <input type="checkbox" id="mondialRelay" value="mondialRelay" v-model="mondialRelay">
+                        <label for="mondialRelay">Mondial Relay</label>
+                        <MondialRelay v-if="mondialRelay"/>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="colissimo" value="colissimo" v-model="colissimo">
+                        <label for="colissimo">Colissimo</label>
+                        <div v-if="colissimo">Colissimo</div>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="connexion" value="connexion" v-model="connexion">
+                        <label for="connexion">Se connecter</label><br>
+                        <div class="connexion-container" v-if="$store.state.user.userId == -1">
+                            <router-link to="/connexion"><button  class="btn check-btn" v-if="connexion">Connexion</button></router-link>
+                        </div>
+                    </div>
                 </div>
-                <MondialRelay />
-                <div class="form-container">
-                    <div v-if="$store.state.user.userId == -1">
-                        <h3>Ou Commander en tant qu'invité</h3>
-                        <form @submit="checkForm">
-                            <div class="form-row">
-                                <input v-model="email_address" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail" required/>
-                            </div>
-                            <div class="form-row">
-                                <input v-model="firstName" class="form-row__input" type="text" placeholder="Prénom" required/>
-                            </div>
-                            <div class="form-row">
-                                <input v-model="lastName" class="form-row__input" type="text" placeholder="Nom" required/>
-                            </div>
-                            <div class="form-row">
-                                <input v-model="phone_number" class="form-row__input" type="text" placeholder="Téléphone" required/>
-                            </div>
-                            <div class="form-row">
-                                <textarea v-model="address" class="form-row__input" type="text" placeholder="Adresse" required/>
-                            </div>
-                            <div class="form-row">
-                                <input v-model="postal_code" class="form-row__input" type="text" placeholder="Code postal" required/>
-                            </div>
-                            <div class="form-row">
-                                <input v-model="city" class="form-row__input" type="text" placeholder="Ville" required/>
-                            </div>
-                            <p v-if="errors.length">
-                                <span>
-                                    <p class="text-danger" v-for="error in errors" :key='error.index'>{{ error }}</p>
-                                </span>
-                            </p>
-                            <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
-                            <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br>
-                            <button class="btn check-btn" @click="order()"><router-link to="">Confirmer la commande</router-link></button>
-                        </form>
-                    </div>
-                    <div v-else-if="$store.state.user.userId == 1">
-                        <h3></h3>
-                        <form @submit="checkForm">
-                            <div class="form-row">
-                                <input v-model="$store.state.user.email" @change="isEmailValid" class="form-row__input" type="text" />
-                            </div>
-                            <div class="form-row">
-                                <input v-model="$store.state.user.firstName" class="form-row__input" type="text" />
-                            </div>
-                            <div class="form-row">
-                                <input v-model="$store.state.user.lastName" class="form-row__input" type="text" />
-                            </div>
-                            <div class="form-row">
-                                <input v-model="$store.state.user.phone_number" class="form-row__input" type="text" />
-                            </div>
-                            <div class="form-row">
-                                <textarea v-model="$store.state.user.address" class="form-row__input" type="text" />
-                            </div>
-                            <div class="form-row">
-                                <input v-model="$store.state.user.postal_code" class="form-row__input" type="text" />
-                            </div>
-                            <div class="form-row">
-                                <input v-model="$store.state.user.city" class="form-row__input" type="text" />
-                            </div>
-                            <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
-                            <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br>
-                            <button class="btn check-btn" @click="order()"><router-link to="">Confirmer la commande</router-link></button>
-                        </form>
-                    </div>
+                <div v-if="$store.state.user.userId == 1">
+                    <form @submit="checkForm">
+                        <div class="form-row">
+                            <input v-model="$store.state.user.email" ref="email_address" @change="isEmailValid" class="form-row__input" type="text" />
+                        </div>
+                        <div class="form-row">
+                            <input v-model="$store.state.user.firstName" ref="firstName" class="form-row__input" type="text" />
+                        </div>
+                        <div class="form-row">
+                            <input v-model="$store.state.user.lastName" ref="lastName" class="form-row__input" type="text" />
+                        </div>
+                        <div class="form-row">
+                            <input v-model="$store.state.user.phone_number" ref="phone_number" class="form-row__input" type="text" />
+                        </div>
+                        <div class="form-row">
+                            <textarea v-model="$store.state.user.address" ref="address" class="form-row__input" type="text" />
+                        </div>
+                        <div class="form-row">
+                            <input v-model="$store.state.user.postal_code" ref="postal_code" class="form-row__input" type="text" />
+                        </div>
+                        <div class="form-row">
+                            <input v-model="$store.state.user.city" ref="city" class="form-row__input" type="text" />
+                        </div>
+                        <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
+                        <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br>
+                        <button class="btn check-btn" @click="order()"><router-link to="">Confirmer la commande</router-link></button>
+                    </form>
                 </div>
             </section>
             <aside class="resume-container">
@@ -113,6 +92,29 @@
 <script>
 import MondialRelay from '@/components/MondialRelay'
 
+const axios = require('axios')
+
+let user = localStorage.getItem('user')
+if (!user) {
+    user = {
+    userId: -1,
+    token: '',
+    }
+} else {
+    try {
+    user = JSON.parse(user)
+    } catch (ex) {
+    user = {
+        userId: -1,
+        token: '',
+        }
+    }
+}
+
+const instance = axios.create({
+    baseURL: 'http://localhost:3000/api/',
+    headers: {'Authorization': 'Bearer '+ `${user.token}`}
+})
 
 export default {
     components:{
@@ -129,9 +131,11 @@ export default {
         city: '',
         postal_code: '',
         phone_number: '',
-        password:'',
         errors: [],
-        newsletter:[]
+        newsletter:[],
+        mondialRelay:false,
+        colissimo:false, 
+        connexion:false,
         }
     },
     computed:{
@@ -167,18 +171,20 @@ export default {
     methods: {
         checkForm: function (e) {
             const email_regex = /^(([^<>()[\].,;:s@"]+(.[^<>()[\].,;:s@"]+)*)|(".+"))@((s[[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
-            const email = this.email;
-            const pwd_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-            const password = this.password;
+            const email = this.email_address;
             
             this.errors = [];
             
             if (!email_regex.test(email)) {
                 this.errors.push('Merci de saisir le bon format d\'adresse mail !');
-            } else if (!pwd_regex.test(password)) {
-                this.errors.push('Le mot de passe doit comporter un minimum de 8 caractères, au moins un chiffre et au moins une lettre ');
-            } else {
-                this.errors.push('Adresse mail déjà utilisée !');
+            } else if(!this.email_address || 
+            !this.firstName || 
+            !this.lastName || 
+            !this.phone_number || 
+            !this.address || 
+            !this.city || 
+            !this.postal_code){
+                this.errors.push('Merci de compléter tous les champs');
             }
             e.preventDefault();
         },
@@ -189,8 +195,39 @@ export default {
             //     email_address: this.email_address,
             //     })
             // }
-            console.log('Total :', this.promotion)
-            console.log('Réduction :',this.sale)
+            const contact = {
+                firstName: this.$refs.firstName.value,
+                lastName: this.$refs.lastName.value,
+                email_address: this.$refs.email_address.value,
+                address: this.$refs.address.value,
+                city: this.$refs.city.value,
+                postal_code: this.$refs.postal_code.value,
+                phone_number: this.$refs.phone_number.value,
+            }
+            const products = [];
+                const cart = this.carts;
+                for (const product of cart) {
+                    for (let i = 0; i < product.quantity; i++) {
+                    products.push(product.id);
+                    }
+                }
+            const data = {
+                "contact" : contact,
+                "products" : products
+            }
+            console.log("data : ", data);
+
+            instance.post('products/order', data)
+            .then(() => {
+                console.log("Response:", data)
+                // localStorage.setItem("createdOrder", JSON.stringify(response.data));
+                // localStorage.setItem("orderId", JSON.stringify(response.orderId))
+                // self.$router.push('/validation')
+
+            }, function (error) {
+                console.log(error);
+            })
+            localStorage.setItem("totalCart", JSON.stringify(this.promotion));
         },
     },
 }
@@ -202,7 +239,20 @@ export default {
     margin: 10px;
     margin-top:5px;
 }
-h3, label{
+.delivery-choice{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    margin-top: 50px
+}
+.delivery-choice label, .delivery-choice p {
+    font-size: 20px;
+    margin: 10px;
+    color:#672932
+
+}
+ h3, label{
     color:#672932
 }
 a {
@@ -224,9 +274,6 @@ a:hover {
     justify-content: flex-end;
     width: 80%;
     padding: 10px 0;
-}
-.connexion-container{
-    margin: 50px;
 }
 .information-container{
     display: flex;
@@ -276,8 +323,6 @@ a:hover {
     padding: 10px 25px;
     font-size: 23px;
     border: none;
-    margin-bottom: 50px;
-    margin-top: 50px;
 }
 .check-btn:hover{
     background-color: #672932;

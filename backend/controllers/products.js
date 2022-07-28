@@ -1,5 +1,7 @@
 //Import des modules
 const asyncLib = require('async');
+const ShortUniqueId = require('short-unique-id')
+
 //import des modèles
 const models = require('../models');
 
@@ -283,5 +285,60 @@ exports.deleteProduct = (req, res) => {
           return res.status(500).json({ 'error': 'Le produit ne peut être affiché' });
         }
       })
+}
+//Créé la commande du produit  
+exports.orderProducts = (req, res) => { 
+  const uid = new ShortUniqueId({
+    dictionary: 'number',
+  }, { length: 10 });
+  if (!req.body.contact ||
+    !req.body.contact.firstName ||
+    !req.body.contact.lastName ||
+    !req.body.contact.address ||
+    !req.body.contact.postal_code ||
+    !req.body.contact.city ||
+    !req.body.contact.email_address ||
+    !req.body.contact.phone_number ||
+    !req.body.products) {
+    return res.status(400).send(new Error('Bad request!'));
   }
+  let queries = []
+  for (let productId of req.body.products) {
+    const queryPromise = new Promise((resolve, reject) => {
+      models.Product.findOne({ where: { id: productId }, attributes : ["id"] }).then(
+        (product) => {
+          if (!product) {
+            reject('Product not found: ' + productId);
+          }
+          teddy.img = req.protocol + '://' + req.get('host') + '/images/products' + teddy.img;
+          teddy.thumbImg1 = req.protocol + '://' + req.get('host') + '/images/products' + teddy.thumbImg1;
+          teddy.thumbImg2 = req.protocol + '://' + req.get('host') + '/images/products' + teddy.thumbImg2;
+          teddy.thumbImg3 = req.protocol + '://' + req.get('host') + '/images/products' + teddy.thumbImg3;
+          teddy.thumbVideo = req.protocol + '://' + req.get('host') + '/images/products' + teddy.thumbVideo;
+          resolve(product);
+        }
+      ).catch(
+        () => {
+          reject('Database error!');
+        }
+      )
+    });
+    queries.push(queryPromise);
+  }
+
+  Promise.all(queries).then(
+    (products) => {
+      const orderId = uid();
+      return res.status(201).json({
+        contact: req.body.contact,
+        products: products,
+        orderId: orderId
+      })
+    }).catch(
+      (error) => {
+        return res.status(500).json(new Error(error));
+      }
+    );
+} 
+
 

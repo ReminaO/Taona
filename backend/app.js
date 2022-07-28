@@ -35,6 +35,8 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/likes', likeRoutes);
 app.use('/audience', newsRoutes);
+app.post('https://sandbox-api.aftership.com/postmen/v3/shipper-accounts');
+app.post('https://sandbox-api.aftership.com/postmen/v3/labels');
 
 
 

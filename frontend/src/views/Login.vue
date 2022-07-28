@@ -9,7 +9,7 @@
       <p class="card__subtitle" v-if="mode == 'login'">Tu n'as pas encore de compte ? <span class="card__action" @click="switchToCreateAccount()">Créer un compte</span></p>
       <p class="card__subtitle" v-else>Tu as déjà un compte ? <span class="card__action" @click="switchToLogin()">Se connecter</span></p>
       <div class="form-row">
-        <input v-model="email" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail*"/>
+        <input v-model="email_address" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail*"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
         <input v-model="firstName" class="form-row__input" type="text" placeholder="Prénom*"/>

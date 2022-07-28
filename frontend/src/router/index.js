@@ -14,6 +14,7 @@ import Login from '../views/Login.vue'
 import ConfirmNews from '../views/ConfirmNews.vue'
 import Faqs from '../views/Faqs.vue'
 import DeliveryInfo from '../views/DeliveryInfo.vue'
+import Validation from '../views/Validation.vue'
 
 
 const routes = [
@@ -135,6 +136,14 @@ const routes = [
     component: DeliveryInfo,
     meta: {
       title: 'Info Livraison',
+    },
+  },
+  {
+    path: '/validation',
+    name: 'Validation',
+    component: Validation,
+    meta: {
+      title: 'Validation',
     },
   },
 ]
