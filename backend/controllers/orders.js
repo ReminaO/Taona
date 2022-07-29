@@ -18,7 +18,7 @@ exports.createOrder = (req, res, next) => {
   // Paramètres
   const userId =  req.params.userId;
   const quantity  = req.body.quantity;
-  const amount = req.body.price;
+  const amount = req.body.totalCart;
   
 
   asyncLib.waterfall([

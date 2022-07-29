@@ -20,10 +20,10 @@
                         <label for="colissimo">Colissimo</label>
                         <div v-if="colissimo">Colissimo</div>
                     </div>
-                    <div>
+                    <div v-if="$store.state.user.userId == -1">
                         <input type="checkbox" id="connexion" value="connexion" v-model="connexion">
                         <label for="connexion">Se connecter</label><br>
-                        <div class="connexion-container" v-if="$store.state.user.userId == -1">
+                        <div class="connexion-container">
                             <router-link to="/connexion"><button  class="btn check-btn" v-if="connexion">Connexion</button></router-link>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                             <input v-model="$store.state.user.city" ref="city" class="form-row__input" type="text" />
                         </div>
                         <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
-                        <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br>
+                        <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br><br>
                         <button class="btn check-btn" @click="order()"><router-link to="">Confirmer la commande</router-link></button>
                     </form>
                 </div>
@@ -92,6 +92,7 @@
 <script>
 import MondialRelay from '@/components/MondialRelay'
 
+
 const axios = require('axios')
 
 let user = localStorage.getItem('user')
@@ -112,7 +113,7 @@ if (!user) {
 }
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3000/api/',
+    baseURL: 'http://localhost:3000/',
     headers: {'Authorization': 'Bearer '+ `${user.token}`}
 })
 
@@ -132,11 +133,14 @@ export default {
         postal_code: '',
         phone_number: '',
         errors: [],
-        newsletter:[],
+        newsletter:false,
         mondialRelay:false,
         colissimo:false, 
         connexion:false,
         }
+    },
+    mounted(){
+        localStorage.setItem("totalCart", JSON.stringify(this.promotion));
     },
     computed:{
         carts() {
@@ -177,57 +181,47 @@ export default {
             
             if (!email_regex.test(email)) {
                 this.errors.push('Merci de saisir le bon format d\'adresse mail !');
-            } else if(!this.email_address || 
-            !this.firstName || 
-            !this.lastName || 
-            !this.phone_number || 
-            !this.address || 
-            !this.city || 
-            !this.postal_code){
+            } else if(!this.$refs.email_address.value || 
+            !this.$refs.firstName.value || 
+            !this.$refs.lastName.value || 
+            !this.$refs.phone_number.value || 
+            !this.$refs.address.value || 
+            !this.$refs.city.value || 
+            !this.$refs.postal_code.value){
                 this.errors.push('Merci de compléter tous les champs');
             }
             e.preventDefault();
         },
         order(){
             const self = this;
-            // if(this.newsletter){
-            //     instance.post(`/lists/14fd06490a/members`, {
-            //     email_address: this.email_address,
-            //     })
-            // }
-            const contact = {
-                firstName: this.$refs.firstName.value,
-                lastName: this.$refs.lastName.value,
+            if(this.newsletter){
+                instance.post(`audience/lists/14fd06490a/members`, {
                 email_address: this.$refs.email_address.value,
-                address: this.$refs.address.value,
-                city: this.$refs.city.value,
-                postal_code: this.$refs.postal_code.value,
-                phone_number: this.$refs.phone_number.value,
+                })
+            }
+            const contact = {
+                firstName: self.$refs.firstName.value,
+                lastName: self.$refs.lastName.value,
+                email: self.$refs.email_address.value,
+                address: self.$refs.address.value,
+                city: self.$refs.city.value,
+                postal_code: self.$refs.postal_code.value,
+                phone_number: self.$refs.phone_number.value,
             }
             const products = [];
-                const cart = this.carts;
-                for (const product of cart) {
-                    for (let i = 0; i < product.quantity; i++) {
-                    products.push(product.id);
-                    }
+            const cart = self.carts;
+            for (const product of cart) {
+                for (let i = 0; i < product.quantity; i++) {
+                products.push(product.id);
                 }
+            }
             const data = {
                 "contact" : contact,
                 "products" : products
             }
             console.log("data : ", data);
 
-            instance.post('products/order', data)
-            .then(() => {
-                console.log("Response:", data)
-                // localStorage.setItem("createdOrder", JSON.stringify(response.data));
-                // localStorage.setItem("orderId", JSON.stringify(response.orderId))
-                // self.$router.push('/validation')
-
-            }, function (error) {
-                console.log(error);
-            })
-            localStorage.setItem("totalCart", JSON.stringify(this.promotion));
+            this.$store.dispatch('order', data)
         },
     },
 }

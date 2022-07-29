@@ -80,6 +80,15 @@ const store = createStore({
       productId: '',
       likeState: '',
     },
+    contact: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      address: '',
+      city: '',
+      postal_code: '',
+      phone_number: '',
+    },
   },
   plugins: [
     vuejsStorage({
@@ -116,20 +125,11 @@ const store = createStore({
     likes: function (state, likes) {
       state.likes = likes;
     },
-    orderInfos: function (state, orderInfos, carts) {
-      state.orderInfos = {
-        product: cart.name,
-        quantity: cart.quantity,
-        total() {
-          let price = 0;
-          cart.map(item => {
-              price += item["quantity"] * item["price"]
-          })
-          return price
-        },
-        amount : total()
-      }
-      state.preOrder.push(orderInfos)
+    contactInfos: function (state, contact) {
+      state.contact = contact
+    },
+    productsInfos: function (state, orderInfos, carts) {
+      state.contactInfos = contactInfos
     },
     
     logout: function (state) {
@@ -356,6 +356,28 @@ const store = createStore({
     productDislike({ commit }, productId) {
       instance.post(`likes/${user.userId}/${productId}/dislike`).then((response) => {
         commit('likes', response.data);
+      });
+    },
+    order({ commit }, payload) {
+      const data = {
+        "contact": {
+          email_address: payload.email_address,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          address: payload.address,
+          city: payload.city,
+          postal_code: payload.postal_code,
+          phone_number: payload.phone_number
+        },
+        "products" : payload.products
+    }
+      instance.post(`products/order`, data).then((response) => {
+        commit('contactInfos', response.data)
+        commit('products', response.data)
+        localStorage.setItem("createdOrder", JSON.stringify(response.data));
+        localStorage.setItem("orderId", JSON.stringify(response.orderId))
+      }).catch((error) => {
+        console.log(error)
       });
     },
   }  

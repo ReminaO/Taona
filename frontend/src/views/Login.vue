@@ -46,6 +46,10 @@
           </span>
         </p>
       </div>
+      <div class="checkbox" v-if="mode == 'create'">
+        <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
+        <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br><br>
+      </div>                                    
       <div class="form-row">
         <button @click="login()" class="button" :class="{'button--disabled' : !validatedFields}" v-if="mode == 'login'">
           <span v-if="status == 'loading'">Connexion en cours...</span>
@@ -76,7 +80,9 @@ export default {
       postal_code: '',
       phone_number: '',
       password:'',
-      errors: []
+      errors: [],
+      newsletter:false,
+
     }
   },
   created() {
@@ -97,13 +103,13 @@ export default {
   computed: {
     validatedFields: function () {
       if (this.mode == 'create') {
-        if (this.email != "" && this.lastName != "" && this.firstName != "" && this.phone_number != "" && this.password != "" && this.city != "" && this.postal_code != "") {
+        if (this.email_address != "" && this.lastName != "" && this.firstName != "" && this.phone_number != "" && this.password != "" && this.city != "" && this.postal_code != "") {
           return true;
         } else {
           return false;
         }
       } else {
-        if (this.email != "" && this.password != "") {
+        if (this.email_address != "" && this.password != "") {
           return true;
         } else {
           return false;
@@ -122,7 +128,7 @@ export default {
     login: function () {
       const self = this;
       this.$store.dispatch('login', {
-        email: this.email,
+        email: this.email_address,
         password: this.password,
       }).then(function () {
         self.$router.go(-1);
@@ -132,9 +138,14 @@ export default {
     },
     signup: function () {
       const self = this;
+      if(this.newsletter){
+                instance.post(`audience/lists/14fd06490a/members`, {
+                email_address: this.$refs.email_address.value,
+                })
+            }
       if(this.$refs.password.value === this.$refs.confirm_password.value) {
         this.$store.dispatch('createAccount', {
-          email: this.email,
+          email: this.email_address,
           firstName: this.firstName,
           lastName: this.lastName,
           address: this.address,
@@ -152,7 +163,7 @@ export default {
     },
     checkForm: function (e) {
       const email_regex = /^(([^<>()[\].,;:s@"]+(.[^<>()[\].,;:s@"]+)*)|(".+"))@((s[[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
-      const email = this.email;
+      const email = this.email_address;
       const pwd_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
       const password = this.password;
       
@@ -236,5 +247,10 @@ export default {
 }
 .card__subtitle {
   font-size: 23px;
+}
+.checkbox{
+  display: flex;
+  align-items: center;
+  color:#672932
 }
 </style>

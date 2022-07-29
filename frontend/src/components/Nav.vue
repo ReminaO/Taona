@@ -67,6 +67,9 @@
         this.$store.commit('logout');
         this.$router.push('/');
       }
+    },
+    mounted(){
+      localStorage.setItem("quantity", this.cartCount)
     }
 
 }
