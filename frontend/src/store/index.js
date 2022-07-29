@@ -128,9 +128,6 @@ const store = createStore({
     contactInfos: function (state, contact) {
       state.contact = contact
     },
-    productsInfos: function (state, orderInfos, carts) {
-      state.contactInfos = contactInfos
-    },
     
     logout: function (state) {
       state.user = {
