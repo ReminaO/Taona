@@ -233,7 +233,7 @@ exports.deleteProduct = (req, res) => {
             },
             {
               model: models.Like,
-           },
+            },
         ]
         }).then(function (products) {
           done(products)
@@ -302,6 +302,9 @@ exports.orderProducts = (req, res) => {
         where: { id: productId },
         attributes: ["id"]
       }).then((product) => {
+        if (!product) {
+          reject('Product not found: ' + productId);
+        }
           resolve(product);
         }
       ).catch(

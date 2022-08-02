@@ -4,9 +4,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <!-- <link rel="icon" href="<%= BASE_URL %>favicon.ico"> -->
     <link rel="stylesheet" type="text/css" href="//unpkg.com/leaflet/dist/leaflet.css" />
-
+    <script src="https://js.stripe.com/v3/"></script>
+    <!--On charge Jquery depuis le CDN de google-->
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <!-- Charger Leaflet pour l'affichage de la map-->
+    <script type="text/javascript" src="//unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!--On charge le widget mondial relay depuis leurs serveurs-->
+    <script type="text/javascript"
+      src="https://widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
     <title>
       <%= htmlWebpackPlugin.options.title %>
     </title>
@@ -19,12 +26,5 @@
         </noscript>
         <div id="app"></div>
         <!-- built files will be auto injected -->
-      <!--On charge Jquery depuis le CDN de google-->
-      <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-      <!-- Charger Leaflet pour l'affichage de la map-->
-      <script type="text/javascript" src="//unpkg.com/leaflet/dist/leaflet.js"></script>
-      <!--On charge le widget mondial relay depuis leurs serveurs-->
-      <script type="text/javascript"
-        src="https://widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
-  </body>
+    </body>
 </html>

@@ -23,7 +23,7 @@ if (!user) {
   }
 }
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/',
+  baseURL: 'http://localhost:4242/api/',
   headers: {'Authorization': 'Bearer '+ `${user.token}`}
 })
 
@@ -358,7 +358,7 @@ const store = createStore({
     order({ commit }, payload) {
       const data = {
         "contact": {
-          email_address: payload.email_address,
+          email: payload.email,
           firstName: payload.firstName,
           lastName: payload.lastName,
           address: payload.address,

@@ -5,6 +5,8 @@ require('./database.js');
 const express = require('express');
 const path = require('path');
 var cors = require('cors')
+// This is your test secret API key.
+const stripe = require("stripe")('sk_test_51LMyQ9DVJPzOBtu2WpIJCcStAxhyRn3NOfs0AbemTYFckVVuOck6t9YSyoc595vlTHSLVvX27mYulG2RK3mfElgz00vDkW81M0');
 
 //import des routes
 const userRoutes = require('./routes/users');
@@ -39,5 +41,21 @@ app.post('https://sandbox-api.aftership.com/postmen/v3/shipper-accounts');
 app.post('https://sandbox-api.aftership.com/postmen/v3/labels');
 
 
+app.post("/create-payment-intent", async (req, res) => {
+    const items = req.body.amount;
+
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: items,
+        currency: "eur",
+        automatic_payment_methods: {
+            enabled: true,
+        },
+    });
+
+    res.send({
+        clientSecret: paymentIntent.client_secret,
+    });
+});
 
 module.exports = app;

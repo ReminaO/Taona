@@ -113,7 +113,7 @@ if (!user) {
 }
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3000/',
+    baseURL: 'http://localhost:4242/',
     headers: {'Authorization': 'Bearer '+ `${user.token}`}
 })
 
@@ -192,7 +192,7 @@ export default {
             }
             e.preventDefault();
         },
-        order(){
+        order(e){
             const self = this;
             if(this.newsletter){
                 instance.post(`audience/lists/14fd06490a/members`, {
@@ -202,11 +202,11 @@ export default {
             const contact = {
                 firstName: self.$refs.firstName.value,
                 lastName: self.$refs.lastName.value,
-                email: self.$refs.email_address.value,
                 address: self.$refs.address.value,
                 city: self.$refs.city.value,
                 postal_code: self.$refs.postal_code.value,
                 phone_number: self.$refs.phone_number.value,
+                email: self.$refs.email_address.value,
             }
             const products = [];
             const cart = self.carts;
@@ -216,12 +216,14 @@ export default {
                 }
             }
             const data = {
-                "contact" : contact,
-                "products" : products
+                contact : contact,
+                products : products
             }
             console.log("data : ", data);
+            // this.$store.dispatch('order', data)
+            this.$router.push("/checkout")
+            
 
-            this.$store.dispatch('order', data)
         },
     },
 }
