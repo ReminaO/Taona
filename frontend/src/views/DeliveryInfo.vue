@@ -14,6 +14,7 @@
                         <input type="checkbox" id="mondialRelay" value="mondialRelay" v-model="mondialRelay">
                         <label for="mondialRelay">Mondial Relay</label>
                         <MondialRelay v-if="mondialRelay"/>
+                        <button v-if="mondialRelay" class="btn check-btn" @click="order()"><router-link to="checkout">Payer la commande</router-link></button>
                     </div>
                     <div>
                         <input type="checkbox" id="colissimo" value="colissimo" v-model="colissimo">
@@ -53,7 +54,7 @@
                         </div>
                         <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
                         <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br><br>
-                        <button class="btn check-btn" @click="order()"><router-link to="">Payer la commande</router-link></button>
+                        <button class="btn check-btn" @click="order()"><router-link to="/checkout">Payer la commande</router-link></button>
                     </form>
                 </div>
             </section>
@@ -91,7 +92,6 @@
 
 <script>
 import MondialRelay from '@/components/MondialRelay'
-
 
 const axios = require('axios')
 
@@ -222,8 +222,6 @@ export default {
             console.log("data : ", data);
             // this.$store.dispatch('order', data)
             this.$router.push("/checkout")
-            
-
         },
     },
 }
