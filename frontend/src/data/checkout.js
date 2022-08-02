@@ -57,9 +57,10 @@ export async function handleSubmit() {
         elements,
         confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:8080/validation",
+            return_url: "http://localhost:8080/validation",
+            receipt_email: document.getElementById("email").value,
         },
-  });
+    });
 
   // This point will only be reached if there is an immediate error when
   // confirming the payment. Otherwise, your customer will be redirected to

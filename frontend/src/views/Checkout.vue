@@ -2,12 +2,13 @@
   <section>
       <!-- Display a payment form -->
       <form id="payment-form">
+        <input type="text" id="email" placeholder="E-mail" />
         <div id="payment-element">
           <!--Stripe.js injects the Payment Element-->
         </div>
         <button @click.prevent="paymentBtn()" id="submit">
           <div class="spinner hidden" id="spinner"></div>
-          <span id="button-text">Pay now</span>
+          <span id="button-text">Payer</span>
         </button>
         <div id="payment-message" class="hidden"></div>
       </form>
@@ -65,7 +66,15 @@ form {
   border-radius: 7px;
   padding: 40px;
 }
-
+input {
+  border: rgb(194, 194, 194) 1px solid;
+  margin-bottom: 30px;
+  padding: 10px;
+  width:100%;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+}
 .hidden {
   display: none;
 }
