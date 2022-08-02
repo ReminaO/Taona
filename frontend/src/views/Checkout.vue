@@ -24,12 +24,6 @@ export default {
             return this.$store.state.cart
         },
     },
-    // created() {
-    //   let stripe = document.createElement('script')
-    //   stripe.setAttribute('src', '../data/checkout.js')
-    //   stripe.setAttribute('defer', 'defer')
-    //   document.head.appendChild(stripe)
-    // },
     mounted(){
       stripe.initialize()
     },
