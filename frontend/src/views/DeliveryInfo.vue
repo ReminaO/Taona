@@ -53,7 +53,7 @@
                         </div>
                         <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
                         <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br><br>
-                        <button class="btn check-btn" @click="order()"><router-link to="">Confirmer la commande</router-link></button>
+                        <button class="btn check-btn" @click="order()"><router-link to="">Payer la commande</router-link></button>
                     </form>
                 </div>
             </section>
