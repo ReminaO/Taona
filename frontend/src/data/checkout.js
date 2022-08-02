@@ -23,20 +23,18 @@ const instance = axios.create({
     headers: {'Authorization': 'Bearer '+ `${user.token}`}
 })
 // The items the customer wants to buy
-const items = localStorage.getItem('cartItem');
+// const items = localStorage.getItem('cartItem');
 const amount = localStorage.getItem('totalCart')
 
 let elements;
-// initialize()
-checkStatus();
 
-// document.querySelector("#payment-form").addEventListener("submit", handleSubmit);
+checkStatus();
 
 // Fetches a payment intent and captures the client secret
 export async function initialize() {
-    console.log(items)
+    // console.log(items)
     const response = await instance.post("/create-payment-intent", {
-        items,
+        // items,
         amount
     })
     const { clientSecret } = await response.data;
