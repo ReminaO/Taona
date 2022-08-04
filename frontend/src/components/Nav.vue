@@ -45,10 +45,12 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/infolivraison">Livraison</router-link>
           </li>
+          <!-- <li class="nav-item">
+            <router-link class="nav-link" to="/validation">Validation</router-link>
+          </li> -->
         </ul>
       </div>
     </div>
-    
   </nav>
 </header>
 </template>

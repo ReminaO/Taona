@@ -118,6 +118,7 @@ const instance = axios.create({
 })
 
 export default {
+    name: 'Info Livraison',
     components:{
         MondialRelay
     },

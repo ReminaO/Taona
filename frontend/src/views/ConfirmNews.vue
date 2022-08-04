@@ -8,7 +8,7 @@
 </template>
 <script>
 export default {
-    name: 'Confirm Newsletter',
+    name: 'Confirmation Newsletter',
 }
 </script>
 <style scoped>
