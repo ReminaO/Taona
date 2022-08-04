@@ -45,9 +45,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/infolivraison">Livraison</router-link>
           </li>
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <router-link class="nav-link" to="/validation">Validation</router-link>
-          </li> -->
+          </li>
         </ul>
       </div>
     </div>

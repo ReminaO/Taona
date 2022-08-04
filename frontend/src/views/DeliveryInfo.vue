@@ -76,7 +76,7 @@
                     <h4 class="basketTotalTitle">Promotion</h4>
                     <h4 class="basketTotal"> <span class="equal">=</span> {{total/100 * sale}}€</h4>
                 </div>
-                <div class="deliveryContainer">
+                <div class="delivery-container">
                     <h4 class="basketTotalTitle">Frais de Livraison</h4>
                     <h4 class="basketTotal" v-if="total > 2500"> <span class="equal">=</span> Gratuit</h4>
                     <h4 class="basketTotal" v-else> <span class="equal">=</span> 4.55€</h4>
@@ -264,10 +264,10 @@ a:hover {
         width: 100%;
         padding: 10px 0;
     }
-.deliveryContainer{
+.delivery-container{
     display:flex;
     justify-content: flex-end;
-    width: 80%;
+    width: 85%;
     padding: 10px 0;
 }
 .information-container{
@@ -362,10 +362,12 @@ a:hover {
     .product img {
         display: flex;
         width: 30%;
-        height: 70px;
         object-fit: contain;
-        margin-left: 30px;
-        margin-right: 30px
+    }
+    .product span{
+        width: 100%;
+        text-align:center;
+        flex-wrap: wrap;
     }
     .price {
         width : 20%;
@@ -428,12 +430,56 @@ a:hover {
     margin: 5px;
     border-radius: 5px
 }
-@media screen and (max-width: 500px)
+@media screen and (max-width: 550px)
 {
+    .resume-container {
+    width: 90%;
+    text-align: center;
+    margin:0;
+    height: 100%
+
+}
 .information-container{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
+}
+.resume-container h4{
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+}
+.product {
+    width: 20%;
+}
+.total {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+.quantity {
+    width: 50%;
+}
+.product span {
+    visibility: hidden;
+}
+.product img {
+    width: 100%;
+}
+.promotion-container{
+        display:flex;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 0;
+    }
+.delivery-container{
+    display:flex;
+    justify-content: center;
+    width: 80%;
+    padding: 10px 0;
 }
 }
 </style>

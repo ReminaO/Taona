@@ -14,7 +14,7 @@
         <div class="product-header">
           <h5 class="product-title">Article <span v-if="$store.state.cart.length >1"> s </span></h5>
           <h5 class="price">Prix</h5>
-          <h5 class="quantity">Quantité</h5>
+          <h5 class="quantity-title">Quantité</h5>
           <h5 class="total">Sous-total</h5>
         </div>
         <div v-for="cart in carts" :key="cart.id" class="cart-container">
@@ -166,7 +166,7 @@ export default {
       border-bottom: #672932 2px solid;
     }
 
-    .quantity {
+    .quantity, .quantity-title {
       width: 30%;
       display: flex;
       align-items: center;
@@ -245,7 +245,7 @@ export default {
   background-color: #672932;
   color: white
 }
-@media screen and (max-width: 500px)
+@media screen and (max-width: 550px)
 {/*Style page du panier*/
     .product-container{
         max-width: 100%;
@@ -265,31 +265,28 @@ export default {
     }
     .cart-container {
         display: flex;
-        flex-wrap: wrap;
     }
-
-    .color{
-        visibility: hidden;
-        width: 0%;
-    }
-
-    .color-choice{
-        visibility: hidden;
-        width: 0%;
-    }
-
     .price {
         visibility: hidden;
         width: 0%;
     }
-
-    .quantity {
+  .quantity {
+        /* visibility: hidden; */
+        width: 10%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .quantity-span {
+        /* visibility: hidden; */
+        width: 10%;
+    }
+    .quantity button{
         visibility: hidden;
-        width: 0%;
     }
     
     .total {
-        width: 20%;
+        width: 25%;
         align-items: center;
     }
 
@@ -298,14 +295,13 @@ export default {
         visibility: hidden;
     }
     .product  {
-        width : 80%;
+        width : 60%;
         align-items: center;
     }
 
     .product-title {
-        width : 100%
+        width : 50%
     }
-
     .basketTotalTitle{
         width: 40%;
     }
@@ -321,6 +317,10 @@ export default {
         justify-content: flex-end;
         padding: 10px 0;
         border-top: #672932 4px solid;
+    }
+    img{
+      margin :0;
+      width:50%
     }
   }
 </style>

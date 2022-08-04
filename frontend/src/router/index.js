@@ -14,7 +14,7 @@ import Login from '../views/Login.vue'
 import ConfirmNews from '../views/ConfirmNews.vue'
 import Faqs from '../views/Faqs.vue'
 import DeliveryInfo from '../views/DeliveryInfo.vue'
-// import Validation from '../views/Validation.vue'
+import Validation from '../views/Validation.vue'
 import Checkout from '../views/Checkout.vue'
 
 
@@ -139,14 +139,14 @@ const routes = [
       title: 'Info Livraison',
     },
   },
-  // {
-  //   path: '/validation',
-  //   name: 'Validation',
-  //   component: Validation,
-  //   meta: {
-  //     title: 'Validation',
-  //   },
-  // },
+  {
+    path: '/validation',
+    name: 'Validation',
+    component: Validation,
+    meta: {
+      title: 'Validation',
+    },
+  },
   {
     path: '/checkout',
     name: 'Checkout',
