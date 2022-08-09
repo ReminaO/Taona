@@ -120,7 +120,7 @@ if (!user) {
 }
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3000/api/',
+    baseURL: 'http://localhost:4242/api/',
     headers: {'Authorization': 'Bearer '+ `${user.token}`}
 })
 
@@ -227,7 +227,6 @@ const instance = axios.create({
                 this.thumbVideo = this.$refs.prodImg.files[4];
             },
             modifyProduct: function () {
-                const self = this;
                 const formData = new FormData();
                 formData.append('prodImg', this.img);
                 formData.append('prodImg', this.thumbImg1);
@@ -241,18 +240,17 @@ const instance = axios.create({
                 })
                 .then(function () {
                 alert("Article modifié !");
-                this. $router.go()
+                location.reload()
                 }, function (error) {
                 console.log(error);
                 })
             },
             deleteComment: function (id) {
-                const self = this;
                     this.$store.dispatch('deleteComment', id, {
                 })
                 .then(function () {
                 alert("Commentaire supprimé !");
-                this. $router.go()
+                location.reload()
                 }, function (error) {
                 console.log(error);
                 })

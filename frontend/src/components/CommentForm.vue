@@ -33,7 +33,7 @@ if (!user) {
   }
 }
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/comments/',
+  baseURL: 'http://localhost:4242/api/comments/',
   headers: {'Authorization': 'Bearer '+ `${user.token}`}
 });
 

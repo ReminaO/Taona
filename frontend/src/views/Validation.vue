@@ -7,28 +7,33 @@
         </div>
     </div>
     <section>
-        <h2 class="text-center">Votre commande {{orderId}} d'un montant de {{total/100}}€ a bien été prise en compte</h2>
-        <p>Résumé de votre commande:</p>
-        <div class="resume-container ">
-            <div class="product-container" v-if="$store.state.cart.length > 0">
-                <div class="product-header">
-                    <h5 class="product-title">Article <span v-if="$store.state.cart.length >1"> s </span></h5>
-                    <h5 class="price">Prix</h5>
-                    <h5 class="quantity">Quantité</h5>
-                    <h5 class="total">Sous-total</h5>
-                </div>
-                <div v-for="cart in carts" :key="cart.id" class="cart-container">
-                <div class= "product">
-                    <img :src="cart.img" :alt="cart.name">
-                    <span> {{cart.name}}</span>
-                </div>
-                <div class="price">{{cart.price / 100}} €</div>
-                <div class="quantity">
-                    <span class="quantity-span">{{cart.quantity}}</span>
-                </div>
-                <div class="total" ref="subTotal">{{cart.quantity * cart.price / 100}}€</div>
+        <div v-if="total>0">
+            <h2 class="text-center">Votre commande {{orderId}} d'un montant de {{total/100}}€ a bien été prise en compte</h2>
+            <p>Résumé de votre commande:</p>
+            <div class="resume-container ">
+                <div class="product-container" v-if="$store.state.cart.length > 0">
+                    <div class="product-header">
+                        <h5 class="product-title">Article <span v-if="$store.state.cart.length >1"> s </span></h5>
+                        <h5 class="price">Prix</h5>
+                        <h5 class="quantity">Quantité</h5>
+                        <h5 class="total">Sous-total</h5>
+                    </div>
+                    <div v-for="cart in carts" :key="cart.id" class="cart-container">
+                    <div class= "product">
+                        <img :src="cart.img" :alt="cart.name">
+                        <span> {{cart.name}}</span>
+                    </div>
+                    <div class="price">{{cart.price / 100}} €</div>
+                    <div class="quantity">
+                        <span class="quantity-span">{{cart.quantity}}</span>
+                    </div>
+                    <div class="total" ref="subTotal">{{cart.quantity * cart.price / 100}}€</div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div v-else>
+            <h2> Commande en cours de traitement...</h2>
         </div>    
     </section>
 </main>
@@ -45,6 +50,11 @@ export default {
             orderId: orderId
         }
     },
+    mounted(){
+        setTimeout(()=>{
+            localStorage.clear()
+        }, 60000)
+    }
 }
 </script>
 
