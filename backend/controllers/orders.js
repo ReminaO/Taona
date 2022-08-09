@@ -12,57 +12,45 @@ const ITEMS_LIMIT = 50;
 exports.createOrder = (req, res, next) => {
   
   const uid = new ShortUniqueId({
-    dictionary: 'number', // the default
+    dictionary: 'number',
   }, { length: 10 });
-  
-  // Paramètres
-  const userId =  req.params.userId;
-  const quantity  = req.body.quantity;
-  const amount = req.body.totalCart;
-  
-
-  asyncLib.waterfall([
-
-    // 1. recherche de l'utilisateur
-    function (done) {
-      models.User.findOne({
-        attributes: ['id'],
-        where: { id: userId }
+  if (!req.body.contact ||
+    !req.body.products) {
+    return res.status(400).send(new Error('Bad request!'));
+  }
+  let queries = []
+  for (let productId of req.body.products) {
+    const queryPromise = new Promise((resolve, reject) => {
+      models.Product.findOne({
+        where: { id: productId },
+        attributes: ["id"]
+      }).then((product) => {
+        if (!product) {
+          reject('Product not found: ' + productId);
+        }
+          resolve(product);
+        }
+      ).catch(
+        () => {
+          reject('Database error!');
+        }
+      )
+    });
+    queries.push(queryPromise);
+  }
+  Promise.all(queries).then(
+    (products) => {
+      const orderId = uid();
+      return res.status(201).json({
+        contact: req.body.contact,
+        products: products,
+        orderId: orderId
       })
-        .then(function (userFound) {
-          done(null, userFound);
-        })
-        .catch(function (err) {
-          return res.status(500).json({ 'error': 'Impossible de vérifier l\'utilisateur' });
-        });
-    },
-      
-    // 2. Une fois trouvé crée le ordere avec l'input
-    function (userFound, done) {
-      if (userFound) {
-        models.Order.create({
-          id:uid,
-          UserId: userId,
-          amount: amount,
-          product: models.Product.name,
-          quantity: quantity
-        })
-          .then(function (newOrder) {
-            done(newOrder);
-          });
-      } else {
-        res.status(404).json({ 'error': 'Utilisateur introuvable' });
+    }).catch(
+      (error) => {
+        return res.status(500).json(new Error(error));
       }
-    },
-    // 3. Confirmation une fois fait
-  ],
-    function (newOrder) {
-    if (newOrder) {
-      return res.status(201).json(newOrder);
-    } else {
-      return res.status(500).json({ 'error': 'Le message ne peut être publié' });
-    }
-  })
+    );
 };
   // Controllers por effacer le reçu grâce a l'ID
 exports.deleteOrder = (req, res, next) => {

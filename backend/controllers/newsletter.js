@@ -8,7 +8,7 @@ mailchimp.setConfig({
 exports.createNews = async(req, res, next) => { 
     
   const response = await mailchimp.lists.addListMember(process.env.LIST_ID, {
-      email_address: `${req.body.email_address}`,
+      email_address: `${req.body.email}`,
       status: "subscribed",
   })
   res.status(200).json(response)

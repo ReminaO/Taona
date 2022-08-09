@@ -33,7 +33,7 @@ module.exports = {
       },
       content: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(3072)
       },
       createdAt: {
         allowNull: false,

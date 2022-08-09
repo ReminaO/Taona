@@ -32,7 +32,7 @@
                 <div v-if="$store.state.user.userId == 1">
                     <form @submit="checkForm">
                         <div class="form-row">
-                            <input v-model="$store.state.user.email" ref="email_address" @change="isEmailValid" class="form-row__input" type="text" />
+                            <input v-model="$store.state.user.email" ref="email" @change="isEmailValid" class="form-row__input" type="text" />
                         </div>
                         <div class="form-row">
                             <input v-model="$store.state.user.firstName" ref="firstName" class="form-row__input" type="text" />
@@ -126,7 +126,7 @@ export default {
     return {
         mode: 'login',
         id: '',
-        email_address: '',
+        email: '',
         firstName: '',
         lastName: '',
         address: '',
@@ -176,13 +176,13 @@ export default {
     methods: {
         checkForm: function (e) {
             const email_regex = /^(([^<>()[\].,;:s@"]+(.[^<>()[\].,;:s@"]+)*)|(".+"))@((s[[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
-            const email = this.email_address;
+            const email = this.email;
             
             this.errors = [];
             
             if (!email_regex.test(email)) {
                 this.errors.push('Merci de saisir le bon format d\'adresse mail !');
-            } else if(!this.$refs.email_address.value || 
+            } else if(!this.$refs.email.value || 
             !this.$refs.firstName.value || 
             !this.$refs.lastName.value || 
             !this.$refs.phone_number.value || 
@@ -197,7 +197,7 @@ export default {
             const self = this;
             if(this.newsletter){
                 instance.post(`audience/lists/14fd06490a/members`, {
-                email_address: this.$refs.email_address.value,
+                email_address: this.$refs.email.value,
                 })
             }
             const contact = {
@@ -207,7 +207,7 @@ export default {
                 city: self.$refs.city.value,
                 postal_code: self.$refs.postal_code.value,
                 phone_number: self.$refs.phone_number.value,
-                email: self.$refs.email_address.value,
+                email: self.$refs.email.value,
             }
             const products = [];
             const cart = self.carts;

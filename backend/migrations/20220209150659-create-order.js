@@ -8,29 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
+      products: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id',
-        },
+        type: Sequelize.JSON
       },
-      productId: {
+      contact: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Products',
-          key: 'id',
-        },
-      },
-      product: {
-        type: Sequelize.STRING
-      },
-      quantity: {
-        type: Sequelize.INTEGER
+        type: Sequelize.JSON
       },
       amount: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       createdAt: {

@@ -9,7 +9,7 @@
       <p class="card__subtitle" v-if="mode == 'login'">Tu n'as pas encore de compte ? <span class="card__action" @click="switchToCreateAccount()">Créer un compte</span></p>
       <p class="card__subtitle" v-else>Tu as déjà un compte ? <span class="card__action" @click="switchToLogin()">Se connecter</span></p>
       <div class="form-row">
-        <input v-model="email_address" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail*"/>
+        <input v-model="email" @change="isEmailValid" class="form-row__input" type="text" placeholder="Adresse mail*"/>
       </div>
       <div class="form-row" v-if="mode == 'create'">
         <input v-model="firstName" class="form-row__input" type="text" placeholder="Prénom*"/>
@@ -66,6 +66,29 @@
 
 <script>
 import { mapState } from 'vuex';
+const axios = require('axios')
+
+
+let user = localStorage.getItem('user')
+if (!user) {
+  user = {
+    userId: -1,
+    token: '',
+  }
+} else {
+  try {
+    user = JSON.parse(user)
+  } catch (ex) {
+    user = {
+      userId: -1,
+      token: '',
+    }
+  }
+}
+const instance = axios.create({
+  baseURL: 'http://localhost:4242/',
+  headers: {'Authorization': 'Bearer '+ `${user.token}`}
+})
 export default {
   name: 'Login',
   data: function () {
@@ -103,13 +126,13 @@ export default {
   computed: {
     validatedFields: function () {
       if (this.mode == 'create') {
-        if (this.email_address != "" && this.lastName != "" && this.firstName != "" && this.phone_number != "" && this.password != "" && this.city != "" && this.postal_code != "") {
+        if (this.email != "" && this.lastName != "" && this.firstName != "" && this.phone_number != "" && this.password != "" && this.city != "" && this.postal_code != "") {
           return true;
         } else {
           return false;
         }
       } else {
-        if (this.email_address != "" && this.password != "") {
+        if (this.email != "" && this.password != "") {
           return true;
         } else {
           return false;
@@ -128,10 +151,10 @@ export default {
     login: function () {
       const self = this;
       this.$store.dispatch('login', {
-        email: this.email_address,
+        email: this.email,
         password: this.password,
       }).then(function () {
-        self.$router.go(-1);
+        self.$router.push('/panier');
       }, function (error) {
         console.log(error);
       })
@@ -139,13 +162,13 @@ export default {
     signup: function () {
       const self = this;
       if(this.newsletter){
-                instance.post(`audience/lists/14fd06490a/members`, {
-                email_address: this.$refs.email_address.value,
-                })
-            }
+        instance.post(`audience/lists/14fd06490a/members`, {
+        email_address: this.email,
+        })
+      }
       if(this.$refs.password.value === this.$refs.confirm_password.value) {
         this.$store.dispatch('createAccount', {
-          email: this.email_address,
+          email: this.email,
           firstName: this.firstName,
           lastName: this.lastName,
           address: this.address,
@@ -163,7 +186,7 @@ export default {
     },
     checkForm: function (e) {
       const email_regex = /^(([^<>()[\].,;:s@"]+(.[^<>()[\].,;:s@"]+)*)|(".+"))@((s[[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
-      const email = this.email_address;
+      const email = this.email;
       const pwd_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
       const password = this.password;
       

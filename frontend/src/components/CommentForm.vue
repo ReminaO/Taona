@@ -2,7 +2,7 @@
 <div class="container w-50">
   <div class="card comment-publish">
     <textarea class="form-row__input form-control" v-bind="$attrs" type="text" id="content" ref="content" name="content" v-model="content" placeholder="Votre avis compte..."></textarea><br>
-    <p>maximum 255 caractères</p>
+    <p>maximum 3072 caractères</p>
     <button @click="addPost($attrs)" v-bind="$attrs" v-if="$store.state.user.userId !== -1"  ref="content" class="button" data-bs-toggle="button" autocomplete="off">
       Publier
     </button>
