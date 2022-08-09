@@ -19,14 +19,16 @@ exports.createOrder = (req, res, next) => {
     return res.status(400).send(new Error('Bad request!'));
   }
   let queries = []
-  for (let productId of req.body.products) {
+  const orderId = uid();
+
+  for (let name of req.body.products) {
     const queryPromise = new Promise((resolve, reject) => {
       models.Product.findOne({
-        where: { id: productId },
-        attributes: ["id"]
+        where: { name: name },
+        attributes: ["name"]
       }).then((product) => {
         if (!product) {
-          reject('Product not found: ' + productId);
+          reject('Product not found: ' + name);
         }
           resolve(product);
         }
@@ -37,10 +39,16 @@ exports.createOrder = (req, res, next) => {
       )
     });
     queries.push(queryPromise);
+    models.Order.create({
+      orderId: orderId,
+      contact: req.body.contact,
+      products: req.body.products,
+      amount: req.body.amount
+      
+    })
   }
   Promise.all(queries).then(
     (products) => {
-      const orderId = uid();
       return res.status(201).json({
         contact: req.body.contact,
         products: products,

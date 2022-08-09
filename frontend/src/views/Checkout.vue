@@ -1,4 +1,10 @@
 <template>
+<main>
+  <div class="p-5 mb-4 banner jumbotron">
+    <div class="container-fluid py-5">
+      <h1 class="display-5 fw-bold">Paiement</h1>
+    </div>
+  </div>
   <section>
       <!-- Display a payment form -->
       <form id="payment-form">
@@ -13,6 +19,7 @@
         <div id="payment-message" class="hidden"></div>
       </form>
   </section>
+</main>  
 </template>
 
 <script>
@@ -30,8 +37,8 @@ export default {
     methods:{
       paymentBtn(){
         stripe.handleSubmit()
-      }
     }
+  }
 }
 </script>
 
@@ -47,7 +54,7 @@ section {
   display: flex;
   justify-content: center;
   align-content: center;
-  height: 100vh;
+  height: 80vh;
   width: 100vw;
 }
 

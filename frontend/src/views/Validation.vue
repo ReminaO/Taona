@@ -7,7 +7,7 @@
         </div>
     </div>
     <section>
-        <h2 class="text-center">Votre commande d'un montant de {{total/100}}€ a bien été prise en compte</h2>
+        <h2 class="text-center">Votre commande {{orderId}} d'un montant de {{total/100}}€ a bien été prise en compte</h2>
         <p>Résumé de votre commande:</p>
         <div class="resume-container ">
             <div class="product-container" v-if="$store.state.cart.length > 0">
@@ -35,12 +35,14 @@
 </template>
 
 <script>
+let orderId = localStorage.getItem("orderId")
 export default {
     name:"Validation",
     data(){
         return {
             total: localStorage.getItem('totalCart'),
-            carts:this.$store.state.cart
+            carts:this.$store.state.cart,
+            orderId: orderId
         }
     },
 }
@@ -55,8 +57,9 @@ section{
     margin-top:100px;
     margin-bottom:100px;
 }
-h2,p{
-    color:#672932
+section h2,section p{
+    color:#672932;
+    margin: 30px;
 }
 .resume-container {
     width: 50%;

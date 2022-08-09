@@ -7,6 +7,7 @@ const axios = require('axios')
 
 let user = localStorage.getItem('user')
 let cart = localStorage.getItem('cart')
+let amount = localStorage.getItem('totalCart')
 if (!user) {
   user = {
     userId: -1,
@@ -65,6 +66,7 @@ const store = createStore({
       quantity: '',
       amount: '',
     },
+    amount:amount,
     cart: [],
     carts: cart,
     comments: [],
@@ -357,22 +359,15 @@ const store = createStore({
     },
     order({ commit }, payload) {
       const data = {
-        "contact": {
-          email: payload.email,
-          firstName: payload.firstName,
-          lastName: payload.lastName,
-          address: payload.address,
-          city: payload.city,
-          postal_code: payload.postal_code,
-          phone_number: payload.phone_number
-        },
-        "products" : payload.products
+        "contact": payload.contact,
+        "products": payload.products,
+        "amount":payload.amount
     }
-      instance.post(`products/order`, data).then((response) => {
+      instance.post(`orders/order`, data).then((response) => {
         commit('contactInfos', response.data)
         commit('products', response.data)
         localStorage.setItem("createdOrder", JSON.stringify(response.data));
-        localStorage.setItem("orderId", JSON.stringify(response.orderId))
+        localStorage.setItem("orderId", JSON.stringify(response.data.orderId))
       }).catch((error) => {
         console.log(error)
       });

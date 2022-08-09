@@ -29,28 +29,30 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="$store.state.user.userId == 1">
+                <div v-if="$store.state.user.userId >= 1" class="connected-user">
+                    <p>Adresse de facturation</p>
+
                     <form @submit="checkForm">
                         <div class="form-row">
-                            <input v-model="$store.state.user.email" ref="email" @change="isEmailValid" class="form-row__input" type="text" />
+                            <input v-model="email" placeholder="E-mail" @change="isEmailValid" class="form-row__input" type="text" />
                         </div>
                         <div class="form-row">
-                            <input v-model="$store.state.user.firstName" ref="firstName" class="form-row__input" type="text" />
+                            <input v-model="firstName" placeholder="Prénom" class="form-row__input" type="text" />
                         </div>
                         <div class="form-row">
-                            <input v-model="$store.state.user.lastName" ref="lastName" class="form-row__input" type="text" />
+                            <input v-model="lastName" placeholder="Nom" class="form-row__input" type="text" />
                         </div>
                         <div class="form-row">
-                            <input v-model="$store.state.user.phone_number" ref="phone_number" class="form-row__input" type="text" />
+                            <input v-model="phone_number" placeholder="Téléphone" class="form-row__input" type="text" />
                         </div>
                         <div class="form-row">
-                            <textarea v-model="$store.state.user.address" ref="address" class="form-row__input" type="text" />
+                            <textarea v-model="address" placeholder="Adresse" class="form-row__input" type="text" />
                         </div>
                         <div class="form-row">
-                            <input v-model="$store.state.user.postal_code" ref="postal_code" class="form-row__input" type="text" />
+                            <input v-model="postal_code" placeholder="Code postal" class="form-row__input" type="text" />
                         </div>
                         <div class="form-row">
-                            <input v-model="$store.state.user.city" ref="city" class="form-row__input" type="text" />
+                            <input v-model="city" placeholder="Ville" class="form-row__input" type="text" >
                         </div>
                         <input type="checkbox" v-model="newsletter" value="newsletter" id="newsletter"/>
                         <label for="newsletter"> "Je souhaite recevoir la newsletter et les offres de TAONA Cosmetics"</label><br><br>
@@ -116,7 +118,6 @@ const instance = axios.create({
     baseURL: 'http://localhost:4242/',
     headers: {'Authorization': 'Bearer '+ `${user.token}`}
 })
-
 export default {
     name: 'Info Livraison',
     components:{
@@ -138,6 +139,15 @@ export default {
         mondialRelay:false,
         colissimo:false, 
         connexion:false,
+        }
+    },
+    created() {
+    if( window.localStorage ){
+        if( !localStorage.getItem('firstLoad') ){
+        localStorage['firstLoad'] = true;
+        window.location.reload();
+        } else
+        localStorage.removeItem('firstLoad');
         }
     },
     mounted(){
@@ -182,47 +192,46 @@ export default {
             
             if (!email_regex.test(email)) {
                 this.errors.push('Merci de saisir le bon format d\'adresse mail !');
-            } else if(!this.$refs.email.value || 
-            !this.$refs.firstName.value || 
-            !this.$refs.lastName.value || 
-            !this.$refs.phone_number.value || 
-            !this.$refs.address.value || 
-            !this.$refs.city.value || 
-            !this.$refs.postal_code.value){
+            } else if(!this.email || 
+            !this.firstName || 
+            !this.lastName || 
+            !this.phone_number|| 
+            !this.address || 
+            !this.city || 
+            !this.postal_code){
                 this.errors.push('Merci de compléter tous les champs');
             }
             e.preventDefault();
         },
         order(e){
-            const self = this;
             if(this.newsletter){
                 instance.post(`audience/lists/14fd06490a/members`, {
-                email_address: this.$refs.email.value,
+                email_address: this.email,
                 })
             }
             const contact = {
-                firstName: self.$refs.firstName.value,
-                lastName: self.$refs.lastName.value,
-                address: self.$refs.address.value,
-                city: self.$refs.city.value,
-                postal_code: self.$refs.postal_code.value,
-                phone_number: self.$refs.phone_number.value,
-                email: self.$refs.email.value,
+                firstName: this.firstName,
+                lastName: this.lastName,
+                address: this.address,
+                city: this.city,
+                postal_code: this.postal_code,
+                phone_number: this.phone_number,
+                email: this.email,
             }
             const products = [];
-            const cart = self.carts;
+            const cart = this.carts;
             for (const product of cart) {
                 for (let i = 0; i < product.quantity; i++) {
-                products.push(product.id);
+                products.push(product.name);
                 }
             }
             const data = {
                 contact : contact,
-                products : products
+                products : products,
+                amount: localStorage.getItem("totalCart"),
             }
             console.log("data : ", data);
-            // this.$store.dispatch('order', data)
-            this.$router.push("/checkout")
+            this.$store.dispatch('order', data)
         },
     },
 }
@@ -241,7 +250,7 @@ export default {
     align-items: center;
     margin-top: 50px
 }
-.delivery-choice label, .delivery-choice p {
+.delivery-choice label, .delivery-choice p, .connected-user p{
     font-size: 20px;
     margin: 10px;
     color:#672932

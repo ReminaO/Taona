@@ -154,7 +154,7 @@ export default {
         email: this.email,
         password: this.password,
       }).then(function () {
-        self.$router.push('/panier');
+        self.$router.push('/articles');
       }, function (error) {
         console.log(error);
       })
