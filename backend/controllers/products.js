@@ -286,48 +286,4 @@ exports.deleteProduct = (req, res) => {
         }
       })
 }
-//Créé la commande du produit  
-exports.orderProducts = (req, res) => { 
-  const uid = new ShortUniqueId({
-    dictionary: 'number',
-  }, { length: 10 });
-  if (!req.body.contact ||
-    !req.body.products) {
-    return res.status(400).send(new Error('Bad request!'));
-  }
-  let queries = []
-  for (let productId of req.body.products) {
-    const queryPromise = new Promise((resolve, reject) => {
-      models.Product.findOne({
-        where: { id: productId },
-        attributes: ["id"]
-      }).then((product) => {
-        if (!product) {
-          reject('Product not found: ' + productId);
-        }
-          resolve(product);
-        }
-      ).catch(
-        () => {
-          reject('Database error!');
-        }
-      )
-    });
-    queries.push(queryPromise);
-  }
-  Promise.all(queries).then(
-    (products) => {
-      const orderId = uid();
-      return res.status(201).json({
-        contact: req.body.contact,
-        products: products,
-        orderId: orderId
-      })
-    }).catch(
-      (error) => {
-        return res.status(500).json(new Error(error));
-      }
-    );
-} 
-
 
